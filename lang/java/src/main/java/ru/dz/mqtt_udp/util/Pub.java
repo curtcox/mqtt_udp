@@ -13,14 +13,13 @@ import ru.dz.mqtt_udp.PublishPacket;
  * @author dz
  *
  */
-public class Pub {
+public final class Pub {
 
 	public static void main(String[] args) throws IOException {
-		String topic = null;
-		String msg = null;
+		String topic;
+		String msg;
 
-		if(args.length == 4)
-		{
+		if(args.length == 4) {
 			if( !args[0].equals("-s") )
 			{
 				usage();
@@ -43,6 +42,10 @@ public class Pub {
 			msg = args[1];
 		}
 
+		sendMessageToTopic(msg,topic);
+	}
+
+	static void sendMessageToTopic(String msg, String topic) throws IOException {
 		System.out.println("Will send "+msg+" to "+topic);
 
 		PublishPacket pp = new PublishPacket(topic,msg);
