@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
-import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.PacketSourceMultiServer;
 import ru.dz.mqtt_udp.PublishPacket;
 import ru.dz.mqtt_udp.SubscribePacket;
@@ -39,20 +38,19 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  * @author dz
  *
  */
-public class RemoteConfig implements Consumer<IPacket> {
-	private LoopRunner lr = new LoopRunner("Remote Config Controllable") 
-	{
+public final class RemoteConfig implements Consumer<IPacket> {
+	private LoopRunner lr = new LoopRunner("Remote Config Controllable") {
 		@Override
-		protected void step() throws IOException, MqttProtocolException {
+		protected void step() {
 			//new SubscribePacket(SYS_CONF_WILD).send();
 			sleep(30L*1000L);
 			//sleep(2L*1000L);
 		}
 
 		@Override
-		protected void onStop() throws IOException, MqttProtocolException { /** empty */ }		
+		protected void onStop() { /** empty */ }
 		@Override
-		protected void onStart() throws IOException, MqttProtocolException { /** empty */ }
+		protected void onStart() { /** empty */ }
 	};
 	//private String macAddress;
 	private Collection<ConfigurableParameter> items; 
@@ -65,8 +63,7 @@ public class RemoteConfig implements Consumer<IPacket> {
 		ms.addPacketSink(this);	
 	}
 
-	public void requestStart()
-	{
+	public void requestStart() {
 		lr.requestStart();
 	}
 
@@ -81,13 +78,11 @@ public class RemoteConfig implements Consumer<IPacket> {
 	 * 
 	 */
 	@Override
-	public void accept(IPacket p) 
-	{
+	public void accept(IPacket p) {
 		if (p instanceof SubscribePacket) {
 			SubscribePacket sp = (SubscribePacket) p;
 
-			if( rf.test(sp.getTopic()) )
-			{
+			if( rf.test(sp.getTopic()) ) {
 				sendAllConfigurableTopics();
 				return;
 			}
@@ -203,12 +198,10 @@ public class RemoteConfig implements Consumer<IPacket> {
 	}
 
 
+	static Set<ConfigurableParameter> itemList() {
+		Set<ConfigurableParameter> itemList = new HashSet<>();
 
-
-	public static void main(String[] args) {
-		Set<ConfigurableParameter> itemList = new HashSet<ConfigurableParameter>(); 
-
-		//ConfigurableHost ch = new ConfigurableHost(mac, null ); 		
+		//ConfigurableHost ch = new ConfigurableHost(mac, null );
 		//itemList.add(new ConfigurableParameter(ch, "topic", "test1", "Trigger"));
 
 		itemList.add(new LocalReadOnlyParameter( "info", "soft", "Tray Informer") );
@@ -220,14 +213,23 @@ public class RemoteConfig implements Consumer<IPacket> {
 
 		itemList.add(new LocalConfigurableParameter( "topic", "test1", "Trigger") );
 
-		PacketSourceMultiServer ms = new PacketSourceMultiServer();
-		RemoteConfig rc = new RemoteConfig(ms, itemList);
+		return itemList;
+	}
 
-		ms.requestStart();
-		rc.requestStart();
+	static void start() {
+		PacketSourceMultiServer server = new PacketSourceMultiServer();
+		RemoteConfig config = new RemoteConfig(server, itemList());
 
-		rc.setPropertiesFileName("remoteconf.prop");
-		rc.saveToProperties();
+		server.requestStart();
+		config.requestStart();
+
+		config.setPropertiesFileName("remoteconf.prop");
+		config.saveToProperties();
+	}
+
+
+	public static void main(String[] args) {
+		start();
 	}
 
 
