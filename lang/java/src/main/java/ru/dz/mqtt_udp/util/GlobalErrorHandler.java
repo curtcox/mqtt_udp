@@ -6,7 +6,7 @@ import java.util.function.BiConsumer;
 /**
  * Singleton for MQTT/UDP error callback.
  */
-public class GlobalErrorHandler {
+public final class GlobalErrorHandler {
 
 	private static volatile GlobalErrorHandler instance;
 	
@@ -16,8 +16,7 @@ public class GlobalErrorHandler {
 	 * Singleton for MQTT/UDP error callback.
 	 * @return handler instance
 	 */
-	public static GlobalErrorHandler get()  
-	{
+	public static GlobalErrorHandler get() {
 		GlobalErrorHandler localInstance = instance;
 		if (localInstance == null) {
 			synchronized (GlobalErrorHandler.class) {
@@ -47,11 +46,9 @@ public class GlobalErrorHandler {
 		handleError(type, th.toString());
 	}
 	
-	public static void handleError(ErrorType type, String description)
-	{
+	public static void handleError(ErrorType type, String description) {
 		BiConsumer<ErrorType, String> h = get().handler;
-		if( h != null )
-		{
+		if( h != null ) {
 			h.accept(type, description);
 			return;
 		}
