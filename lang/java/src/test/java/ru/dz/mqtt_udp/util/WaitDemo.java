@@ -1,9 +1,9 @@
 package ru.dz.mqtt_udp.util;
 
-public final class SubDemo {
+public class WaitDemo {
 
     public static void main(String[] args) {
-        Sub.startSub();
+        Wait.startWait("Hello","World");
     }
 
 }
