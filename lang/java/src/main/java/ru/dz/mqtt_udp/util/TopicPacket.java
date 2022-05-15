@@ -16,7 +16,7 @@ public abstract class TopicPacket extends GenericPacket {
 	 * Packet from net.
 	 * @param from Source address.
 	 */
-	public TopicPacket(Flags flags,String topic, IPacketAddress from) {
+	public TopicPacket(Flags flags, String topic, IPacketAddress from) {
 		super(flags,from);
 		this.topic = topic;
 	}

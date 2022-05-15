@@ -3,6 +3,7 @@ package ru.dz.mqtt_udp.util;
 import java.io.IOException;
 
 import ru.dz.mqtt_udp.*;
+import ru.dz.mqtt_udp.packets.PublishPacket;
 
 /**
  * NB!

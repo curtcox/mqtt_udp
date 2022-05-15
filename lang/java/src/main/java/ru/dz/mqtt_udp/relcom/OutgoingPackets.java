@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
-import ru.dz.mqtt_udp.PubAckPacket;
+import ru.dz.mqtt_udp.packets.PubAckPacket;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
 import ru.dz.mqtt_udp.util.ErrorType;
 import ru.dz.mqtt_udp.util.GenericPacket;

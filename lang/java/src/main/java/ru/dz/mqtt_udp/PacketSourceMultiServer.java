@@ -27,10 +27,6 @@ import ru.dz.mqtt_udp.items.AbstractItem;
  */
 public final class PacketSourceMultiServer extends SubServer implements IPacketMultiSource {
 
-	//public PacketSourceMultiServer() {
-	//}
-
-
 	private List< Consumer<IPacket> > plist = new ArrayList<>(); 
 	private List< Consumer<AbstractItem> > ilist = new ArrayList<>(); 
 
@@ -83,11 +79,8 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 	@Override
 	protected void processPacket(IPacket p) throws IOException {
 
-		//System.out.println("MultiServer got packet "+p);
-
 		synchronized (ilist) {
-			if( ilist.size() > 0 )
-			{
+			if( ilist.size() > 0 ) {
 				AbstractItem ai = AbstractItem.fromPacket(p);
 				for( Consumer<AbstractItem> isink : ilist )
 				{
@@ -97,8 +90,7 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 		}
 
 		synchronized (plist) {
-			for( Consumer<IPacket> psink : plist )
-			{
+			for( Consumer<IPacket> psink : plist ) {
 				psink.accept(p);
 			}
 		}

@@ -1,11 +1,12 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.packets;
+
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
-public final class PingReqPacket extends GenericPacket {
+public final class PingRespPacket extends GenericPacket {
 
 	/**
 	 * Construct from incoming UDP data. 
@@ -14,18 +15,24 @@ public final class PingReqPacket extends GenericPacket {
 	 * @param from Source IP address.
 	 */
 
-	public PingReqPacket(byte[] raw, Flags flags, IPacketAddress from) {
+	public PingRespPacket(byte[] raw, Flags flags, IPacketAddress from) {
 		super(flags,from);
 		if( raw.length > 0 )
-			System.err.println("nonempty PingReqPacket");
+			System.err.println("nonempty PingRespPacket");
 	}
+
+	/*
+	public PingRespPacket(IPacketAddress from) {
+		super(from);	
+	}*/
 
 	/**
 	 * Create packet to be sent.
 	 */
-	public PingReqPacket() {
+	public PingRespPacket() {
 	}
-	
+
+
 	/*
 	 * (non-Javadoc)
 	 * @see ru.dz.mqtt_udp.IPacket#toBytes()
@@ -33,7 +40,7 @@ public final class PingReqPacket extends GenericPacket {
 	@Override
 	public byte[] toBytes() {
 		byte[] pkt = new byte[0];
-		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PINGREQ, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PINGRESP, getFlags(), null, this );
 	}
 
 	/*
@@ -41,15 +48,13 @@ public final class PingReqPacket extends GenericPacket {
 	 * @see ru.dz.mqtt_udp.IPacket#getType()
 	 */
 	@Override
-	public int getType() {		return mqtt_udp_defs.PTYPE_PINGREQ;	}
+	public int getType() {		return mqtt_udp_defs.PTYPE_PINGRESP;	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.util.GenericPacket#toString()
-	 */
+	
 	@Override
 	public String toString() {		
-		return String.format("MQTT/UDP PING Request" );
-	}	
+		return String.format("MQTT/UDP PING Responce" );
+	}
 	
+
 }

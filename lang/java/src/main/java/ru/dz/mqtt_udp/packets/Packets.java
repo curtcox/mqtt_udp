@@ -1,5 +1,6 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.packets;
 
+import ru.dz.mqtt_udp.*;
 import ru.dz.mqtt_udp.hmac.HMAC;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.proto.TTR_PacketNumber;
@@ -21,7 +22,7 @@ public final class Packets {
      * @return Packet object
      * @throws MqttProtocolException on incorrect binary packet data
      */
-    public static IPacket fromBytes( byte[] raw, IPacketAddress from ) throws MqttProtocolException {
+    public static IPacket fromBytes(byte[] raw, IPacketAddress from ) throws MqttProtocolException {
         int total_len = 0;
         int headerEnd = 1;
 

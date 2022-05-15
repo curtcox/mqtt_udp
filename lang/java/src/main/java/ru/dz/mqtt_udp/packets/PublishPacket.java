@@ -1,4 +1,4 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.packets;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

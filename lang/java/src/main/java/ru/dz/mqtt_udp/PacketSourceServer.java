@@ -1,6 +1,5 @@
 package ru.dz.mqtt_udp;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 /**
@@ -32,7 +31,7 @@ public final class PacketSourceServer extends SubServer implements IPacketSource
 	public void setSink(Consumer<IPacket> sink) {		this.sink = sink;	}
 
 	@Override
-	protected void processPacket(IPacket p) throws IOException { if(sink != null ) sink.accept(p);	}
+	protected void processPacket(IPacket p) { if(sink != null ) sink.accept(p);	}
 	
 }
 

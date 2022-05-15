@@ -9,8 +9,7 @@ import ru.dz.mqtt_udp.items.AbstractItem;
  * @author dz
  *
  */
-public interface IPacketMultiSource 
-{
+public interface IPacketMultiSource {
 	/**
 	 * Add sink to consume received packets.
 	 * @param sink Consumer&lt;IPacket&gt; to add to consumers list.

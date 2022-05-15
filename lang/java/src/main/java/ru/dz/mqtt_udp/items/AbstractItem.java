@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import ru.dz.mqtt_udp.IPacket;
-import ru.dz.mqtt_udp.PingReqPacket;
-import ru.dz.mqtt_udp.PingRespPacket;
-import ru.dz.mqtt_udp.PublishPacket;
-import ru.dz.mqtt_udp.SubscribePacket;
+import ru.dz.mqtt_udp.packets.PingReqPacket;
+import ru.dz.mqtt_udp.packets.PingRespPacket;
+import ru.dz.mqtt_udp.packets.PublishPacket;
+import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;

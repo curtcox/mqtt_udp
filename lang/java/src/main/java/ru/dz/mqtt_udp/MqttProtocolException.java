@@ -8,7 +8,4 @@ public final class MqttProtocolException extends Exception {
 		super(message);
 	}
 	
-	public MqttProtocolException(String message, Throwable cause) {
-		super(message,cause);
-	}
 }

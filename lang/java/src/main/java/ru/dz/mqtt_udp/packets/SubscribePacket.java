@@ -1,4 +1,4 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.NoEncodingRuntimeException;
