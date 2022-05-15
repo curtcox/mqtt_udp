@@ -24,13 +24,11 @@ public final class Packets {
      * @return Packet object
      * @throws MqttProtocolException on incorrect binary packet data
      */
-    public static IPacket fromBytes( byte[] raw, IPacketAddress from ) throws MqttProtocolException
-    {
+    public static IPacket fromBytes( byte[] raw, IPacketAddress from ) throws MqttProtocolException {
         int total_len = 0;
         int headerEnd = 1;
 
-        while(true)
-        {
+        while(true) {
             byte b = raw[headerEnd++];
             total_len |= b & ~0x80;
 
@@ -53,8 +51,7 @@ public final class Packets {
             throw new MqttProtocolException("packet decoded size ("+total_len+") > packet length ("+recvLen+")");
 
         // We have bytes after classic MQTT packet, must be TTRs, decode 'em
-        if(recvLen > total_len)
-        {
+        if(recvLen > total_len) {
             ttrs = decodeTTRs(raw, total_len, headerEnd, recvLen);
         }
 
@@ -65,8 +62,7 @@ public final class Packets {
         int flags = 0x0F & (int)(raw[0]);
 
         GenericPacket p;
-        switch(ptype)
-        {
+        switch(ptype) {
             case mqtt_udp_defs.PTYPE_PUBLISH:
                 p = new PublishPacket(sub, (byte)flags, from);
                 break;
@@ -95,7 +91,8 @@ public final class Packets {
     }
 
     static Collection<TaggedTailRecord> decodeTTRs(byte[] raw, int total_len, int headerEnd, int recvLen)
-            throws MqttProtocolException {
+            throws MqttProtocolException
+    {
         Collection<TaggedTailRecord> ttrs;
         int tail_len = recvLen - total_len; // TTRs size
         byte [] ttrs_bytes = new byte[tail_len];
@@ -108,11 +105,6 @@ public final class Packets {
         AtomicReference<Integer> signaturePos = new AtomicReference<Integer>(-1);
         ttrs = TaggedTailRecord.fromBytesAll(ttrs_bytes, signaturePos);
 
-		/*{
-			for( TaggedTailRecord ttr : ttrs )
-				System.out.println(ttr);
-		}*/
-
         // If we have signature TTR in packet, check it
         int sigPos = signaturePos.get();
 
@@ -121,8 +113,7 @@ public final class Packets {
             throw new MqttProtocolException("Unsigned packet");
 
         // Have signature - check it
-        if(sigPos >= 0)
-        {
+        if(sigPos >= 0) {
             // fromBytesAll() calcs signature position in ttrs_bytes, add preceding parts lengths
             sigPos += total_len;
             sigPos += headerEnd;
@@ -136,15 +127,8 @@ public final class Packets {
             byte [] sig_check_bytes = new byte[sigPos];
             System.arraycopy(raw, 0, sig_check_bytes, 0, sigPos);
 
-			/*if(true)
-			{
-				byte[] our_signature = HMAC.hmacDigestMD5(sig_check_bytes, Engine.getSignatureKey());
-				ByteArray.dumpBytes("our", our_signature);
-			}*/
-
             // Look for the signature TTR
-            for( TaggedTailRecord ttr : ttrs )
-            {
+            for( TaggedTailRecord ttr : ttrs ) {
                 if (ttr instanceof TTR_Signature) {
                     TTR_Signature ts = (TTR_Signature) ttr;
 
@@ -158,23 +142,15 @@ public final class Packets {
         }
         return ttrs;
     }
-
-
-
+    
     /**
      * Decode 2-byte string length.
      * @param pkt Binary packet data.
      * @return Decoded length.
      */
-    static int decodeTopicLen( byte [] pkt )
-    {
-        int ret = 0;
-
-        //ret = (pkt[1] << 8) | pkt[0];
-        ret = (pkt[0] << 8) | pkt[1];
-
+    static int decodeTopicLen( byte [] pkt ) {
+        int ret = (pkt[0] << 8) | pkt[1];
         ret &= 0xFFFF;
-
         return ret;
     }
 
@@ -183,8 +159,7 @@ public final class Packets {
      * @param packetType as in incoming byte (&amp; 0xF0).
      * @return Type string.
      */
-    public static String getPacketTypeName(int packetType)
-    {
+    public static String getPacketTypeName(int packetType) {
         int pos = packetType >> 4;
 
         if( (pos < 0) || (pos > 15) )
@@ -211,8 +186,7 @@ public final class Packets {
 
         buf[0] = (byte) ((packetType & 0xF0) | (flags & 0x0F));
 
-        do
-        {
+        do {
             byte b = (byte) (data_len % 128);
             data_len /= 128;
 
@@ -231,10 +205,6 @@ public final class Packets {
 
         // Encode in Tagged Tail Records - packet extensions
         byte[] ttrbin = encodeTTR( ttr, out, p );
-        //byte[] ttrbin = out;
-
-
-        //return out;
         return ttrbin;
     }
 
@@ -247,17 +217,14 @@ public final class Packets {
      * @param packetBeginning Classic packet.
      * @return Extended packet.
      */
-    static byte[] encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p )
-    {
+    static byte[] encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p ) {
         ArrayList<byte[]> outs = new ArrayList<>();
 
         boolean haveNumber = false;
 
         if( ttrs != null )
-            for( TaggedTailRecord r : ttrs )
-            {
-                if( r instanceof TTR_Signature )
-                {
+            for( TaggedTailRecord r : ttrs ) {
+                if( r instanceof TTR_Signature ) {
                     GlobalErrorHandler.handleError(ErrorType.Protocol, "Signature must be generated here");
                     continue;
                 }
@@ -269,8 +236,7 @@ public final class Packets {
             }
 
         // Add packet number to list, if none
-        if( !haveNumber )
-        {
+        if( !haveNumber ) {
             if( p.getPacketNumber().isPresent() )
                 outs.add(new TTR_PacketNumber( p.getPacketNumber().get() ).toBytes());
             else
@@ -278,19 +244,16 @@ public final class Packets {
         }
 
         int totalLen = packetBeginning.length;
-        for( byte[] bb : outs )
-        {
+        for( byte[] bb : outs ) {
             totalLen += bb.length;
         }
 
         byte [] presig = new byte[totalLen+TTR_Signature.SIGLEN];
-        //byte [] presig = new byte[totalLen];
 
         System.arraycopy(packetBeginning, 0, presig, 0, packetBeginning.length);
 
         int pos = packetBeginning.length;
-        for( byte[] bb : outs )
-        {
+        for( byte[] bb : outs ) {
             System.arraycopy(bb, 0, presig, pos, bb.length);
             pos += bb.length;
         }
