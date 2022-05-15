@@ -152,10 +152,6 @@ public final class PublishPacket extends TopicPacket {
 		return String.format("MQTT/UDP PUBLISH '%s'='%s'", getTopic(), getValueString() );
 	}
 
-
-	public byte getFlags() {		return flags;	}
-	//public void setFlags(byte flags) {		this.flags = flags;	}
-
 	@Override
 	public int getType() {
 		return mqtt_udp_defs.PTYPE_PUBLISH;

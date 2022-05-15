@@ -28,18 +28,13 @@ import ru.dz.mqtt_udp.proto.TaggedTailRecord;
 
 public abstract class GenericPacket implements IPacket {
 
-	/** 
-	 * Broadcast IP address.
-	 */
-	private static final byte[] broadcast =  { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF } ;
-	
 	/**
 	 * Packet header flags.
 	 */
 	protected byte    flags = 0;
-	
+
 	/**
-	 * Packet source address, if packet is received from net. 
+	 * Packet source address, if packet is received from net.
 	 * Locally created ones have null here.
 	 */
 	protected IPacketAddress from;
@@ -47,7 +42,12 @@ public abstract class GenericPacket implements IPacket {
 	private InetAddress resendAddress;
 
 	private int sentCounter = 0;
-	
+
+	/** 
+	 * Broadcast IP address.
+	 */
+	private static final byte[] broadcast =  { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF } ;
+
 	/**
 	 * Construct packet from network.
 	 * @param from Sender's address.
@@ -68,17 +68,18 @@ public abstract class GenericPacket implements IPacket {
 	 * @return Created socket.
 	 * @throws SocketException If unable.
 	 */
-	public static DatagramSocket recvSocket() throws SocketException
-	{
-		//DatagramSocket s = new DatagramSocket(mqtt_udp_defs.MQTT_PORT);
-		DatagramSocket s = new DatagramSocket(null);
+	public static DatagramSocket recvSocket() throws SocketException {
+		return recvSocket(new DatagramSocket(null));
+	}
+
+	static DatagramSocket recvSocket(DatagramSocket s) throws SocketException {
 		//s.setBroadcast(true);
-		
+
 		s.setReuseAddress(true);
 		// TODO reuseport
-		
+
 		InetSocketAddress address = new InetSocketAddress(mqtt_udp_defs.MQTT_PORT);
-		
+
 		s.bind(address);
 		return s;
 	}
@@ -87,7 +88,7 @@ public abstract class GenericPacket implements IPacket {
 	 * Broadcast me using default send socket.
 	 * @throws IOException If unable.
 	 */
-	public void send() throws IOException {
+	final public void send() throws IOException {
 		send(SingleSendSocket.get());
 	}
 	
@@ -96,7 +97,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param addr Where to send to.
 	 * @throws IOException If unable.
 	 */
-	public void send(InetAddress addr) throws IOException {
+	final public void send(InetAddress addr) throws IOException {
 		send(SingleSendSocket.get(),addr);
 	}
 	
@@ -105,7 +106,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param sock Socket must be made with sendSocket() method.
 	 * @throws IOException If unable.
 	 */
-	public void send(DatagramSocket sock) throws IOException {
+	final public void send(DatagramSocket sock) throws IOException {
 		send( sock, InetAddress.getByAddress(broadcast) );
 	}
 
@@ -115,7 +116,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param address Host to send to
 	 * @throws IOException If unable.
 	 */
-	public void send(DatagramSocket sock, InetAddress address) throws IOException {
+	final public void send(DatagramSocket sock, InetAddress address) throws IOException {
 		byte[] pkt = toBytes();
 		
 		DatagramPacket p = new DatagramPacket(pkt, pkt.length, address, mqtt_udp_defs.MQTT_PORT);
@@ -133,8 +134,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param sock Socket must be made with sendSocket() method.
 	 * @throws IOException If unable.
 	 */
-	public void resend(DatagramSocket sock) throws IOException
-	{
+	final public void resend(DatagramSocket sock) throws IOException {
 		byte[] pkt = toBytes();
 		
 		DatagramPacket p = new DatagramPacket(pkt, pkt.length, resendAddress, mqtt_udp_defs.MQTT_PORT);
@@ -176,28 +176,28 @@ public abstract class GenericPacket implements IPacket {
 	 * @see ru.dz.mqtt_udp.IPacket#getFrom()
 	 */
 	@Override
-	public IPacketAddress getFrom() { return from; }
+	final public IPacketAddress getFrom() { return from; }
 	
 	/**
 	 * Get packet flags. QoS, etc.
 	 * 
 	 * @return Flags bit field.
 	 */
-	public byte getFlags() {		return flags;	}
+	final public byte getFlags() {		return flags;	}
 	
 
-	public int getQoS() {
+	final public int getQoS() {
 		return (flags >> 1) & 0x3;
 	}
 
-	public void setQoS(int qos) {
+	final public void setQoS(int qos) {
 		flags &= ~0x6;
 		flags |= (qos & 0x3) << 1;		
 	}
 	
 	
 	@Override
-	public String toString() {		
+	public String toString() {
 		return String.format("MQTT/UDP packet of unknown type from '%s', please redefine toString in %s", from, getClass().getName());
 	}
 
@@ -212,7 +212,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param ttrs Tagged Tail Records to apply
 	 * @return Self
 	 */
-	public IPacket applyTTRs(Collection<TaggedTailRecord> ttrs) {
+	final public IPacket applyTTRs(Collection<TaggedTailRecord> ttrs) {
 		if( ttrs == null )
 			return this;
 		
@@ -247,29 +247,23 @@ public abstract class GenericPacket implements IPacket {
 
 	private Optional<Integer> replyToPacketNumber = Optional.empty();
 
-	public Optional<Integer> getReplyToPacketNumber() {
+	final public Optional<Integer> getReplyToPacketNumber() {
 		return replyToPacketNumber;
 	}
 
-	public void setReplyToPacketNumber( int replyToPacketNumber ) {
+	final public void setReplyToPacketNumber( int replyToPacketNumber ) {
 		this.replyToPacketNumber = Optional.ofNullable( replyToPacketNumber );
 	}
 	
-
-	
-	
 	private Optional<Integer> packetNumber = Optional.empty();
 
-	public Optional<Integer> getPacketNumber() {
+	final public Optional<Integer> getPacketNumber() {
 		return packetNumber;
 	}
 
-	public void setPacketNumber(int packetNumber) {
+	final public void setPacketNumber(int packetNumber) {
 		this.packetNumber = Optional.ofNullable(packetNumber);
 	}
-
-	
-
 
 	private boolean signed = false;
 
@@ -278,24 +272,20 @@ public abstract class GenericPacket implements IPacket {
 	 * @see ru.dz.mqtt_udp.IPacket#isSigned()
 	 */
 	@Override
-	public boolean isSigned() {		return signed;	}
+	final public boolean isSigned() {		return signed;	}
 
 	private void setSigned(boolean signed) {		this.signed = signed;	}
 
-	public int getSentCounter() {		return sentCounter;	}
+	final public int getSentCounter() {		return sentCounter;	}
 
-	
 	private int ackCount = 0; 
 	/**
 	 * Increment counter of ACKs we got for this packet
 	 */
-	public void incrementAckCount() {
+	final public void incrementAckCount() {
 		ackCount++;
-		
 	}
 
-	public int getAckCount() {	return ackCount;	}
+	final public int getAckCount() {	return ackCount;	}
 
-
-	
 }
