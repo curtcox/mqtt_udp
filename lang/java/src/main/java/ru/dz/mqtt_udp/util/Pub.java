@@ -30,7 +30,7 @@ public final class Pub {
 	static void sendMessageToTopic(String msg, String topic) throws IOException {
 		System.out.println("Will send "+msg+" to "+topic);
 
-		PublishPacket pp = new PublishPacket(topic,msg);
+		PublishPacket pp = new PublishPacket(topic, (byte) 0,msg);
 		pp.send();
 		System.out.println("Sent ok");
 	}

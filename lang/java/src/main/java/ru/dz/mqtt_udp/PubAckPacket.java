@@ -24,9 +24,7 @@ public final class PubAckPacket extends GenericPacket {
 	 */
 
 	public PubAckPacket(byte[] raw, byte flags, IPacketAddress from) {
-		super(from);
-		this.flags = flags;
-		//this.from = from;
+		super(flags,from);
 		if( raw.length > 0 )
 			System.err.println("non-empty PubAck Packet");
 	}
@@ -62,7 +60,7 @@ public final class PubAckPacket extends GenericPacket {
 			ttrs.add(id);
 		}
 		
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBACK, flags, ttrs, this );	
+		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBACK, getFlags(), ttrs, this );
 	}
 
 	/*

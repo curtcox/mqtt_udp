@@ -26,8 +26,7 @@ public final class PublishPacket extends TopicPacket {
 	 * @param from Source IP address.
 	 */
 	public PublishPacket(byte[] raw, byte flags, IPacketAddress from) {
-		super(from);
-		this.flags = flags;
+		super(flags,from);
 		int tlen = IPacket.decodeTopicLen( raw );
 
 		topic = new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
@@ -59,8 +58,8 @@ public final class PublishPacket extends TopicPacket {
 	 * @param value Value as byte array.
 	 */
 	public PublishPacket(String topic, byte flags, byte[] value) {
-		super(null);
-		makeMe( topic, flags, value );
+		super(flags,null);
+		makeMe( topic, value );
 	}
 
 	/**
@@ -69,10 +68,10 @@ public final class PublishPacket extends TopicPacket {
 	 * @param topic Topic string.
 	 * @param value Value string.
 	 */
-	public PublishPacket(String topic, String value) {
-		super(null);
+	public PublishPacket(String topic, byte flags, String value) {
+		super(flags,null);
 		try {
-			makeMe( topic, (byte) 0, value.getBytes(MQTT_CHARSET) );
+			makeMe( topic, value.getBytes(MQTT_CHARSET) );
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}
@@ -86,39 +85,19 @@ public final class PublishPacket extends TopicPacket {
 	 * @param QoS Required QoS, 0-3
 	 */
 	public PublishPacket(String topic, String value, int QoS ) {
-		super(null);
+		super((byte) 0,null);
 		try {
-			makeMe( topic, (byte) 0, value.getBytes(MQTT_CHARSET) );
+			makeMe( topic, value.getBytes(MQTT_CHARSET) );
 			setQoS(QoS);
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}
 	}
-	
 
-	
-	/**
-	 * Create packet to be sent.
-	 * @param topic Topic string.
-	 * @param flags Protocol flags.
-	 * @param value Value as string.
-	 * /
-	public PublishPacket(String topic, byte flags, String value) {
-		super(null);
-		try {
-			makeMe( topic, flags, value.getBytes(MQTT_CHARSET) );
-		} catch (UnsupportedEncodingException e) {
-			throw new NoEncodingRuntimeException(e);
-		}
-	} */
-	
-	private void makeMe(String topic, byte flags, byte[] value) {
+	private void makeMe(String topic, byte[] value) {
 		this.topic = topic;
-		this.flags = flags;
 		this.value = value;
 	}
-	
-	
 
 	/*
 	 * (non-Javadoc)
@@ -137,14 +116,14 @@ public final class PublishPacket extends TopicPacket {
 					
 		byte [] pkt = new byte[plen]; 
 
-		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (flags & 0x0F)); // TODO encodeTotalLength does it?
+		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags() & 0x0F)); // TODO encodeTotalLength does it?
 		pkt[1] = (byte) (tbytes.length & 0xFF);
 		
 		System.arraycopy(tbytes, 0, pkt, 2, tbytes.length);
 		System.arraycopy(value, 0, pkt, tbytes.length + 2, value.length );
 		
 		//return IPacket.encodeTotalLength(pkt, IPacket.PT_PUBLISH);
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBLISH, flags, null, this );
+		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBLISH, getFlags(), null, this );
 	}
 
 	@Override

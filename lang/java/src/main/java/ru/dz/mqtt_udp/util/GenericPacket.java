@@ -31,13 +31,13 @@ public abstract class GenericPacket implements IPacket {
 	/**
 	 * Packet header flags.
 	 */
-	protected byte    flags = 0;
+	private byte flags = 0;
 
 	/**
 	 * Packet source address, if packet is received from net.
 	 * Locally created ones have null here.
 	 */
-	protected IPacketAddress from;
+	private IPacketAddress from;
 
 	private InetAddress resendAddress;
 
@@ -52,7 +52,8 @@ public abstract class GenericPacket implements IPacket {
 	 * Construct packet from network.
 	 * @param from Sender's address.
 	 */
-	protected GenericPacket(IPacketAddress from) {
+	protected GenericPacket(byte flags,IPacketAddress from) {
+		this.flags = flags;
 		this.from = from;
 	}
 

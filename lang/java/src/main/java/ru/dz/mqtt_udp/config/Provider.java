@@ -60,7 +60,7 @@ public final class Provider implements Consumer<IPacket> {
 		
 		TopicItem it = items.get(sp.getTopic());
 		
-		PublishPacket pp = new PublishPacket(it.getTopic(), it.getValue());
+		PublishPacket pp = new PublishPacket(it.getTopic(), (byte) 0, it.getValue());
 		try {
 			pp.send();
 		} catch (IOException e) {

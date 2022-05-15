@@ -20,8 +20,7 @@ public final class SubscribePacket extends TopicPacket {
 	 */
 
 	public SubscribePacket(byte[] raw, byte flags, IPacketAddress from) {
-		super(from);
-		this.flags = flags;
+		super(flags,from);
 		int tlen = IPacket.decodeTopicLen( raw );
 
 		topic = new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
@@ -36,8 +35,8 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param flags Protocol flags.
 	 */
 	public SubscribePacket(String topic, byte flags) {
-		super(null);
-		makeMe( topic, flags );
+		super(flags,null);
+		makeMe( topic);
 	}
 
 	/**
@@ -45,14 +44,13 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 */
 	public SubscribePacket(String topic) {
-		super(null);
-		makeMe( topic, (byte) 0 );
+		super((byte) 0,null);
+		makeMe(topic);
 	}
 
 
-	private void makeMe(String topic, byte flags) {
+	private void makeMe(String topic) {
 		this.topic = topic;
-		this.flags = flags;
 	}
 
 
@@ -74,7 +72,7 @@ public final class SubscribePacket extends TopicPacket {
 
 		byte [] pkt = new byte[plen]; 
 
-		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (flags & 0x0F)); // TODO encodeTotalLength does it?
+		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags() & 0x0F)); // TODO encodeTotalLength does it?
 		pkt[1] = (byte) (tbytes.length & 0xFF);
 
 		System.arraycopy(tbytes, 0, pkt, 2, tbytes.length);
@@ -82,16 +80,13 @@ public final class SubscribePacket extends TopicPacket {
 
 		pkt[tbytes.length + 2] = 0; // Requested QoS is allways zero now - TODO add property
 		
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_SUBSCRIBE, flags, null, this );
+		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_SUBSCRIBE, getFlags(), null, this );
 	}
 
 	@Override
 	public String toString() {		
 		return String.format("MQTT/UDP SUBSCRIBE '%s'", getTopic() );
 	}
-
-	
-	//public void setFlags(byte flags) {		this.flags = flags;	}
 
 	/*
 	 * (non-Javadoc)

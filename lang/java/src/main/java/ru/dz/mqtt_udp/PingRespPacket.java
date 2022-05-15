@@ -15,9 +15,7 @@ public final class PingRespPacket extends GenericPacket {
 	 */
 
 	public PingRespPacket(byte[] raw, byte flags, IPacketAddress from) {
-		super(from);
-		this.flags = flags;
-		this.from = from;
+		super(flags,from);
 		if( raw.length > 0 )
 			System.err.println("nonempty PingRespPacket");
 	}
@@ -41,7 +39,7 @@ public final class PingRespPacket extends GenericPacket {
 	@Override
 	public byte[] toBytes() {
 		byte[] pkt = new byte[0];
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PINGRESP, flags, null, this );	
+		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PINGRESP, getFlags(), null, this );
 	}
 
 	/*
