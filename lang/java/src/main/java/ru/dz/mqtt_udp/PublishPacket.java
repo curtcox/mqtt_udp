@@ -13,7 +13,7 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  * @author dz
  *
  */
-public class PublishPacket extends TopicPacket {
+public final class PublishPacket extends TopicPacket {
 
 	//private String  topic;
 	private byte[]  value;

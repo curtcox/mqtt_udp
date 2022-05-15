@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
-import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.PacketSourceMultiServer;
 import ru.dz.mqtt_udp.PublishPacket;
 import ru.dz.mqtt_udp.SubscribePacket;
@@ -42,24 +41,19 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  * 
  */
 
-public class Controller implements Consumer<IPacket> {
+public final class Controller implements Consumer<IPacket> {
 
 	private final static String SYS_CONF_WILD = mqtt_udp_defs.SYS_CONF_PREFIX+"/#";
 	
-	private LoopRunner lr = new LoopRunner("Remote Config Controller") 
-	{
+	private LoopRunner lr = new RemoteConfigLoopRunner() {
 		@Override
-		protected void step() throws IOException, MqttProtocolException {
+		protected void step() throws IOException {
 			new SubscribePacket(SYS_CONF_WILD).send();
 			sleep(30L*1000L);
 			//sleep(2L*1000L);
 		}
 		
-		@Override
-		protected void onStop() throws IOException, MqttProtocolException { /** empty */ }		
-		@Override
-		protected void onStart() throws IOException, MqttProtocolException { /** empty */ }
-	}; 
+	};
 	
 	private TopicFilter rf = new TopicFilter(SYS_CONF_WILD);
 
@@ -181,13 +175,17 @@ public class Controller implements Consumer<IPacket> {
 	public void setNewParameterListener(Consumer<ConfigurableParameter> sink) {
 		this.newParameterListener = sink;		
 	}
-	
-	public static void main(String[] args) {
+
+	static void start() {
 		PacketSourceMultiServer ms = new PacketSourceMultiServer();
 		Controller rc = new Controller(ms);
-		
+
 		ms.requestStart();
 		rc.requestStart();
+	}
+
+	public static void main(String[] args) {
+		start();
 	}
 
 }

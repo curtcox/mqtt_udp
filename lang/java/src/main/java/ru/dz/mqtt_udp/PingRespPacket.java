@@ -5,7 +5,7 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
-public class PingRespPacket extends GenericPacket {
+public final class PingRespPacket extends GenericPacket {
 
 	/**
 	 * Construct from incoming UDP data. 

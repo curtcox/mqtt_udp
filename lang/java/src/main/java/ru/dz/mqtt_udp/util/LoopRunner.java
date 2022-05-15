@@ -109,23 +109,19 @@ public abstract class LoopRunner {
 
 
 	private Runnable makeLoopRunnable() {
-		return new Runnable() {
-			@Override
-			public void run() {
-				try {
-					loop();
-				} catch (IOException e) {
-					GlobalErrorHandler.handleError(ErrorType.IO, e);
-				} catch (MqttProtocolException e) {
-					GlobalErrorHandler.handleError(ErrorType.Protocol, e);
-				}				
+		return () -> {
+			try {
+				loop();
+			} catch (IOException e) {
+				GlobalErrorHandler.handleError(ErrorType.IO, e);
+			} catch (MqttProtocolException e) {
+				GlobalErrorHandler.handleError(ErrorType.Protocol, e);
 			}
 		};
 	}
 
 	
-	public static void sleep(long msec)
-	{
+	public static void sleep(long msec) {
 		try {
 			Thread.sleep(msec);
 		} catch (InterruptedException e) {

@@ -26,7 +26,7 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  *
  */
 
-public class Provider implements Consumer<IPacket> {
+public final class Provider implements Consumer<IPacket> {
 
 	//private SubServer ss; // no, need one that can serve multiple listeners with thread pool
 	//private ArrayList topics = new ArrayList<>();

@@ -5,7 +5,7 @@ package ru.dz.mqtt_udp.util;
  * @author dz
  *
  */
-public class MqttUdpRuntimeException extends RuntimeException {
+public final class MqttUdpRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = -5457668271437431299L;
 

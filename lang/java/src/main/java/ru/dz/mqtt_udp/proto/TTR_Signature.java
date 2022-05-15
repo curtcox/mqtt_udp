@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import ru.dz.mqtt_udp.hmac.HMAC;
 
-public class TTR_Signature extends TaggedTailRecord {
+public final class TTR_Signature extends TaggedTailRecord {
 	private final static byte myTag = (byte)'s'; 
 	public final static int SIGLEN = 16+1+1; // len of signature TTRecord
 

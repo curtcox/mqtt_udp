@@ -11,7 +11,7 @@ import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 
 
-public class HMAC {
+public final class HMAC {
 
 
 

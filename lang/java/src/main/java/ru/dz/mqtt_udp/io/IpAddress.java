@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-public class IpAddress extends GeneralAddress implements Comparable<IPacketAddress>{
+public final class IpAddress extends GeneralAddress implements Comparable<IPacketAddress>{
 
 	private SocketAddress socketAddress;
 

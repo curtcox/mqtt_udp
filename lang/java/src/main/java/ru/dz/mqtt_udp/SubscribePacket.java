@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
-public class SubscribePacket extends TopicPacket {
+public final class SubscribePacket extends TopicPacket {
 
 
 	/**

@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
  * @author dz
  *
  */
-public class TTR_ProtocolTimeDate extends TTR_AbstractTimeDate {
+public final class TTR_ProtocolTimeDate extends TTR_AbstractTimeDate {
 
 	private final static byte myTag = (byte)'p'; 
 	

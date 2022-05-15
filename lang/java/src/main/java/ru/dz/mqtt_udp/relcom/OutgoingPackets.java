@@ -15,7 +15,7 @@ import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 import ru.dz.mqtt_udp.util.LoopRunner;
 
-public class OutgoingPackets implements Consumer<IPacket> {
+public final class OutgoingPackets implements Consumer<IPacket> {
 
 	protected static final int RESEND_COUNT = 3;
 

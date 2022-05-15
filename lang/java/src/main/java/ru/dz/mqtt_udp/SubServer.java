@@ -25,7 +25,7 @@ public abstract class SubServer extends LoopRunner
 	}	
 
 	@Override
-	protected void onStart() throws IOException, MqttProtocolException {
+	protected void onStart() throws IOException {
 		s = GenericPacket.recvSocket();
 	}
 
@@ -38,7 +38,7 @@ public abstract class SubServer extends LoopRunner
 	}
 
 	@Override
-	protected void onStop() throws IOException, MqttProtocolException {
+	protected void onStop() {
 		s.close();
 	}
 

@@ -24,25 +24,25 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 public interface IPacket {
 
 	/** MQTT/UDP character set */
-	public static final String MQTT_CHARSET = "UTF-8";
+	String MQTT_CHARSET = "UTF-8";
 
 	/**
 	 * Generate network representation of packet to be sent.
 	 * @return UDP packet contents.
 	 */
-	public byte[] toBytes();
+	byte[] toBytes();
 
 	/**
 	 * Get packet sender address.
 	 * @return IP address.
 	 */
-	public IPacketAddress getFrom();
+	IPacketAddress getFrom();
 
 	/**
 	 * Get packet type byte, as sent over the net (&amp; 0xF0).
 	 * @return Packet type byte.
 	 */
-	public int getType();
+	int getType();
 
 	
 	
@@ -59,7 +59,7 @@ public interface IPacket {
 	 * @return Packet object
 	 * @throws MqttProtocolException on incorrect binary packet data
 	 */
-	public static IPacket fromBytes( byte[] raw, IPacketAddress from ) throws MqttProtocolException
+	static IPacket fromBytes( byte[] raw, IPacketAddress from ) throws MqttProtocolException
 	{		
 	    int total_len = 0;
 	    int headerEnd = 1;
@@ -129,7 +129,7 @@ public interface IPacket {
 		return p.applyTTRs(ttrs);
 	}
 
-	public static Collection<TaggedTailRecord> decodeTTRs(byte[] raw, int total_len, int headerEnd, int recvLen)
+	static Collection<TaggedTailRecord> decodeTTRs(byte[] raw, int total_len, int headerEnd, int recvLen)
 			throws MqttProtocolException {
 		Collection<TaggedTailRecord> ttrs;
 		int tail_len = recvLen - total_len; // TTRs size 
@@ -201,7 +201,7 @@ public interface IPacket {
 	 * @param pkt Binary packet data.
 	 * @return Decoded length.
 	 */
-	public static int decodeTopicLen( byte [] pkt )
+	static int decodeTopicLen( byte [] pkt )
 	{
 	    int ret = 0;
 
@@ -224,7 +224,7 @@ public interface IPacket {
 	 * @param ttr TTRs to encode to packet
 	 * @return encoded packet to send to UDP
 	 */
-	public static byte[] encodeTotalLength(byte[] pkt, int packetType, byte flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
+	static byte[] encodeTotalLength(byte[] pkt, int packetType, byte flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
 		int data_len = pkt.length;
 		
 		byte[] buf = new byte[4]; // can't sent very long packets over UDP, 16 bytes are surely ok
@@ -268,7 +268,7 @@ public interface IPacket {
 	 * @param packetBeginning Classic packet.
 	 * @return Extended packet.
 	 */
-	public static byte[] encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p ) 
+	static byte[] encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p )
 	{
 		ArrayList<byte[]> outs = new ArrayList<>();
 
@@ -365,7 +365,7 @@ public interface IPacket {
 	}*/
 	
 
-	static final String[] pTYpeNames = {
+	String[] pTYpeNames = {
 			"? NULL",
 			"Connect",
 			"ConnAck",
@@ -389,7 +389,7 @@ public interface IPacket {
 	 * @param packetType as in incoming byte (&amp; 0xF0).
 	 * @return Type string.
 	 */
-	public static String getPacketTypeName(int packetType) 
+	static String getPacketTypeName(int packetType)
 	{
 		int pos = packetType >> 4;
 	    
@@ -402,7 +402,7 @@ public interface IPacket {
 	 * Packet with valid signature?
 	 * @return true if it has valid digital signature.
 	 */
-	public boolean isSigned();
+	boolean isSigned();
 	
 	
 }

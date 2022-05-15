@@ -39,18 +39,13 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  *
  */
 public final class RemoteConfig implements Consumer<IPacket> {
-	private LoopRunner lr = new LoopRunner("Remote Config Controllable") {
+	private LoopRunner lr = new RemoteConfigLoopRunner() {
 		@Override
 		protected void step() {
 			//new SubscribePacket(SYS_CONF_WILD).send();
 			sleep(30L*1000L);
 			//sleep(2L*1000L);
 		}
-
-		@Override
-		protected void onStop() { /** empty */ }
-		@Override
-		protected void onStart() { /** empty */ }
 	};
 	//private String macAddress;
 	private Collection<ConfigurableParameter> items; 

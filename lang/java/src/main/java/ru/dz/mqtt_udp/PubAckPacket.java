@@ -11,7 +11,7 @@ import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
-public class PubAckPacket extends GenericPacket {
+public final class PubAckPacket extends GenericPacket {
 
 	private PublishPacket replyToPkt;
 	//private int qos;

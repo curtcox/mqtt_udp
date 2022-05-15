@@ -1,6 +1,6 @@
 package ru.dz.mqtt_udp.util;
 
-public class ByteArray {
+public final class ByteArray {
 
 
 	public static void dumpBytes(String string, byte[] b) 

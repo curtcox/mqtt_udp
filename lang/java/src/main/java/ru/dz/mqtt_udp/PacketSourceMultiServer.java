@@ -25,7 +25,7 @@ import ru.dz.mqtt_udp.items.AbstractItem;
  * @author dz
  *
  */
-public class PacketSourceMultiServer extends SubServer implements IPacketMultiSource {
+public final class PacketSourceMultiServer extends SubServer implements IPacketMultiSource {
 
 	//public PacketSourceMultiServer() {
 	//}

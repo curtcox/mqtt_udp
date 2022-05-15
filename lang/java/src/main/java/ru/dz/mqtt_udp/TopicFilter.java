@@ -7,7 +7,7 @@ import java.util.function.Predicate;
  * @author dz
  *
  */
-public class TopicFilter implements Predicate<String> {
+public final class TopicFilter implements Predicate<String> {
 
 	private String filter;
 

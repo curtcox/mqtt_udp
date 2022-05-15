@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * @author dz
  *
  */
-public class PacketSourceServer extends SubServer implements IPacketSource {
+public final class PacketSourceServer extends SubServer implements IPacketSource {
 
 	private Consumer<IPacket> sink;
 

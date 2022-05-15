@@ -3,7 +3,7 @@ package ru.dz.mqtt_udp.config;
 import ru.dz.mqtt_udp.util.ErrorType;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 
-public class LocalReadOnlyParameter extends LocalConfigurableParameter {
+public final class LocalReadOnlyParameter extends LocalConfigurableParameter {
 
 	public LocalReadOnlyParameter(String kind, String name, String value) {
 		super(kind, name, value);

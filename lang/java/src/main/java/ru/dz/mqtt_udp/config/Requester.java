@@ -53,7 +53,7 @@ import ru.dz.mqtt_udp.util.LoopRunner;
  *
  */
 
-public class Requester implements Consumer<IPacket> {
+public final class Requester implements Consumer<IPacket> {
 	private static final int CHECK_LOOP_TIME = 1000*60;
 	private static final int REQUEST_STEP_TIME = 1000;
 

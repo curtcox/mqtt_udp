@@ -15,12 +15,12 @@ public interface IPacketMultiSource
 	 * Add sink to consume received packets.
 	 * @param sink Consumer&lt;IPacket&gt; to add to consumers list.
 	 */
-	public void addPacketSink(Consumer<IPacket> sink);	
+	void addPacketSink(Consumer<IPacket> sink);
 	/**
 	 * Remove sink from consumers list.
 	 * @param sink Consumer&lt;IPacket&gt; to add to consumers list.
 	 */
-	public void removePacketSink(Consumer<IPacket> sink);
+	void removePacketSink(Consumer<IPacket> sink);
 
 	
 	
@@ -29,12 +29,12 @@ public interface IPacketMultiSource
 	 * Add sink to consume received packets.
 	 * @param sink Consumer&lt;AbstractItem&gt; to add to consumers list.
 	 */
-	public void addItemSink(Consumer<AbstractItem> sink);	
+	void addItemSink(Consumer<AbstractItem> sink);
 	/**
 	 * Remove sink from consumers list.
 	 * @param sink Consumer&lt;AbstractItem&gt; to add to consumers list.
 	 */
-	public void removeItemSink(Consumer<AbstractItem> sink);
+	void removeItemSink(Consumer<AbstractItem> sink);
 	
 	
 }

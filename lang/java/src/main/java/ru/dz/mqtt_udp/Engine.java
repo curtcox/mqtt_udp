@@ -4,7 +4,7 @@ import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.Throttle;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
-public class Engine {
+public final class Engine {
 
 	private static boolean signatureRequired = false;
 	private static String signatureKey = "signPassword";

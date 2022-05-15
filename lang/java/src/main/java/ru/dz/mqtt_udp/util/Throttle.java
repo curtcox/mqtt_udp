@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 
  * 
 **/
-public class Throttle 
+public final class Throttle
 {
 
 	private long last_send_time = 0;

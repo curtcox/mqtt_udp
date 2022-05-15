@@ -13,7 +13,7 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  * @author dz
  *
  */
-public class TopicItem extends AbstractItem {
+public final class TopicItem extends AbstractItem {
 
 	
 	private String topic;

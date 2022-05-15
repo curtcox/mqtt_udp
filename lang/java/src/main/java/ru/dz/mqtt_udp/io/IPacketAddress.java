@@ -14,8 +14,8 @@ import java.net.InetAddress;
 
 public interface IPacketAddress {
 
-	public String toString();
+	String toString();
 
-	public InetAddress getInetAddress();
+	InetAddress getInetAddress();
 	
 }

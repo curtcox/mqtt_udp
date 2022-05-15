@@ -8,7 +8,7 @@ import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 /**
  * Singleton for UDP send socket.
  */
-public class SingleSendSocket {
+public final class SingleSendSocket {
 
         private static volatile SingleSendSocket instance;
 
