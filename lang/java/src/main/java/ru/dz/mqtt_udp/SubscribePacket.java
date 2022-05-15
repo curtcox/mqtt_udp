@@ -24,7 +24,7 @@ public final class SubscribePacket extends TopicPacket {
 	}
 
     private static String topic(byte[] raw) {
-		int tlen = IPacket.decodeTopicLen( raw );
+		int tlen = Packets.decodeTopicLen( raw );
 		return new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
 	}
 
@@ -70,7 +70,7 @@ public final class SubscribePacket extends TopicPacket {
 
 		pkt[tbytes.length + 2] = 0; // Requested QoS is allways zero now - TODO add property
 		
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_SUBSCRIBE, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_SUBSCRIBE, getFlags(), null, this );
 	}
 
 	@Override

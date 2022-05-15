@@ -1,6 +1,7 @@
 package ru.dz.mqtt_udp.items;
 
 import ru.dz.mqtt_udp.IPacket;
+import ru.dz.mqtt_udp.Packets;
 import ru.dz.mqtt_udp.PublishPacket;
 import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
@@ -69,9 +70,9 @@ public final class TopicItem extends AbstractItem {
 		if( packetType == mqtt_udp_defs.PTYPE_PUBLISH)
 			return com+topic+"="+value;
 		else if(typeWithTopic())
-			return com+IPacket.getPacketTypeName(packetType)+" \ttopic="+topic;
+			return com + Packets.getPacketTypeName(packetType)+" \ttopic="+topic;
 		else
-			return com+IPacket.getPacketTypeName(packetType);
+			return com + Packets.getPacketTypeName(packetType);
 	}
 
 	public String getTopic() {		return topic;	}

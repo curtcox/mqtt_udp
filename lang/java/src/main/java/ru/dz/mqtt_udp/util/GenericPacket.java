@@ -12,6 +12,7 @@ import java.util.Optional;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
+import ru.dz.mqtt_udp.Packets;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.io.IpAddress;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
@@ -168,7 +169,7 @@ public abstract class GenericPacket implements IPacket {
 		
 		System.arraycopy(p.getData(), p.getOffset(), got, 0, l);
 		
-		return IPacket.fromBytes(got, new IpAddress(p.getSocketAddress()) );		
+		return Packets.fromBytes(got, new IpAddress(p.getSocketAddress()) );
 	}
 
 

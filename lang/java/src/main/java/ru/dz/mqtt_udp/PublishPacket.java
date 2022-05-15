@@ -27,7 +27,7 @@ public final class PublishPacket extends TopicPacket {
 	 */
 	public PublishPacket(byte[] raw, byte flags, IPacketAddress from) {
 		super(flags,topic(raw),from);
-		int tlen = IPacket.decodeTopicLen( raw );
+		int tlen = Packets.decodeTopicLen( raw );
 		int vlen = raw.length - tlen - 2;		
 		value = new byte[vlen];	
 		System.arraycopy( raw, tlen+2, value, 0, vlen );
@@ -36,7 +36,7 @@ public final class PublishPacket extends TopicPacket {
 	}
 
 	private static String topic(byte[] raw) {
-		int tlen = IPacket.decodeTopicLen( raw );
+		int tlen = Packets.decodeTopicLen( raw );
 		return new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
 	}
 	
@@ -123,7 +123,7 @@ public final class PublishPacket extends TopicPacket {
 		System.arraycopy(value, 0, pkt, tbytes.length + 2, value.length );
 		
 		//return IPacket.encodeTotalLength(pkt, IPacket.PT_PUBLISH);
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBLISH, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBLISH, getFlags(), null, this );
 	}
 
 	@Override

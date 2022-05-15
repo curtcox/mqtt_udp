@@ -60,7 +60,7 @@ public final class PubAckPacket extends GenericPacket {
 			ttrs.add(id);
 		}
 		
-		return IPacket.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBACK, getFlags(), ttrs, this );
+		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBACK, getFlags(), ttrs, this );
 	}
 
 	/*
