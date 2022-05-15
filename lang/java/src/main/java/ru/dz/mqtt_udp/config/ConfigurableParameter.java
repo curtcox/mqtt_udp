@@ -5,6 +5,7 @@ import java.io.IOException;
 import ru.dz.mqtt_udp.PublishPacket;
 import ru.dz.mqtt_udp.SubscribePacket;
 import ru.dz.mqtt_udp.util.ErrorType;
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -136,7 +137,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 		//System.out.println("send "+topic+"="+value);
 		
 		try {
-			new PublishPacket(topic, (byte) 0,value).send();
+			new PublishPacket(topic,new Flags(),value).send();
 		} catch (IOException e) {
 			GlobalErrorHandler.handleError(ErrorType.IO, e);
 		}

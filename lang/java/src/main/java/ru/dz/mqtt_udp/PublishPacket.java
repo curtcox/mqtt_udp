@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.NoEncodingRuntimeException;
 import ru.dz.mqtt_udp.util.TopicPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
@@ -25,7 +26,7 @@ public final class PublishPacket extends TopicPacket {
 	 * @param flags Flags from packet header.
 	 * @param from Source IP address.
 	 */
-	public PublishPacket(byte[] raw, byte flags, IPacketAddress from) {
+	public PublishPacket(byte[] raw, Flags flags, IPacketAddress from) {
 		super(flags,topic(raw),from);
 		int tlen = Packets.decodeTopicLen( raw );
 		int vlen = raw.length - tlen - 2;		
@@ -58,7 +59,7 @@ public final class PublishPacket extends TopicPacket {
 	 * @param flags Protocol flags.
 	 * @param value Value as byte array.
 	 */
-	public PublishPacket(String topic, byte flags, byte[] value) {
+	public PublishPacket(String topic, Flags flags, byte[] value) {
 		super(flags,topic, null);
 		makeMe(value);
 	}
@@ -69,7 +70,7 @@ public final class PublishPacket extends TopicPacket {
 	 * @param topic Topic string.
 	 * @param value Value string.
 	 */
-	public PublishPacket(String topic, byte flags, String value) {
+	public PublishPacket(String topic, Flags flags, String value) {
 		super(flags,topic,null);
 		try {
 			makeMe(value.getBytes(MQTT_CHARSET) );
@@ -86,10 +87,9 @@ public final class PublishPacket extends TopicPacket {
 	 * @param QoS Required QoS, 0-3
 	 */
 	public PublishPacket(String topic, String value, int QoS ) {
-		super((byte) 0,topic,null);
+		super(new Flags(QoS),topic,null);
 		try {
 			makeMe(value.getBytes(MQTT_CHARSET) );
-			setQoS(QoS);
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}
@@ -116,7 +116,7 @@ public final class PublishPacket extends TopicPacket {
 					
 		byte [] pkt = new byte[plen]; 
 
-		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags() & 0x0F)); // TODO encodeTotalLength does it?
+		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags().toByte() & 0x0F)); // TODO encodeTotalLength does it?
 		pkt[1] = (byte) (tbytes.length & 0xFF);
 		
 		System.arraycopy(tbytes, 0, pkt, 2, tbytes.length);

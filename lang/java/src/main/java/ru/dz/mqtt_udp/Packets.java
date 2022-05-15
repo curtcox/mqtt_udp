@@ -5,10 +5,7 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.proto.TTR_PacketNumber;
 import ru.dz.mqtt_udp.proto.TTR_Signature;
 import ru.dz.mqtt_udp.proto.TaggedTailRecord;
-import ru.dz.mqtt_udp.util.ErrorType;
-import ru.dz.mqtt_udp.util.GenericPacket;
-import ru.dz.mqtt_udp.util.GlobalErrorHandler;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
+import ru.dz.mqtt_udp.util.*;
 
 import java.util.AbstractCollection;
 import java.util.ArrayList;
@@ -59,28 +56,28 @@ public final class Packets {
         System.arraycopy(raw, headerEnd, sub, 0, total_len);
 
         int ptype = 0xF0 & (int)(raw[0]);
-        int flags = 0x0F & (int)(raw[0]);
+        Flags flags = new Flags(0x0F & (int)(raw[0]));
 
         GenericPacket p;
         switch(ptype) {
             case mqtt_udp_defs.PTYPE_PUBLISH:
-                p = new PublishPacket(sub, (byte)flags, from);
+                p = new PublishPacket(sub, flags, from);
                 break;
 
             case mqtt_udp_defs.PTYPE_PUBACK:
-                p = new PubAckPacket(sub, (byte)flags, from);
+                p = new PubAckPacket(sub, flags, from);
                 break;
 
             case mqtt_udp_defs.PTYPE_PINGREQ:
-                p = new PingReqPacket(sub, (byte)flags, from);
+                p = new PingReqPacket(sub, flags, from);
                 break;
 
             case mqtt_udp_defs.PTYPE_PINGRESP:
-                p = new PingRespPacket(sub, (byte)flags, from);
+                p = new PingRespPacket(sub, flags, from);
                 break;
 
             case mqtt_udp_defs.PTYPE_SUBSCRIBE:
-                p = new SubscribePacket(sub, (byte)flags, from);
+                p = new SubscribePacket(sub, flags, from);
                 break;
 
             default:
@@ -142,7 +139,7 @@ public final class Packets {
         }
         return ttrs;
     }
-    
+
     /**
      * Decode 2-byte string length.
      * @param pkt Binary packet data.
@@ -178,13 +175,13 @@ public final class Packets {
      * @param ttr TTRs to encode to packet
      * @return encoded packet to send to UDP
      */
-    static byte[] encodeTotalLength(byte[] pkt, int packetType, byte flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
+    static byte[] encodeTotalLength(byte[] pkt, int packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
         int data_len = pkt.length;
 
         byte[] buf = new byte[4]; // can't sent very long packets over UDP, 16 bytes are surely ok
         int bp = 1;
 
-        buf[0] = (byte) ((packetType & 0xF0) | (flags & 0x0F));
+        buf[0] = (byte) ((packetType & 0xF0) | (flags.toByte() & 0x0F));
 
         do {
             byte b = (byte) (data_len % 128);

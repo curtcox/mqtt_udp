@@ -7,7 +7,6 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
  * @author dz
  *
  */
-
 public interface IPacket {
 
 	/** MQTT/UDP character set */

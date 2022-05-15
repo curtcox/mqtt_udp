@@ -32,7 +32,7 @@ public abstract class GenericPacket implements IPacket {
 	/**
 	 * Packet header flags.
 	 */
-	private byte flags = 0;
+	private Flags flags = new Flags();
 
 	/**
 	 * Packet source address, if packet is received from net.
@@ -53,7 +53,7 @@ public abstract class GenericPacket implements IPacket {
 	 * Construct packet from network.
 	 * @param from Sender's address.
 	 */
-	protected GenericPacket(byte flags,IPacketAddress from) {
+	protected GenericPacket(Flags flags,IPacketAddress from) {
 		this.flags = flags;
 		this.from = from;
 	}
@@ -127,7 +127,7 @@ public abstract class GenericPacket implements IPacket {
 		sentCounter++;
 		//System.out.println("UDP sent "+pkt.length);
 		resendAddress = address;
-		if( getQoS() != 0 ) Engine.queueForResend(this);
+		if( flags.getQoS() != 0 ) Engine.queueForResend(this);
 	}
 
 
@@ -185,18 +185,8 @@ public abstract class GenericPacket implements IPacket {
 	 * 
 	 * @return Flags bit field.
 	 */
-	final public byte getFlags() {		return flags;	}
-	
+	final public Flags getFlags() {		return flags;	}
 
-	final public int getQoS() {
-		return (flags >> 1) & 0x3;
-	}
-
-	final public void setQoS(int qos) {
-		flags &= ~0x6;
-		flags |= (qos & 0x3) << 1;		
-	}
-	
 	
 	@Override
 	public String toString() {

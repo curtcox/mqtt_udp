@@ -10,6 +10,7 @@ import ru.dz.mqtt_udp.IPacketMultiSource;
 import ru.dz.mqtt_udp.PublishPacket;
 import ru.dz.mqtt_udp.SubscribePacket;
 import ru.dz.mqtt_udp.items.TopicItem;
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 /**
@@ -60,7 +61,7 @@ public final class Provider implements Consumer<IPacket> {
 		
 		TopicItem it = items.get(sp.getTopic());
 		
-		PublishPacket pp = new PublishPacket(it.getTopic(), (byte) 0, it.getValue());
+		PublishPacket pp = new PublishPacket(it.getTopic(),new Flags(), it.getValue());
 		try {
 			pp.send();
 		} catch (IOException e) {

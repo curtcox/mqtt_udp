@@ -2,6 +2,7 @@ package ru.dz.mqtt_udp;
 
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -14,7 +15,7 @@ public final class PingRespPacket extends GenericPacket {
 	 * @param from Source IP address.
 	 */
 
-	public PingRespPacket(byte[] raw, byte flags, IPacketAddress from) {
+	public PingRespPacket(byte[] raw, Flags flags, IPacketAddress from) {
 		super(flags,from);
 		if( raw.length > 0 )
 			System.err.println("nonempty PingRespPacket");

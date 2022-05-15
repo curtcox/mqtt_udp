@@ -146,9 +146,7 @@ public abstract class SubServer extends LoopRunner {
 	 */
 	private void preprocessPacket(IPacket p) throws IOException {
 
-		//if (p instanceof PublishPacket) {		} else 
-		if( p instanceof PingReqPacket)
-		{
+		if( p instanceof PingReqPacket) {
 			// Reply to ping
 			PingRespPacket presp = new PingRespPacket();
 			//presp.send(ss, ((PingReqPacket) p).getFrom().getInetAddress());
@@ -158,9 +156,8 @@ public abstract class SubServer extends LoopRunner {
 		else if( p instanceof PublishPacket) {
 			PublishPacket pp = (PublishPacket) p;
 			
-			int qos = pp.getQoS();
-			if( qos != 0 )
-			{
+			int qos = pp.getFlags().getQoS();
+			if( qos != 0 ) {
 				System.out.println("QoS, Publish id="+pp.getPacketNumber().orElse(0));
 				int maxQos = Engine.getMaxReplyQoS();
 				qos = Integer.min(qos, maxQos);

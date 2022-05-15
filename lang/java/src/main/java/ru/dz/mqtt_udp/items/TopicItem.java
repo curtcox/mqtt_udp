@@ -1,8 +1,8 @@
 package ru.dz.mqtt_udp.items;
 
-import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.Packets;
 import ru.dz.mqtt_udp.PublishPacket;
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -103,8 +103,7 @@ public final class TopicItem extends AbstractItem {
 		return getTopic().equals(t.getTopic());
 	}
 
-	public boolean sameHostAndTopic( TopicItem t )
-	{
+	public boolean sameHostAndTopic( TopicItem t ) {
 		return getTopic().equals(t.getTopic()) && getFrom().equals(t.getFrom());
 	}
 
@@ -113,11 +112,9 @@ public final class TopicItem extends AbstractItem {
 	// ---------------------------------------------------
 	
 	
-	public GenericPacket toPacket()
-	{
-		switch(packetType)
-		{
-		case mqtt_udp_defs.PTYPE_PUBLISH: return new PublishPacket(topic, (byte) 0, value);
+	public GenericPacket toPacket() {
+		switch(packetType) {
+		case mqtt_udp_defs.PTYPE_PUBLISH: return new PublishPacket(topic,new Flags(), value);
 		//case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(topic);
 		
 		default: return super.toPacket(); 

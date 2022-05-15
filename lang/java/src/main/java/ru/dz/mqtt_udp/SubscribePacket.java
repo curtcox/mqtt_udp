@@ -1,5 +1,6 @@
 package ru.dz.mqtt_udp;
 
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.NoEncodingRuntimeException;
 import ru.dz.mqtt_udp.util.TopicPacket;
 
@@ -19,7 +20,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param from Source IP address.
 	 */
 
-	public SubscribePacket(byte[] raw, byte flags, IPacketAddress from) {
+	public SubscribePacket(byte[] raw, Flags flags, IPacketAddress from) {
 		super(flags,topic(raw),from);
 	}
 
@@ -33,7 +34,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 * @param flags Protocol flags.
 	 */
-	public SubscribePacket(String topic, byte flags) {
+	public SubscribePacket(String topic, Flags flags) {
 		super(flags,topic, null);
 	}
 
@@ -42,7 +43,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 */
 	public SubscribePacket(String topic) {
-		super((byte) 0,topic, null);
+		super(new Flags(),topic, null);
 	}
 
 	/*
@@ -62,7 +63,7 @@ public final class SubscribePacket extends TopicPacket {
 
 		byte [] pkt = new byte[plen]; 
 
-		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags() & 0x0F)); // TODO encodeTotalLength does it?
+		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags().toByte() & 0x0F)); // TODO encodeTotalLength does it?
 		pkt[1] = (byte) (tbytes.length & 0xFF);
 
 		System.arraycopy(tbytes, 0, pkt, 2, tbytes.length);

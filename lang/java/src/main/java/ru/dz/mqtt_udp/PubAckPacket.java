@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.proto.TTR_ReplyTo;
 import ru.dz.mqtt_udp.proto.TaggedTailRecord;
-import ru.dz.mqtt_udp.util.ErrorType;
-import ru.dz.mqtt_udp.util.GenericPacket;
-import ru.dz.mqtt_udp.util.GlobalErrorHandler;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
+import ru.dz.mqtt_udp.util.*;
 
 public final class PubAckPacket extends GenericPacket {
 
@@ -23,7 +20,7 @@ public final class PubAckPacket extends GenericPacket {
 	 * @param from Source IP address.
 	 */
 
-	public PubAckPacket(byte[] raw, byte flags, IPacketAddress from) {
+	public PubAckPacket(byte[] raw, Flags flags, IPacketAddress from) {
 		super(flags,from);
 		if( raw.length > 0 )
 			System.err.println("non-empty PubAck Packet");
@@ -34,9 +31,7 @@ public final class PubAckPacket extends GenericPacket {
 	 */
 	public PubAckPacket(PublishPacket replyTo, int qos) {
 		this.replyToPkt = replyTo;
-		//this.qos = qos;
-
-		setQoS(qos);
+		getFlags().setQoS(qos);
 	}
 
 

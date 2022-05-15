@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
-import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.PubAckPacket;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
 import ru.dz.mqtt_udp.util.ErrorType;
@@ -31,9 +30,8 @@ public final class OutgoingPackets implements Consumer<IPacket> {
 		s.addPacketSink(this);
 	}
 
-	void add( GenericPacket p)
-	{
-		int qos = p.getQoS();
+	void add( GenericPacket p) {
+		int qos = p.getFlags().getQoS();
 
 		// No QoS? No resend.
 		if( qos == 0 )
@@ -63,18 +61,16 @@ public final class OutgoingPackets implements Consumer<IPacket> {
 			
 			System.out.println("found "+replyTo);
 			
-			int ackQoS = pa.getQoS();
-			int sentQoS = found.getQoS();
+			int ackQoS = pa.getFlags().getQoS();
+			int sentQoS = found.getFlags().getQoS();
 			
-			if( ackQoS == sentQoS )
-			{
+			if( ackQoS == sentQoS ) {
 				outgoing.remove(replyTo);
 				System.out.println("qos equal, remove");
 				return;
 			}
 			
-			if( ackQoS == sentQoS-1 )
-			{
+			if( ackQoS == sentQoS-1 ) {
 				System.out.println("qos -1, decrement");
 				found.incrementAckCount();
 				if( found.getAckCount() > MIN_ACK )
@@ -94,17 +90,15 @@ public final class OutgoingPackets implements Consumer<IPacket> {
 	private LoopRunner lr = new LoopRunner("ResendLoop") {
 
 		@Override
-		protected void step() throws IOException, MqttProtocolException {
+		protected void step() throws IOException {
 			sleep(300); // TODO use sleep time from defs
-			synchronized (outgoing) 
-			{
+			synchronized (outgoing) {
 				for(GenericPacket p : outgoing.values()) {
 					p.resend(SingleSendSocket.get());
 				}
 
 				boolean retry = false;
-				while(true)
-				{
+				while(true) {
 					for(GenericPacket p : outgoing.values()) {
 						//p.getSentCounter() > mqtt_udp_defs.RESEND_COUNT
 						if( p.getSentCounter() > RESEND_COUNT )
@@ -128,13 +122,13 @@ public final class OutgoingPackets implements Consumer<IPacket> {
 		 * Unused
 		 */
 		@Override
-		protected void onStop() throws IOException, MqttProtocolException { /* empty */ }
+		protected void onStop() { /* empty */ }
 
 		/**
 		 * Unused
 		 */
 		@Override
-		protected void onStart() throws IOException, MqttProtocolException { /* empty */ }
+		protected void onStart()  { /* empty */ }
 	};
 
 }

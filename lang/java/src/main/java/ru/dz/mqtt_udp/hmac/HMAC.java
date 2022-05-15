@@ -13,8 +13,6 @@ import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 
 public final class HMAC {
 
-
-
 	public static String hmacDigestMD5(String msg, String keyString) {
 		return hmacDigest(msg, keyString, "HmacMD5");
 	}
@@ -22,8 +20,6 @@ public final class HMAC {
 	public static String hmacDigestSHA256(String msg, String keyString) {
 		return hmacDigest(msg, keyString, "HmacSHA256");
 	}
-
-
 
 	
 	public static byte[] hmacDigestMD5(byte[] msg, String keyString) 
@@ -84,12 +80,6 @@ public final class HMAC {
 		digest = hash.toString();
 		return digest;
 	}
-
-
-
-
-
-
 
 
 }

@@ -60,7 +60,7 @@ public class GenericPacketTest {
 
     @Test
     public void getQoS() {
-        packet.getQoS();
+        packet.getFlags().getQoS();
     }
 
     @Test

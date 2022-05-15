@@ -40,9 +40,6 @@ public abstract class AbstractItem {
 		this.signed = src.signed;
 	}
 
-
-
-
 	// ---------------------------------------------------
 	// C'tors help
 
