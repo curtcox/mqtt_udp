@@ -67,7 +67,7 @@ public final class PubAckPacket extends GenericPacket {
 
 	/*
 	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.util.GenericPacket#toString()
+	 * @see ru.dz.mqtt_udp.packets.GenericPacket#toString()
 	 */
 	@Override
 	public String toString() {		

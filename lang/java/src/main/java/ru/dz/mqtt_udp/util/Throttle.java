@@ -10,8 +10,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * Will keep send pace. Up to {max_seq_packets} will be passed with no pause,
  * but more than that will be paused so that average time between packets
  * will be about {throttle} msec.
- * 
- * 
 **/
 public final class Throttle {
 

@@ -1,7 +1,6 @@
 package ru.dz.mqtt_udp.packets;
 
 import org.junit.Test;
-import ru.dz.mqtt_udp.util.GenericPacket;
 
 import java.io.IOException;
 

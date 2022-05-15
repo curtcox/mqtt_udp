@@ -10,7 +10,7 @@ import ru.dz.mqtt_udp.IPacketMultiSource;
 import ru.dz.mqtt_udp.packets.PubAckPacket;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
 import ru.dz.mqtt_udp.util.ErrorType;
-import ru.dz.mqtt_udp.util.GenericPacket;
+import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 import ru.dz.mqtt_udp.util.LoopRunner;
 

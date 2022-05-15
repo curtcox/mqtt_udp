@@ -1,6 +1,6 @@
 package ru.dz.mqtt_udp;
 
-import ru.dz.mqtt_udp.util.GenericPacket;
+import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.util.Throttle;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 

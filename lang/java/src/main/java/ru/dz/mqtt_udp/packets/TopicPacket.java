@@ -1,6 +1,7 @@
-package ru.dz.mqtt_udp.util;
+package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.util.Flags;
 
 /**
  * Packets with topic field.

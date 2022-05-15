@@ -6,7 +6,7 @@ import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.SubServer;
+import ru.dz.mqtt_udp.servers.SubServer;
 
 /**
  * 

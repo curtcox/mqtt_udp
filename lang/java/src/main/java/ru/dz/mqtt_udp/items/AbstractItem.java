@@ -8,7 +8,7 @@ import ru.dz.mqtt_udp.packets.PingReqPacket;
 import ru.dz.mqtt_udp.packets.PingRespPacket;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
-import ru.dz.mqtt_udp.util.GenericPacket;
+import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -109,8 +109,7 @@ public abstract class AbstractItem {
 
 
 
-	public GenericPacket toPacket()
-	{
+	public GenericPacket toPacket() {
 		switch(packetType)
 		{
 		case mqtt_udp_defs.PTYPE_PINGREQ: return new PingReqPacket();
@@ -165,21 +164,12 @@ public abstract class AbstractItem {
 	}
 
 
-
-
-
-
-
-
-
-	public void sendToAll() throws IOException
-	{
+	public void sendToAll() throws IOException {
 		GenericPacket pkt = toPacket();
 		pkt.send();
 	}
 
-	public void sendTo(InetAddress addr) throws IOException
-	{
+	public void sendTo(InetAddress addr) throws IOException {
 		GenericPacket pkt = toPacket();
 		pkt.send( addr );
 	}

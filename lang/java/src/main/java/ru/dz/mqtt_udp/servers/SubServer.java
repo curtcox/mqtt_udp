@@ -1,14 +1,17 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.servers;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
 
+import ru.dz.mqtt_udp.Engine;
+import ru.dz.mqtt_udp.IPacket;
+import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
 import ru.dz.mqtt_udp.packets.PingReqPacket;
 import ru.dz.mqtt_udp.packets.PingRespPacket;
 import ru.dz.mqtt_udp.packets.PubAckPacket;
 import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.util.GenericPacket;
+import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.util.LoopRunner;
 
 
@@ -33,7 +36,7 @@ public abstract class SubServer extends LoopRunner {
 	}
 
 	@Override
-	protected void step() throws IOException, MqttProtocolException 
+	protected void step() throws IOException, MqttProtocolException
 	{
 		IPacket p = GenericPacket.recv(s);
 		if(!muted) preprocessPacket(p);			

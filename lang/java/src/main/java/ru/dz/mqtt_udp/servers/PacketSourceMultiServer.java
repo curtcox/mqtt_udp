@@ -1,10 +1,12 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.servers;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import ru.dz.mqtt_udp.IPacket;
+import ru.dz.mqtt_udp.IPacketMultiSource;
 import ru.dz.mqtt_udp.items.AbstractItem;
 
 /**
@@ -27,7 +29,7 @@ import ru.dz.mqtt_udp.items.AbstractItem;
  */
 public final class PacketSourceMultiServer extends SubServer implements IPacketMultiSource {
 
-	private List< Consumer<IPacket> > plist = new ArrayList<>(); 
+	private List< Consumer<IPacket> > plist = new ArrayList<>();
 	private List< Consumer<AbstractItem> > ilist = new ArrayList<>(); 
 
 	/*

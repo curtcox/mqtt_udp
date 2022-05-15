@@ -1,4 +1,7 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.servers;
+
+import ru.dz.mqtt_udp.IPacket;
+import ru.dz.mqtt_udp.IPacketSource;
 
 import java.util.function.Consumer;
 

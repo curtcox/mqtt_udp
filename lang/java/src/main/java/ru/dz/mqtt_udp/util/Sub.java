@@ -2,7 +2,7 @@ package ru.dz.mqtt_udp.util;
 
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
-import ru.dz.mqtt_udp.SubServer;
+import ru.dz.mqtt_udp.servers.SubServer;
 
 public final class Sub extends SubServer {
 

@@ -1,9 +1,9 @@
 package ru.dz.mqtt_udp.items;
 
+import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 // TODO rename to PacketItem, make subclasses per type

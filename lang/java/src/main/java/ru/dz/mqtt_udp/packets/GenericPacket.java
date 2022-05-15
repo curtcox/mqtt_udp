@@ -1,4 +1,4 @@
-package ru.dz.mqtt_udp.util;
+package ru.dz.mqtt_udp.packets;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -12,7 +12,6 @@ import java.util.Optional;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
-import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.io.IpAddress;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
@@ -20,6 +19,10 @@ import ru.dz.mqtt_udp.proto.TTR_PacketNumber;
 import ru.dz.mqtt_udp.proto.TTR_ReplyTo;
 import ru.dz.mqtt_udp.proto.TTR_Signature;
 import ru.dz.mqtt_udp.proto.TaggedTailRecord;
+import ru.dz.mqtt_udp.util.ErrorType;
+import ru.dz.mqtt_udp.util.Flags;
+import ru.dz.mqtt_udp.util.GlobalErrorHandler;
+import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 /**
  * Network IO work horse for MQTT/UDP packets.

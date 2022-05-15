@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import ru.dz.mqtt_udp.config.Provider;
 import ru.dz.mqtt_udp.config.Requester;
+import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 
 public class RequesterProviderTest {
 

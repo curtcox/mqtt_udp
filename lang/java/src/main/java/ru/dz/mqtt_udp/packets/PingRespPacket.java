@@ -3,7 +3,6 @@ package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.GenericPacket;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 public final class PingRespPacket extends GenericPacket {
