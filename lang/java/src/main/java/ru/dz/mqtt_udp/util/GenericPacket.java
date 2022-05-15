@@ -62,18 +62,6 @@ public abstract class GenericPacket implements IPacket {
 	protected GenericPacket() {
 		this.from = null;
 	}
-	
-	/**
-	 * Create new socket to send MQTT/UDP packets.
-	 * @return socket
-	 * @throws SocketException
-	 * /
-	public static DatagramSocket sendSocket() throws SocketException
-	{
-		DatagramSocket s = new DatagramSocket();
-		s.setBroadcast(true);
-		return s;
-	} */
 
 	/**
 	 * Create new socket to listen to MQTT/UDP packets.
@@ -118,16 +106,6 @@ public abstract class GenericPacket implements IPacket {
 	 * @throws IOException If unable.
 	 */
 	public void send(DatagramSocket sock) throws IOException {
-		/*
-		byte[] pkt = toBytes();
-		
-		InetAddress address = InetAddress.getByAddress(broadcast);
-		DatagramPacket p = new DatagramPacket(pkt, pkt.length, address, mqtt_udp_defs.MQTT_PORT);
-		Engine.throttle();
-		sock.send(p);
-		resendAddress = address;
-		if( getQoS() != 0 ) Engine.queueForResend(this);
-		*/
 		send( sock, InetAddress.getByAddress(broadcast) );
 	}
 
@@ -137,8 +115,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param address Host to send to
 	 * @throws IOException If unable.
 	 */
-	public void send(DatagramSocket sock, InetAddress address) throws IOException
-	{
+	public void send(DatagramSocket sock, InetAddress address) throws IOException {
 		byte[] pkt = toBytes();
 		
 		DatagramPacket p = new DatagramPacket(pkt, pkt.length, address, mqtt_udp_defs.MQTT_PORT);
@@ -165,29 +142,7 @@ public abstract class GenericPacket implements IPacket {
 		sentCounter++;
 		//System.out.println("UDP resent "+pkt.length);
 	}
-	
-	
-	
-	
-	
-	
 
-	/**
-	 * Wait for packet to come in.
-	 * @return Packet received.
-	 * @throws SocketException As is.
-	 * @throws IOException As is. 
-	 * @throws MqttProtocolException What we got is not a valid MQTT/UDP packet.
-	 * /
-	public static IPacket recv() throws SocketException, IOException, MqttProtocolException
-	{
-		DatagramSocket s = recvSocket();
-		IPacket o = recv(s);
-		s.close();
-		return o;
-	}*/
-
-	
 	/**
 	 * Wait for packet to come in.
 	 * @param s Socket to use.
@@ -196,8 +151,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @throws IOException As is. 
 	 * @throws MqttProtocolException What we got is not a valid MQTT/UDP packet.
 	 */
-	public static IPacket recv(DatagramSocket s) throws IOException, MqttProtocolException
-	{
+	public static IPacket recv(DatagramSocket s) throws IOException, MqttProtocolException {
 		// some embedded systems can't fragment UDP and
 		// fragmented UDP is highly unreliable anyway, so it is 
 		// better to stick to MAC layer max packet size 
@@ -258,8 +212,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param ttrs Tagged Tail Records to apply
 	 * @return Self
 	 */
-	public IPacket applyTTRs(Collection<TaggedTailRecord> ttrs)
-	{
+	public IPacket applyTTRs(Collection<TaggedTailRecord> ttrs) {
 		if( ttrs == null )
 			return this;
 		
@@ -269,8 +222,7 @@ public abstract class GenericPacket implements IPacket {
 		return this;
 	}
 
-	private void applyTTR(TaggedTailRecord ttr) 
-	{
+	private void applyTTR(TaggedTailRecord ttr) {
 		if (ttr instanceof TTR_Signature) {
 			; // just ignore, checked outside
 			setSigned( true );
