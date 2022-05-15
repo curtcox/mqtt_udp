@@ -1,4 +1,4 @@
-package ru.dz.mqtt_udp;
+package ru.dz.mqtt_udp.config;
 
 import static org.junit.Assert.assertTrue;
 
@@ -7,8 +7,6 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import ru.dz.mqtt_udp.config.Provider;
-import ru.dz.mqtt_udp.config.Requester;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 

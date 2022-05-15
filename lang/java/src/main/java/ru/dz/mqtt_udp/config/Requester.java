@@ -59,7 +59,6 @@ public final class Requester implements Consumer<IPacket> {
 	private static final int REQUEST_STEP_TIME = 1000;
 
 	private long checkLoopTime = CHECK_LOOP_TIME;
-	
 
 	private Map<Topic,TopicItem> items = new HashMap<>();
 
