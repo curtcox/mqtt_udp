@@ -3,6 +3,7 @@ package ru.dz.mqtt_udp.items;
 import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.PublishPacket;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -17,7 +18,7 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 public final class TopicItem extends AbstractItem {
 
 	
-	private String topic;
+	private Topic topic;
 	private String value;
 
 	public TopicItem(int packetType) {
@@ -25,7 +26,7 @@ public final class TopicItem extends AbstractItem {
 		assertHasNoTopic();
 	}
 	
-	public TopicItem(int packetType, String topic) {
+	public TopicItem(int packetType, Topic topic) {
 		super(packetType);
 		this.topic = topic;
 		this.value = "";
@@ -34,7 +35,7 @@ public final class TopicItem extends AbstractItem {
 	}
 
 
-	public TopicItem(int packetType, String topic, String value) {
+	public TopicItem(int packetType, Topic topic, String value) {
 		super(packetType);
 		this.topic = topic;
 		this.value = value;
@@ -75,7 +76,7 @@ public final class TopicItem extends AbstractItem {
 			return com + Packets.getPacketTypeName(packetType);
 	}
 
-	public String getTopic() {		return topic;	}
+	public Topic getTopic() {		return topic;	}
 
 	public void setValue(String value) { this.value = value; }
 	public String getValue() {		return value;	}

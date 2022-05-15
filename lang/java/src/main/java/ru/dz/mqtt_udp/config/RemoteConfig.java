@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
@@ -101,7 +102,7 @@ public final class RemoteConfig implements Consumer<IPacket> {
 		} );
 	}
 
-	private void sendConfigurableTopic(String topic) {
+	private void sendConfigurableTopic(Topic topic) {
 		items.forEach( item -> {
 			if( item.topicIs(topic))
 				item.sendCurrentValue();

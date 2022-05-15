@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ru.dz.mqtt_udp.*;
 import ru.dz.mqtt_udp.packets.PublishPacket;
+import ru.dz.mqtt_udp.packets.Topic;
 
 /**
  * NB!
@@ -28,7 +29,7 @@ public final class Pub {
 		sendMessageToTopic(params.msg,params.topic);
 	}
 
-	static void sendMessageToTopic(String msg, String topic) throws IOException {
+	static void sendMessageToTopic(String msg, Topic topic) throws IOException {
 		System.out.println("Will send "+msg+" to "+topic);
 
 		PublishPacket pp = new PublishPacket(topic,new Flags(),msg);

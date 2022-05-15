@@ -11,13 +11,13 @@ import ru.dz.mqtt_udp.util.Flags;
  */
 public abstract class TopicPacket extends GenericPacket {
 
-	private final String  topic;
+	private final Topic  topic;
 
 	/**
 	 * Packet from net.
 	 * @param from Source address.
 	 */
-	public TopicPacket(Flags flags, String topic, IPacketAddress from) {
+	public TopicPacket(Flags flags, Topic topic, IPacketAddress from) {
 		super(flags,from);
 		this.topic = topic;
 	}
@@ -26,6 +26,6 @@ public abstract class TopicPacket extends GenericPacket {
 	 * Get topic value.
 	 * @return Topic string.
 	 */
-	final public String getTopic() {			return topic;	}
+	final public Topic getTopic() {			return topic;	}
 
 }

@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
@@ -43,19 +44,17 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 public final class Controller implements Consumer<IPacket> {
 
-	private final static String SYS_CONF_WILD = mqtt_udp_defs.SYS_CONF_PREFIX+"/#";
-	
 	private LoopRunner lr = new RemoteConfigLoopRunner() {
 		@Override
 		protected void step() throws IOException {
-			new SubscribePacket(SYS_CONF_WILD).send();
+			new SubscribePacket(Topic.SYS_CONF_WILD).send();
 			sleep(30L*1000L);
 			//sleep(2L*1000L);
 		}
 		
 	};
 	
-	private TopicFilter rf = new TopicFilter(SYS_CONF_WILD);
+	private TopicFilter rf = new TopicFilter(Topic.SYS_CONF_WILD.toString());
 
 	//private IPacketMultiSource ms;
 	
@@ -84,7 +83,7 @@ public final class Controller implements Consumer<IPacket> {
 		PublishPacket pp = (PublishPacket) t;
 			
 	
-		String topic = pp.getTopic();
+		Topic topic = pp.getTopic();
 		String value = pp.getValueString();
 
 		if( !rf.test(topic) )
@@ -92,8 +91,8 @@ public final class Controller implements Consumer<IPacket> {
 		
 		//System.out.println("Got confable "+topic+" = "+value);
 
-		String suffix = topic.substring(mqtt_udp_defs.SYS_CONF_PREFIX.length());
-		
+		String suffix = topic.suffix();
+
 		if(suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		

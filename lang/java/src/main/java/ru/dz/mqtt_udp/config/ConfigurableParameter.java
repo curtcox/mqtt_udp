@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.ErrorType;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
@@ -89,8 +90,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 	public String getValue() { return value; }
 
 	// Update value here and send to host
-	public void sendNewValue(String v) 
-	{
+	public void sendNewValue(String v) {
 		value = v;
 		sendCurrentValue();
 	}
@@ -98,7 +98,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 
 
 	public void requestAgain() {
-		String topic = getTopicName();
+		Topic topic = getTopicName();
 		
 		System.out.println("request "+topic);
 		
@@ -109,19 +109,18 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 		}
 	}
 
-	private String makeTopicName() {
-		return String.format(
+	private Topic makeTopicName() {
+		return new Topic(String.format(
 				"%s/%s/%s/%s", 
 				mqtt_udp_defs.SYS_CONF_PREFIX,
 				host.getMacAddressString(),
 				kind, name
-				);
+				));
 	}
 	
-	private String fullTopcNameCache = null;
-	public String getTopicName() {
-		if(null == fullTopcNameCache)
-		{
+	private Topic fullTopcNameCache = null;
+	public Topic getTopicName() {
+		if(null == fullTopcNameCache) {
 			synchronized (this) {
 				if(null == fullTopcNameCache)
 					fullTopcNameCache = makeTopicName();
@@ -132,7 +131,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 
 
 	public void sendCurrentValue() {
-		String topic = getTopicName();
+		Topic topic = getTopicName();
 		
 		//System.out.println("send "+topic+"="+value);
 		
@@ -144,7 +143,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 	}
 
 
-	public boolean topicIs(String topic) {
+	public boolean topicIs(Topic topic) {
 		return getTopicName().equals(topic);
 	}
 

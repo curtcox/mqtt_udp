@@ -1,9 +1,11 @@
 package ru.dz.mqtt_udp.util;
 
+import ru.dz.mqtt_udp.packets.Topic;
+
 final class Args {
 
     final boolean areValid;
-    final String topic;
+    final Topic topic;
     final String msg;
     final String signatureKey;
 
@@ -11,7 +13,7 @@ final class Args {
 
     Args(boolean areValid, String topic, String msg, String signatureKey) {
         this.areValid = areValid;
-        this.topic = topic;
+        this.topic = new Topic(topic);
         this.msg = msg;
         this.signatureKey = signatureKey;
     }

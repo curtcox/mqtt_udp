@@ -6,6 +6,7 @@ import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.packets.PublishPacket;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.SubServer;
 
 /**
@@ -18,7 +19,7 @@ import ru.dz.mqtt_udp.servers.SubServer;
  */
 public final class Wait extends SubServer {
 
-	final private String topic;
+	final private Topic topic;
 	final private String value;
 
 	public static void main(String[] args) throws IOException, MqttProtocolException {
@@ -33,7 +34,7 @@ public final class Wait extends SubServer {
 		startWait(params.msg,params.topic);
 	}
 
-	static void startWait(String value,String topic) {
+	static void startWait(String value, Topic topic) {
 		Thread timer = new Thread(() -> {
 			sleep(4000);
 			System.out.println("Timed out");
@@ -51,7 +52,7 @@ public final class Wait extends SubServer {
 		System.exit(2);
 	}
 	
-	public Wait(String topic, String value) {
+	public Wait(Topic topic, String value) {
 		this.topic = topic;
 		this.value = value;
 		System.out.println("Will wait for "+topic+" = "+value);

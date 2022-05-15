@@ -9,72 +9,68 @@ import org.junit.Test;
 
 import ru.dz.mqtt_udp.config.Provider;
 import ru.dz.mqtt_udp.config.Requester;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 
 public class RequesterProviderTest {
 
-	private static final String T1  = "test/java/t1";
+	private static final Topic T1  = new Topic("test/java/t1");
 	private static final String T1V = "test value 1";
 
-	private static final String T2  = "test/java/t3";
+	private static final Topic T2  = new Topic("test/java/t3");
 	private static final String T2V = "test value 2";
 
-	private static final String T3  = "test/java/t3";
+	private static final Topic T3  = new Topic("test/java/t3");
 	private static final String T3V = "test value 3";
 
 	private static final String TO = "timeout/";
 	
 
-	private static PacketSourceMultiServer ms;
-	private static Provider p;
-	private static Requester r;
+	private static PacketSourceMultiServer multiServer;
+	private static Provider provider;
+	private static Requester requester;
 	
 	@BeforeClass
-    public static void setUpClass() throws Exception 
-	{
-		ms = new PacketSourceMultiServer();
-		p = new Provider(ms);		
-		r = new Requester(ms);
+    public static void setUpClass() {
+		multiServer = new PacketSourceMultiServer();
+		provider = new Provider(multiServer);
+		requester = new Requester(multiServer);
 
-		ms.requestStart();		
+		multiServer.requestStart();
     }
 
-	
-	
-	@Test(timeout=4000) //@Ignore
+	@Test(timeout=4000)
 	public void testExchange() throws IOException {
 		
-		p.addTopic(T1, T1V);
-		p.addTopic(T2, T2V);
-		p.addTopic(T3, T3V);
+		provider.addTopic(T1, T1V);
+		provider.addTopic(T2, T2V);
+		provider.addTopic(T3, T3V);
 		
-		r.addTopic(T1);
-		r.addTopic(T2);
-		r.addTopic(T3);
+		requester.addTopic(T1);
+		requester.addTopic(T2);
+		requester.addTopic(T3);
 		
-		assertTrue( r.waitForAll(1000) );
+		assertTrue( requester.waitForAll(1000) );
 	}
 
 	
-	@Test //@Ignore
+	@Test
 	public void testTimeout() throws IOException {
-		
-		
-		r.setCheckLoopTime(1000);
-		r.startBackgroundRequests();
+		requester.setCheckLoopTime(1000);
+		requester.startBackgroundRequests();
 		
 		// Let requester ask it for the first time before 
 		// provider is ready to answer. It will work if
 		// requester is repeating it's requests
-		r.addTopic(TO+T1);
-		r.addTopic(TO+T2);
-		r.addTopic(TO+T3);
+		requester.addTopic(new Topic(TO+T1));
+		requester.addTopic(new Topic(TO+T2));
+		requester.addTopic(new Topic(TO+T3));
 
-		p.addTopic(TO+T1, T1V);
-		p.addTopic(TO+T2, T2V);
-		p.addTopic(TO+T3, T3V);		
+		provider.addTopic(new Topic(TO+T1), T1V);
+		provider.addTopic(new Topic(TO+T2), T2V);
+		provider.addTopic(new Topic(TO+T3), T3V);
 		
-		assertTrue( r.waitForAll(4000) );
+		assertTrue( requester.waitForAll(4000) );
 	}
 
 	

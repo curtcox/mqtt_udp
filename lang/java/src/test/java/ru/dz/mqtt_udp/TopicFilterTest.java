@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import ru.dz.mqtt_udp.TopicFilter;
+import ru.dz.mqtt_udp.packets.Topic;
 
 /**
  * Test for topic filtering.
@@ -14,33 +15,30 @@ import ru.dz.mqtt_udp.TopicFilter;
 public class TopicFilterTest {
 
 	@Test
-	public void testPlain() 
-	{
+	public void testPlain() {
 		TopicFilter tf = new TopicFilter("aaa/ccc/bbb");
-		assertTrue( tf.test("aaa/ccc/bbb") );
-		assertFalse( tf.test("aaa/c/bbb") );
-		assertFalse( tf.test("aaa/ccccc/bbb") );
-		assertFalse( tf.test("aaa/ccccc/ccc") );
+		assertTrue( tf.test(new Topic("aaa/ccc/bbb") ));
+		assertFalse( tf.test(new Topic("aaa/c/bbb")) );
+		assertFalse( tf.test(new Topic("aaa/ccccc/bbb")) );
+		assertFalse( tf.test(new Topic("aaa/ccccc/ccc") ));
 	}
 
 	@Test
-	public void testPlus() 
-	{
+	public void testPlus() {
 		TopicFilter tf = new TopicFilter("aaa/+/bbb");
-		assertTrue( tf.test("aaa/ccc/bbb") );
-		assertTrue( tf.test("aaa/c/bbb") );
-		assertTrue( tf.test("aaa/ccccc/bbb") );
-		assertFalse( tf.test("aaa/ccccc/ccc") );
+		assertTrue( tf.test(new Topic("aaa/ccc/bbb")) );
+		assertTrue( tf.test(new Topic("aaa/c/bbb") ));
+		assertTrue( tf.test(new Topic("aaa/ccccc/bbb")) );
+		assertFalse( tf.test(new Topic("aaa/ccccc/ccc")) );
 	}
 
 	@Test
-	public void testSharp() 
-	{
+	public void testSharp() {
 		TopicFilter tf = new TopicFilter("aaa/#");
-		assertTrue( tf.test("aaa/ccc/bbb") );
-		assertTrue( tf.test("aaa/c/bbb") );
-		assertTrue( tf.test("aaa/ccccc/bbb") );
-		assertFalse( tf.test("aba/ccccc/ccc") );
+		assertTrue( tf.test(new Topic("aaa/ccc/bbb")) );
+		assertTrue( tf.test(new Topic("aaa/c/bbb") ));
+		assertTrue( tf.test(new Topic("aaa/ccccc/bbb")) );
+		assertFalse( tf.test(new Topic("aba/ccccc/ccc")) );
 	}
 	
 	

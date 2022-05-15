@@ -1,5 +1,7 @@
 package ru.dz.mqtt_udp;
 
+import ru.dz.mqtt_udp.packets.Topic;
+
 import java.util.function.Predicate;
 
 /**
@@ -7,7 +9,7 @@ import java.util.function.Predicate;
  * @author dz
  *
  */
-public final class TopicFilter implements Predicate<String> {
+public final class TopicFilter implements Predicate<Topic> {
 
 	private String filter;
 
@@ -16,17 +18,16 @@ public final class TopicFilter implements Predicate<String> {
 	}
 
 	@Override
-	public boolean test(String topicName) {
+	public boolean test(Topic topic) {
 		
 		int tc = 0;
 		int fc = 0;
-		
-		while(true)
-		{
+		final String topicName = topic.toString();
+
+		while(true) {
 			// begin of path part
 			
-			if( filter.charAt(fc) == '+')
-			{
+			if( filter.charAt(fc) == '+') {
 				fc++; // eat +
 				// matches one path part, skip all up to / or end in topic
 				while( (tc < topicName.length()) && (topicName.charAt(tc) != '/') )
@@ -58,8 +59,7 @@ public final class TopicFilter implements Predicate<String> {
 				return true;
 
 			// check parts to be equal
-			while(true)
-			{
+			while(true) {
 				// both finished
 				if( (tc == topicName.length()) && ( fc == filter.length() ) )
 					return true;

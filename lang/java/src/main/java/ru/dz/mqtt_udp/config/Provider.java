@@ -10,6 +10,7 @@ import ru.dz.mqtt_udp.IPacketMultiSource;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.items.TopicItem;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -31,15 +32,14 @@ public final class Provider implements Consumer<IPacket> {
 
 	//private SubServer ss; // no, need one that can serve multiple listeners with thread pool
 	//private ArrayList topics = new ArrayList<>();
-	private Map<String,TopicItem> items = new HashMap<>();
+	private Map<Topic,TopicItem> items = new HashMap<>();
 	
 	public Provider(IPacketMultiSource ms) 
 	{
 		ms.addPacketSink(this);	
 	}
 
-	public void addTopic(String topicName, String topicValue)
-	{
+	public void addTopic(Topic topicName, String topicValue) {
 		// TODO need class PublishTopicItem?
 		items.put(topicName, new TopicItem(mqtt_udp_defs.PTYPE_PUBLISH, topicName, topicValue));
 		

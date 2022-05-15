@@ -1,10 +1,6 @@
 package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.NoEncodingRuntimeException;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
@@ -20,12 +16,7 @@ public final class SubscribePacket extends TopicPacket {
 	 */
 
 	public SubscribePacket(byte[] raw, Flags flags, IPacketAddress from) {
-		super(flags,topic(raw),from);
-	}
-
-    private static String topic(byte[] raw) {
-		int tlen = Packets.decodeTopicLen( raw );
-		return new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
+		super(flags,Topic.from(raw),from);
 	}
 
 	/**
@@ -33,7 +24,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 * @param flags Protocol flags.
 	 */
-	public SubscribePacket(String topic, Flags flags) {
+	public SubscribePacket(Topic topic, Flags flags) {
 		super(flags,topic, null);
 	}
 
@@ -41,7 +32,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * Create packet to be sent.
 	 * @param topic Topic string.
 	 */
-	public SubscribePacket(String topic) {
+	public SubscribePacket(Topic topic) {
 		super(new Flags(),topic, null);
 	}
 
@@ -51,13 +42,7 @@ public final class SubscribePacket extends TopicPacket {
 	 */
 	@Override
 	public byte[] toBytes() {
-		byte[] tbytes;
-		try {
-			tbytes = getTopic().getBytes(MQTT_CHARSET);
-		} catch (UnsupportedEncodingException e) {
-			throw new NoEncodingRuntimeException(e);
-		}
-
+		byte[] tbytes = getTopic().getBytes();
 		int plen = tbytes.length + 2 + 1; // + QoS byte
 
 		byte [] pkt = new byte[plen]; 

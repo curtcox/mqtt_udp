@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import ru.dz.mqtt_udp.IPacket;
-import ru.dz.mqtt_udp.packets.PingReqPacket;
-import ru.dz.mqtt_udp.packets.PingRespPacket;
-import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.packets.SubscribePacket;
-import ru.dz.mqtt_udp.packets.GenericPacket;
+import ru.dz.mqtt_udp.packets.*;
 import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -131,31 +127,26 @@ public abstract class AbstractItem {
 			ti.setFrom(pp.getFrom().toString());
 			ti.setSigned( p.isSigned() );
 			return ti;
-		} else if( p instanceof SubscribePacket)
-		{
+		} else if( p instanceof SubscribePacket) {
 			SubscribePacket sp = (SubscribePacket) p;			
 			TopicItem ti = new TopicItem( mqtt_udp_defs.PTYPE_SUBSCRIBE, sp.getTopic() );
 			ti.setFrom(p.getFrom().toString());
 			ti.setSigned( p.isSigned() );
 			return ti;
-		} else if( p instanceof PingReqPacket)
-		{
+		} else if( p instanceof PingReqPacket) {
 			TopicItem ti = new TopicItem(mqtt_udp_defs.PTYPE_PINGREQ);
 			ti.setFrom(p.getFrom().toString());
 			ti.setSigned( p.isSigned() );
 			return ti;
-		} else if( p instanceof PingRespPacket)
-		{
+		} else if( p instanceof PingRespPacket) {
 			TopicItem ti = new TopicItem(mqtt_udp_defs.PTYPE_PINGRESP);
 			ti.setFrom(p.getFrom().toString());
 			ti.setSigned( p.isSigned() );
 			return ti;
-		}
-		else
-		{
+		} else {
 			System.out.println(p);
 			// TODO hack
-			TopicItem ti = new TopicItem( 0, "UnknownPacket", p.toString());
+			TopicItem ti = new TopicItem( 0, Topic.UnknownPacket, p.toString());
 			ti.setFrom(p.getFrom().toString());
 			ti.setSigned( p.isSigned() );
 			return ti;

@@ -15,6 +15,7 @@ import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.items.AbstractItem;
 import ru.dz.mqtt_udp.items.TopicItem;
+import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.LoopRunner;
 
 /**
@@ -60,21 +61,21 @@ public final class Requester implements Consumer<IPacket> {
 	private long checkLoopTime = CHECK_LOOP_TIME;
 	
 
-	private Map<String,TopicItem> items = new HashMap<>();
+	private Map<Topic,TopicItem> items = new HashMap<>();
 
 	private LoopRunner lr = new  LoopRunner("MQTT UDP config.Requester") {
 
 		@Override
-		protected void onStart() throws IOException, MqttProtocolException { /** empty */ }
+		protected void onStart() { /** empty */ }
 
 		@Override
-		protected void step() throws IOException, MqttProtocolException {
+		protected void step() throws IOException {
 			sleep( checkLoopTime );
 			loop();
 		}
 
 		@Override
-		protected void onStop() throws IOException, MqttProtocolException { /** empty */ }
+		protected void onStop() { /** empty */ }
 		
 	};
 	
@@ -92,10 +93,8 @@ public final class Requester implements Consumer<IPacket> {
 	 * @param topicName name of topic to request
 	 * @throws IOException if network send is failed
 	 */
-	public void addTopic(String topicName) throws IOException
-	{
+	public void addTopic(Topic topicName) throws IOException {
 		synchronized (items) {
-
 			// TODO need class PublishTopicItem?
 			//items.put(topicName, new TopicItem(mqtt_udp_defs.PTYPE_PUBLISH, topicName, topicValue));
 			items.put(topicName, null);
@@ -110,8 +109,7 @@ public final class Requester implements Consumer<IPacket> {
 	 * @param topic to get value for
 	 * @return value or null if not yet received
 	 */
-	public String getValue(String topic)
-	{
+	public String getValue(Topic topic) {
 		String v = null;
 		synchronized (items) {
 			TopicItem ti = items.get(topic);
@@ -127,6 +125,7 @@ public final class Requester implements Consumer<IPacket> {
 	 */
 	@Override
 	public void accept(IPacket t) {
+		System.out.println("Accepted " + t);
 		if( !(t instanceof PublishPacket) ) 
 			return;
 
@@ -160,47 +159,15 @@ public final class Requester implements Consumer<IPacket> {
 	public void setCheckLoopTime(long checkLoopTime) {		this.checkLoopTime = checkLoopTime;	}
 	public long getCheckLoopTime() {		return checkLoopTime;	}
 
-	
-	/*
-	private Runnable makeLoopRunnable() {
-		return new Runnable() {
-
-			@Override
-			public void run() {
-				while(true)
-				{
-					try {
-						// Re-request once a minute
-						Thread.sleep( checkLoopTime );
-						loop();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InterruptedException e) {
-						// Ignore
-					}
-				}
-			}
-		};
-	}*/
-
-
 	protected void loop() throws IOException {
 
 		// find topics for which we have no data
-		Set<String> empty = getAllEmpty();
+		Set<Topic> empty = getAllEmpty();
 
 		// request them one per second		
-		for( String topic : empty )
-		{
+		for( Topic topic : empty ) {
 			new SubscribePacket(topic).send();
 			LoopRunner.sleep(REQUEST_STEP_TIME);
-			/*
-			try {
-				Thread.sleep(REQUEST_STEP_TIME);
-			} catch (InterruptedException e) {
-				// Ignore
-			}*/
 		}
 
 	}
@@ -209,8 +176,8 @@ public final class Requester implements Consumer<IPacket> {
 	 * Get list of topics for which we do not have data yet.
 	 * @return Set of topic strings
 	 */
-	public Set<String> getAllEmpty() {
-		Set<String> empty = new HashSet<String>();
+	public Set<Topic> getAllEmpty() {
+		Set<Topic> empty = new HashSet<>();
 
 		synchronized (items) {
 			items.forEach( (topic, item) -> {
@@ -225,12 +192,13 @@ public final class Requester implements Consumer<IPacket> {
 	 * Check if all items got values.
 	 * @return true if we got all data.
 	 */
-	public boolean isDone()
-	{
+	public boolean isDone() {
 		synchronized (items) {
-			for( TopicItem item : items.values() )
-				if( item == null )
+			for( TopicItem item : items.values() ) {
+				if (item == null) {
 					return false;
+				}
+			}
 		}
 		return true;
 	}
@@ -243,38 +211,31 @@ public final class Requester implements Consumer<IPacket> {
 	 * 
 	 * @return true if success, false if timed out.
 	 */
-	public boolean waitForAll(long timeoutMsec)
-	{
-		if( timeoutMsec < 0 )
+	public boolean waitForAll(long timeoutMsec) {
+		if ( timeoutMsec < 0 )
 			throw new IllegalArgumentException("timeoutMsec < 0");
 
 		long start = System.currentTimeMillis();
 
-		while(true)
-		{
-			//System.out.print("Wait 4 all loop");
-			/*
-			Set<String> e = getAllEmpty();
-			if( e.size() == 0 )
-				return true;
-			*/
-			
-			if( isDone() ) return true;
+		while (true) {
+			if ( isDone() ) return true;
 			
 			long now = System.currentTimeMillis();
 
 			if( (now - start) > timeoutMsec )
 				return false;
 
-			try {
-				//Thread.sleep(CHECK_LOOP_TIME/2); // TODO sleep on cond signalled in recv for shorter time
-				Thread.sleep(timeoutMsec/5);
-			} catch (InterruptedException e1) {
-				// Ignore
-			}
+			sleep(timeoutMsec/5);
 		}
 	}
 
+	private void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e1) {
+			// Ignore
+		}
+	}
 	// TODO set sink to be informed on arrive of some item or any item
 	
 }
