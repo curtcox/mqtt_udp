@@ -10,19 +10,21 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
  */
 public abstract class TopicPacket extends GenericPacket {
 
+	private final String  topic;
+
 	/**
 	 * Packet from net.
 	 * @param from Source address.
 	 */
-	public TopicPacket(byte flags,IPacketAddress from) {
+	public TopicPacket(byte flags,String topic, IPacketAddress from) {
 		super(flags,from);
+		this.topic = topic;
 	}
 
-	protected String  topic;
 	/**
 	 * Get topic value.
 	 * @return Topic string.
 	 */
-	public String getTopic() {			return topic;	}
+	final public String getTopic() {			return topic;	}
 
 }

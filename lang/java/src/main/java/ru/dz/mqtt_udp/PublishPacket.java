@@ -26,11 +26,8 @@ public final class PublishPacket extends TopicPacket {
 	 * @param from Source IP address.
 	 */
 	public PublishPacket(byte[] raw, byte flags, IPacketAddress from) {
-		super(flags,from);
+		super(flags,topic(raw),from);
 		int tlen = IPacket.decodeTopicLen( raw );
-
-		topic = new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
-		
 		int vlen = raw.length - tlen - 2;		
 		value = new byte[vlen];	
 		System.arraycopy( raw, tlen+2, value, 0, vlen );
@@ -38,6 +35,10 @@ public final class PublishPacket extends TopicPacket {
 		//this.from = from;
 	}
 
+	private static String topic(byte[] raw) {
+		int tlen = IPacket.decodeTopicLen( raw );
+		return new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
+	}
 	
 	/**
 	 * Get value as byte array.
@@ -58,8 +59,8 @@ public final class PublishPacket extends TopicPacket {
 	 * @param value Value as byte array.
 	 */
 	public PublishPacket(String topic, byte flags, byte[] value) {
-		super(flags,null);
-		makeMe( topic, value );
+		super(flags,topic, null);
+		makeMe(value);
 	}
 
 	/**
@@ -69,9 +70,9 @@ public final class PublishPacket extends TopicPacket {
 	 * @param value Value string.
 	 */
 	public PublishPacket(String topic, byte flags, String value) {
-		super(flags,null);
+		super(flags,topic,null);
 		try {
-			makeMe( topic, value.getBytes(MQTT_CHARSET) );
+			makeMe(value.getBytes(MQTT_CHARSET) );
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}
@@ -85,17 +86,16 @@ public final class PublishPacket extends TopicPacket {
 	 * @param QoS Required QoS, 0-3
 	 */
 	public PublishPacket(String topic, String value, int QoS ) {
-		super((byte) 0,null);
+		super((byte) 0,topic,null);
 		try {
-			makeMe( topic, value.getBytes(MQTT_CHARSET) );
+			makeMe(value.getBytes(MQTT_CHARSET) );
 			setQoS(QoS);
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}
 	}
 
-	private void makeMe(String topic, byte[] value) {
-		this.topic = topic;
+	private void makeMe(byte[] value) {
 		this.value = value;
 	}
 
@@ -107,7 +107,7 @@ public final class PublishPacket extends TopicPacket {
 	public byte[] toBytes() {
 		byte[] tbytes;
 		try {
-			tbytes = topic.getBytes(MQTT_CHARSET);
+			tbytes = getTopic().getBytes(MQTT_CHARSET);
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}

@@ -13,8 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * 
  * 
 **/
-public final class Throttle
-{
+public final class Throttle {
 
 	private long last_send_time = 0;
 	private AtomicLong last_send_count = new AtomicLong(0);
@@ -51,8 +50,7 @@ public final class Throttle
 	 * Must be called in packet send code.
 	 * Will put caller asleep to make sure packets are sent in a right pace. 
 	 */
-	public void throttle() 
-	{
+	public void throttle() {
 
 	    if( throttle == 0 )
 	        return;
@@ -66,11 +64,9 @@ public final class Throttle
 	    last_send_count.addAndGet(max_seq_packets);
 
 	    long now = timeMsec();
-	    //print( str(now) )
 	    long since_last_pkt = now - last_send_time;
 
-	    if( last_send_time == 0 )
-	    {
+	    if( last_send_time == 0 ) {
 	        last_send_time = now;
 	        return;
 	    }
@@ -79,18 +75,10 @@ public final class Throttle
 
 	    long towait = max_seq_packets * throttle - since_last_pkt;
 
-	    // print( str(towait) )
-
 	    if( towait <= 0 )
 	        return;
 
 	    LoopRunner.sleep(towait);
-	    /*try {
-			Thread.sleep(towait);
-		} catch (InterruptedException e) {
-			GlobalErrorHandler.handleError(ErrorType.Timeout, e);
-		}*/
-	        		
 	}
 
 }

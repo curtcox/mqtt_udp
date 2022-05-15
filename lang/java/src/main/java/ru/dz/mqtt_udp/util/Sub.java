@@ -34,13 +34,6 @@ public final class Sub extends SubServer {
 	@Override
 	protected void processPacket(IPacket p) {
 		System.out.println(p);
-
-		/*
-		if (p instanceof PublishPacket) {
-			PublishPacket pp = (PublishPacket) p;
-
-			// now use pp.getTopic() and pp.getValueString() or pp.getValueRaw()
-		}*/
 	}
 }
 

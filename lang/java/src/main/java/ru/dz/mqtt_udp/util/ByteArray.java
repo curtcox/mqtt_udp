@@ -2,9 +2,7 @@ package ru.dz.mqtt_udp.util;
 
 public final class ByteArray {
 
-
-	public static void dumpBytes(String string, byte[] b) 
-	{
+	public static void dumpBytes(String string, byte[] b) {
 		if( b==null )
 		{
 			System.err.println(string + ", null array " );

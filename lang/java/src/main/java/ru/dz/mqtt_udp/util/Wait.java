@@ -16,8 +16,7 @@ import ru.dz.mqtt_udp.SubServer;
  * @author dz
  *
  */
-public final class Wait extends SubServer
-{
+public final class Wait extends SubServer {
 
 	final private String topic;
 	final private String value;
@@ -46,7 +45,7 @@ public final class Wait extends SubServer
 		srv.start();
 	}
 
-	public static void usage() {
+	static void usage() {
 		System.err.println("usage: Wait [-s SignaturePassword] topic message");
 		System.err.println("Will wait for given topic==value, part of global regress test");
 		System.exit(2);

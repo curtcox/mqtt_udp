@@ -29,18 +29,6 @@ public final class GlobalErrorHandler {
 		return localInstance;
 	}
 
-
-	public static BiConsumer<ErrorType, String> getHandler()
-	{
-		return get().handler;
-	}
-
-	public static void setHandler(BiConsumer<ErrorType, String> h)
-	{
-		get().handler = h;
-	}
-
-	
 	public static void handleError(ErrorType type, Throwable th)
 	{
 		handleError(type, th.toString());
@@ -53,8 +41,6 @@ public final class GlobalErrorHandler {
 			return;
 		}
 		
-		// TODO logger
-		//System.out.println(String.format( "MQTT/UDP %s error: %s", type.toString(), description ));
 		System.err.println(String.format( "MQTT/UDP %s error: %s", type.toString(), description ));
 	}
 

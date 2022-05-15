@@ -20,14 +20,13 @@ public final class SubscribePacket extends TopicPacket {
 	 */
 
 	public SubscribePacket(byte[] raw, byte flags, IPacketAddress from) {
-		super(flags,from);
-		int tlen = IPacket.decodeTopicLen( raw );
-
-		topic = new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
-		// TODO byte of QoS - do we need it?
+		super(flags,topic(raw),from);
 	}
 
-
+    private static String topic(byte[] raw) {
+		int tlen = IPacket.decodeTopicLen( raw );
+		return new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET));
+	}
 
 	/**
 	 * Create packet to be sent.
@@ -35,8 +34,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param flags Protocol flags.
 	 */
 	public SubscribePacket(String topic, byte flags) {
-		super(flags,null);
-		makeMe( topic);
+		super(flags,topic, null);
 	}
 
 	/**
@@ -44,16 +42,8 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 */
 	public SubscribePacket(String topic) {
-		super((byte) 0,null);
-		makeMe(topic);
+		super((byte) 0,topic, null);
 	}
-
-
-	private void makeMe(String topic) {
-		this.topic = topic;
-	}
-
-
 
 	/*
 	 * (non-Javadoc)
@@ -63,7 +53,7 @@ public final class SubscribePacket extends TopicPacket {
 	public byte[] toBytes() {
 		byte[] tbytes;
 		try {
-			tbytes = topic.getBytes(MQTT_CHARSET);
+			tbytes = getTopic().getBytes(MQTT_CHARSET);
 		} catch (UnsupportedEncodingException e) {
 			throw new NoEncodingRuntimeException(e);
 		}
