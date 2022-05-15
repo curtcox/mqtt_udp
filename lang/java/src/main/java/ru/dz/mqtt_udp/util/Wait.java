@@ -19,32 +19,19 @@ import ru.dz.mqtt_udp.SubServer;
 public final class Wait extends SubServer
 {
 
-	private String topic;
-	private String value;
+	final private String topic;
+	final private String value;
 
 	public static void main(String[] args) throws IOException, MqttProtocolException {
-		String topic;
-		String value;
-		
-		if(args.length == 4) {
-			if( !args[0].equals("-s") ) {
-				usage();
-				return;
-			}
-			Engine.setSignatureKey(args[1]);
-			topic = args[2];
-			value = args[3];
-		} else {
-			if(args.length != 2) {
-				usage();
-				return;
-			}
-
-			topic = args[0];
-			value = args[1];
+		Args params = Args.parse(args);
+		if (!params.areValid) {
+			usage();
+			return;
 		}
-		
-		startWait( value, topic );
+		if (params.signatureKey!=null) {
+			Engine.setSignatureKey(params.signatureKey);
+		}
+		startWait(params.msg,params.topic);
 	}
 
 	static void startWait(String value,String topic) {

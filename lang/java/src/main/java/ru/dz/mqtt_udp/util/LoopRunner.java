@@ -92,15 +92,13 @@ public abstract class LoopRunner {
 	}
 
 
-	private void loop() throws IOException, MqttProtocolException 
-	{
+	private void loop() throws IOException, MqttProtocolException {
 		
 		onStart();
 
 		run = true;
 
-		while(run)
-		{
+		while(run) {
 			step();
 		}
 

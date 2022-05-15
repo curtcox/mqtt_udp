@@ -4,8 +4,7 @@ import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.SubServer;
 
-public final class Sub extends SubServer
-{
+public final class Sub extends SubServer {
 
 	public static void main(String[] args) {
 		if(args.length == 2) {

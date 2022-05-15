@@ -14,10 +14,9 @@ import ru.dz.mqtt_udp.util.LoopRunner;
  *
  */
 @Deprecated
-public abstract class SubServer extends LoopRunner 
-{
+public abstract class SubServer extends LoopRunner {
 
-	private DatagramSocket ss = SingleSendSocket.get();
+	private final DatagramSocket ss = SingleSendSocket.get();
 	private DatagramSocket s;
 
 	public SubServer() {

@@ -2,8 +2,8 @@ package ru.dz.mqtt_udp.util;
 
 import java.io.IOException;
 
-import ru.dz.mqtt_udp.Engine;
-import ru.dz.mqtt_udp.PublishPacket;
+import ru.dz.mqtt_udp.*;
+
 /**
  * NB!
  * 
@@ -16,33 +16,15 @@ import ru.dz.mqtt_udp.PublishPacket;
 public final class Pub {
 
 	public static void main(String[] args) throws IOException {
-		String topic;
-		String msg;
-
-		if(args.length == 4) {
-			if( !args[0].equals("-s") )
-			{
-				usage();
-				return;
-			}
-			Engine.setSignatureKey(args[1]);
-			topic = args[2];
-			msg = args[3];
+		Args params = Args.parse(args);
+		if (!params.areValid) {
+			usage();
+			return;
 		}
-		else
-		{
-
-			if(args.length != 2)
-			{
-				usage();
-				return;
-			}
-
-			topic = args[0];
-			msg = args[1];
+		if (params.signatureKey!=null) {
+			Engine.setSignatureKey(params.signatureKey);
 		}
-
-		sendMessageToTopic(msg,topic);
+		sendMessageToTopic(params.msg,params.topic);
 	}
 
 	static void sendMessageToTopic(String msg, String topic) throws IOException {

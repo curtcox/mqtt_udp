@@ -10,14 +10,23 @@ import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
  */
 public final class SingleSendSocket {
 
-        private static volatile SingleSendSocket instance;
+	private DatagramSocket sock;
+	private static volatile SingleSendSocket instance;
 
-        /**
-         * Singleton for UDP send socket.
-         * @return socket to send with
-         */
-        public static DatagramSocket get()  
-        {
+	private SingleSendSocket() {
+		//sock = GenericPacket.sendSocket();
+		try {
+			sock = sendSocket();
+		} catch (SocketException e) {
+			throw new MqttUdpRuntimeException("Can't create send socket", e);
+		}
+	}
+
+	/**
+	 * Singleton for UDP send socket.
+	 * @return socket to send with
+	 */
+	public static DatagramSocket get() {
 		SingleSendSocket localInstance = instance;
 		if (localInstance == null) {
 			synchronized (SingleSendSocket.class) {
@@ -28,32 +37,18 @@ public final class SingleSendSocket {
 			}
 		}
 		return localInstance.sock;
-        }
+	}
 
-		private DatagramSocket sock;
-		
-		private SingleSendSocket() 
-		{
-			//sock = GenericPacket.sendSocket();
-			try {
-				sock = sendSocket();
-			} catch (SocketException e) {
-				throw new MqttUdpRuntimeException("Can't create send socket", e);
-			}
-		}
-
-		
-		/**
-		 * Create new socket to send MQTT/UDP packets.
-		 * @return socket
-		 * @throws SocketException
-		 */
-		private static DatagramSocket sendSocket() throws SocketException
-		{
-			DatagramSocket s = new DatagramSocket();
-			s.setBroadcast(true);
-			return s;
-		}
+	/**
+	 * Create new socket to send MQTT/UDP packets.
+	 * @return socket
+	 * @throws SocketException
+	 */
+	private static DatagramSocket sendSocket() throws SocketException {
+		DatagramSocket s = new DatagramSocket();
+		s.setBroadcast(true);
+		return s;
+	}
 		
 }
 

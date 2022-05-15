@@ -99,8 +99,7 @@ public abstract class GenericPacket implements IPacket {
 	 * Broadcast me using default send socket.
 	 * @throws IOException If unable.
 	 */
-	public void send() throws IOException
-	{
+	public void send() throws IOException {
 		send(SingleSendSocket.get());
 	}
 	
@@ -118,8 +117,7 @@ public abstract class GenericPacket implements IPacket {
 	 * @param sock Socket must be made with sendSocket() method.
 	 * @throws IOException If unable.
 	 */
-	public void send(DatagramSocket sock) throws IOException
-	{
+	public void send(DatagramSocket sock) throws IOException {
 		/*
 		byte[] pkt = toBytes();
 		
