@@ -136,7 +136,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 		//System.out.println("send "+topic+"="+value);
 		
 		try {
-			new PublishPacket(topic,new Flags(),value).send();
+			PublishPacket.from(value, new Flags(), topic, null).send();
 		} catch (IOException e) {
 			GlobalErrorHandler.handleError(ErrorType.IO, e);
 		}

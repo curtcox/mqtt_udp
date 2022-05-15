@@ -71,8 +71,7 @@ public abstract class LoopRunner {
 	/**
 	 * Request to start reception loop thread.
 	 */
-	public void requestStart()
-	{
+	public void requestStart() {
 		if(isRunning()) return;
 		start();
 	}

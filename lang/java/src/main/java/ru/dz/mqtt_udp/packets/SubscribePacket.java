@@ -7,25 +7,8 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 public final class SubscribePacket extends TopicPacket {
 
-
-	/**
-	 * Construct from incoming UDP data. 
-	 * @param raw Data from UDP packet, starting after packet type and length.
-	 * @param flags Flags from packet header.
-	 * @param from Source IP address.
-	 */
-
-	public SubscribePacket(byte[] raw, Flags flags, IPacketAddress from) {
-		super(flags,Topic.from(raw),from);
-	}
-
-	/**
-	 * Create packet to be sent.
-	 * @param topic Topic string.
-	 * @param flags Protocol flags.
-	 */
-	public SubscribePacket(Topic topic, Flags flags) {
-		super(flags,topic, null);
+	public SubscribePacket(Topic topic, Flags flags, IPacketAddress from) {
+		super(flags,topic,from);
 	}
 
 	/**

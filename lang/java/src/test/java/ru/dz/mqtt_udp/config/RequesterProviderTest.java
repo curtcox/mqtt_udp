@@ -31,14 +31,20 @@ public class RequesterProviderTest {
 	@BeforeClass
     public static void setUpClass() {
 		multiServer = new PacketSourceMultiServer();
-		provider = new Provider(multiServer);
-		requester = new Requester(multiServer);
-
+		provider = Provider.withPacketsFrom(multiServer);
+		requester = Requester.withPacketsFrom(multiServer);
 		multiServer.requestStart();
     }
 
 	@Test(timeout=4000)
-	public void testExchange() throws IOException {
+	public void exchange_with_1_topic() throws IOException {
+		provider.addTopic(T1, T1V);
+		requester.addTopic(T1);
+		assertTrue( requester.waitForAll(1000) );
+	}
+
+	@Test(timeout=4000)
+	public void exchange_with_3_topics() throws IOException {
 		
 		provider.addTopic(T1, T1V);
 		provider.addTopic(T2, T2V);
@@ -53,7 +59,7 @@ public class RequesterProviderTest {
 
 	
 	@Test
-	public void testTimeout() throws IOException {
+	public void timeout_with_3_topics() throws IOException {
 		requester.setCheckLoopTime(1000);
 		requester.startBackgroundRequests();
 		

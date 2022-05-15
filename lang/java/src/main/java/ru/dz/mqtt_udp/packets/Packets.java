@@ -59,33 +59,20 @@ public final class Packets {
         int ptype = 0xF0 & (int)(raw[0]);
         Flags flags = new Flags(0x0F & (int)(raw[0]));
 
-        GenericPacket p;
-        switch(ptype) {
-            case mqtt_udp_defs.PTYPE_PUBLISH:
-                p = new PublishPacket(sub, flags, from);
-                break;
-
-            case mqtt_udp_defs.PTYPE_PUBACK:
-                p = new PubAckPacket(sub, flags, from);
-                break;
-
-            case mqtt_udp_defs.PTYPE_PINGREQ:
-                p = new PingReqPacket(sub, flags, from);
-                break;
-
-            case mqtt_udp_defs.PTYPE_PINGRESP:
-                p = new PingRespPacket(sub, flags, from);
-                break;
-
-            case mqtt_udp_defs.PTYPE_SUBSCRIBE:
-                p = new SubscribePacket(sub, flags, from);
-                break;
-
-            default:
-                throw new MqttProtocolException("Unknown pkt type "+raw[0]);
-        }
-
+        GenericPacket p = packet(ptype,sub,flags,from);
         return p.applyTTRs(ttrs);
+    }
+
+    private static GenericPacket packet(int ptype,byte[] sub,Flags flags,IPacketAddress from) throws MqttProtocolException {
+        Topic topic = Topic.from(sub);
+        switch (ptype) {
+            case mqtt_udp_defs.PTYPE_PUBLISH:   return new PublishPacket(flags, topic, from, sub);
+            case mqtt_udp_defs.PTYPE_PUBACK:    return new PubAckPacket(sub, flags, from);
+            case mqtt_udp_defs.PTYPE_PINGREQ:   return new PingReqPacket(sub, flags, from);
+            case mqtt_udp_defs.PTYPE_PINGRESP:  return new PingRespPacket(sub, flags, from);
+            case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(topic, flags, from);
+        }
+        throw new MqttProtocolException("Unknown pkt type " + ptype);
     }
 
     static Collection<TaggedTailRecord> decodeTTRs(byte[] raw, int total_len, int headerEnd, int recvLen)

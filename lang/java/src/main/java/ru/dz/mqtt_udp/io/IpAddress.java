@@ -1,17 +1,20 @@
 package ru.dz.mqtt_udp.io;
 
+import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-public final class IpAddress extends GeneralAddress implements Comparable<IPacketAddress>{
+public final class IpAddress extends GeneralAddress implements Comparable<IPacketAddress> {
 
 	private SocketAddress socketAddress;
 
-	public IpAddress(SocketAddress socketAddress)
-	{
+	public IpAddress(SocketAddress socketAddress) {
 		this.socketAddress = socketAddress;
+	}
 
+	public static IpAddress from(DatagramPacket packet) {
+		return new IpAddress(packet.getSocketAddress());
 	}
 
 	@Override
@@ -48,20 +51,13 @@ public final class IpAddress extends GeneralAddress implements Comparable<IPacke
 
 	@Override
 	public boolean equals(Object obj) {
-		
 		if (!(obj instanceof IpAddress))
 			return false;
-
 		IpAddress ia = (IpAddress)obj;
-
 		InetAddress ina = ia.getInetAddress();
-		
 		if( ina == null ) return false;
-		
 		InetAddress inb = getInetAddress();
-		
 		if( inb == null ) return false;
-		
 		return inb.equals(ina);
 	}
 

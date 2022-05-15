@@ -115,7 +115,7 @@ public final class TopicItem extends AbstractItem {
 	
 	public GenericPacket toPacket() {
 		switch(packetType) {
-		case mqtt_udp_defs.PTYPE_PUBLISH: return new PublishPacket(topic,new Flags(), value);
+		case mqtt_udp_defs.PTYPE_PUBLISH: return PublishPacket.from(value, new Flags(), topic, null);
 		//case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(topic);
 		
 		default: return super.toPacket(); 

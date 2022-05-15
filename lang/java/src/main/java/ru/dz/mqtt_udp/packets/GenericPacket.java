@@ -124,9 +124,9 @@ public abstract class GenericPacket implements IPacket {
 	final public void send(DatagramSocket sock, InetAddress address) throws IOException {
 		byte[] pkt = toBytes();
 		
-		DatagramPacket p = new DatagramPacket(pkt, pkt.length, address, mqtt_udp_defs.MQTT_PORT);
+		DatagramPacket packet = new DatagramPacket(pkt, pkt.length, address, mqtt_udp_defs.MQTT_PORT);
 		Engine.throttle();
-		sock.send(p);
+		sock.send(packet);
 		sentCounter++;
 		//System.out.println("UDP sent "+pkt.length);
 		resendAddress = address;
@@ -162,17 +162,17 @@ public abstract class GenericPacket implements IPacket {
 		// better to stick to MAC layer max packet size 
 		
 		byte[] buf = new byte[2*1024];  
-		DatagramPacket p = new DatagramPacket(buf, buf.length);
+		DatagramPacket packet = new DatagramPacket(buf, buf.length);
 		
-		s.receive(p);
+		s.receive(packet);
 
-		int l = p.getLength();
+		int l = packet.getLength();
 		
 		byte[] got = new byte[l];  
 		
-		System.arraycopy(p.getData(), p.getOffset(), got, 0, l);
+		System.arraycopy(packet.getData(), packet.getOffset(), got, 0, l);
 		
-		return Packets.fromBytes(got, new IpAddress(p.getSocketAddress()) );
+		return Packets.fromBytes(got, IpAddress.from(packet));
 	}
 
 

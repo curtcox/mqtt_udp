@@ -3,9 +3,9 @@ package ru.dz.mqtt_udp.packets;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.NoEncodingRuntimeException;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 /**
@@ -15,23 +15,31 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  */
 public final class PublishPacket extends TopicPacket {
 
-	private byte[]  value;
+	private final byte[]  value;
 
-	
-	/**
-	 * Construct from incoming UDP data. 
-	 * @param raw Data from UDP packet, starting after packet type and length.
-	 * @param flags Flags from packet header.
-	 * @param from Source IP address.
-	 */
-	public PublishPacket(byte[] raw, Flags flags, IPacketAddress from) {
-		super(flags,Topic.from(raw),from);
+	public PublishPacket(Flags flags, Topic topic, IPacketAddress from,byte[] value) {
+		super(flags,topic,from);
+		this.value = value;
+	}
+
+	public static PublishPacket from(byte[] raw, Flags flags, Topic topic, IPacketAddress from) {
+		return new PublishPacket(flags,topic,from,value(raw));
+	}
+
+	public static PublishPacket from(String value, Flags flags, Topic topic, IPacketAddress from)  {
+		try {
+			return new PublishPacket(flags,topic,from,value.getBytes(IPacket.MQTT_CHARSET));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static byte[] value(byte[] raw) {
 		int tlen = Packets.decodeTopicLen( raw );
-		int vlen = raw.length - tlen - 2;		
-		value = new byte[vlen];	
+		int vlen = raw.length - tlen - 2;
+		byte[] value = new byte[vlen];
 		System.arraycopy( raw, tlen+2, value, 0, vlen );
-		
-		//this.from = from;
+		return value;
 	}
 
 	/**
@@ -44,53 +52,6 @@ public final class PublishPacket extends TopicPacket {
 	 * @return Packet value.
 	 */
 	public String getValueString() {	return new String(value, Charset.forName(MQTT_CHARSET));	}
-
-	/**
-	 * Create packet to be sent.
-	 * 
-	 * @param topic Topic string.
-	 * @param flags Protocol flags.
-	 * @param value Value as byte array.
-	 */
-	public PublishPacket(Topic topic, Flags flags, byte[] value) {
-		super(flags,topic, null);
-		makeMe(value);
-	}
-
-	/**
-	 * Create packet to be sent.
-	 * 
-	 * @param topic Topic string.
-	 * @param value Value string.
-	 */
-	public PublishPacket(Topic topic, Flags flags, String value) {
-		super(flags,topic,null);
-		try {
-			makeMe(value.getBytes(MQTT_CHARSET) );
-		} catch (UnsupportedEncodingException e) {
-			throw new NoEncodingRuntimeException(e);
-		}
-	}
-	
-	/**
-	 * Create packet to be sent.
-	 * 
-	 * @param topic Topic string.
-	 * @param value Value string.
-	 * @param QoS Required QoS, 0-3
-	 */
-	public PublishPacket(Topic topic, String value, int QoS ) {
-		super(new Flags(QoS),topic,null);
-		try {
-			makeMe(value.getBytes(MQTT_CHARSET) );
-		} catch (UnsupportedEncodingException e) {
-			throw new NoEncodingRuntimeException(e);
-		}
-	}
-
-	private void makeMe(byte[] value) {
-		this.value = value;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -123,7 +84,4 @@ public final class PublishPacket extends TopicPacket {
 		return mqtt_udp_defs.PTYPE_PUBLISH;
 	}
 
-
-
-	
 }

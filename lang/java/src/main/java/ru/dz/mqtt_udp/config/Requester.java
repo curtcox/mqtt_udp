@@ -10,7 +10,6 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
-import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.items.AbstractItem;
@@ -55,14 +54,15 @@ import ru.dz.mqtt_udp.util.LoopRunner;
  */
 
 public final class Requester implements Consumer<IPacket> {
-	private static final int CHECK_LOOP_TIME = 1000*60;
-	private static final int REQUEST_STEP_TIME = 1000;
 
 	private long checkLoopTime = CHECK_LOOP_TIME;
 
-	private Map<Topic,TopicItem> items = new HashMap<>();
+	private final Map<Topic,TopicItem> items = new HashMap<>();
 
-	private LoopRunner lr = new  LoopRunner("MQTT UDP config.Requester") {
+	private static final int CHECK_LOOP_TIME = 1000*60;
+	private static final int REQUEST_STEP_TIME = 1000;
+
+	private final LoopRunner runner = new  LoopRunner("MQTT UDP config.Requester") {
 
 		@Override
 		protected void onStart() { /** empty */ }
@@ -80,26 +80,27 @@ public final class Requester implements Consumer<IPacket> {
 	
 	/**
 	 * Construct.
-	 * @param ms MQTT/UDP network listener which is able to serve multiple consumers.
+	 * @param source MQTT/UDP network listener which is able to serve multiple consumers.
 	 */
-	public Requester(IPacketMultiSource ms) 
-	{
-		ms.addPacketSink(this);	
+	static Requester withPacketsFrom(IPacketMultiSource source) {
+		Requester requester = new Requester();
+		source.addPacketSink(requester);
+		return requester;
 	}
 
 	/**
 	 * Add topic, which value is to be requested from MQTT/UDP network,
-	 * @param topicName name of topic to request
+	 * @param topic name of topic to request
 	 * @throws IOException if network send is failed
 	 */
-	public void addTopic(Topic topicName) throws IOException {
+	public void addTopic(Topic topic) throws IOException {
 		synchronized (items) {
 			// TODO need class PublishTopicItem?
 			//items.put(topicName, new TopicItem(mqtt_udp_defs.PTYPE_PUBLISH, topicName, topicValue));
-			items.put(topicName, null);
+			put(topic, null);
 
-			SubscribePacket sp = new SubscribePacket(topicName);
-			sp.send();
+			SubscribePacket subscribePacket = new SubscribePacket(topic);
+			subscribePacket.send();
 		}
 	}
 
@@ -124,31 +125,31 @@ public final class Requester implements Consumer<IPacket> {
 	 */
 	@Override
 	public void accept(IPacket t) {
-		System.out.println("Accepted " + t);
-		if( !(t instanceof PublishPacket) ) 
-			return;
-
-		PublishPacket pp = (PublishPacket) t;
-
-		synchronized (items) {
-			if( !items.containsKey(pp.getTopic()) )
-				return;
-
-			TopicItem ai = (TopicItem) AbstractItem.fromPacket(pp);
-			//System.out.println("REQUESTER: Got reply for "+ai.getTopic());
-			items.put(ai.getTopic(), ai);
+		debug("Accepted " + t);
+		if (t instanceof PublishPacket) {
+			acceptPublishPacket((PublishPacket) t);
 		}
 	}
 
+	void acceptPublishPacket(PublishPacket pp) {
+		synchronized (items) {
+			Topic topic = pp.getTopic();
+			if (items.containsKey(topic)) {
+				debug("REQUESTER: Got reply for " + topic);
+				put(topic, (TopicItem) AbstractItem.fromPacket(pp));
+			}
+		}
+	}
+
+	private void put(Topic topic, TopicItem topicItem) {
+		items.put(topic, topicItem);
+	}
 
 	/**
 	 * Start background process to poll net for topics we need.
 	 */
 	public void startBackgroundRequests() {
-		//Runnable target = makeLoopRunnable();
-		//Thread t = new Thread(target, "MQTT UDP config.Requester");
-		//t.start();
-		lr.requestStart();
+		runner.requestStart();
 	}
 
 	/**
@@ -203,8 +204,8 @@ public final class Requester implements Consumer<IPacket> {
 	}
 	
 	/**
-	 * Wait for all topics to get content. Returns when we
-	 * have data for all topics we know about.
+	 * Wait for all topics to get content.
+	 * Returns when we have data for all topics we know about.
 	 * 
 	 * @param timeoutMsec Max time to wait.
 	 * 
@@ -236,5 +237,9 @@ public final class Requester implements Consumer<IPacket> {
 		}
 	}
 	// TODO set sink to be informed on arrive of some item or any item
-	
+
+	private static void debug(String message) {
+		System.out.println("Requester:" + message);
+	}
+
 }

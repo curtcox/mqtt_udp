@@ -33,41 +33,44 @@ public final class Provider implements Consumer<IPacket> {
 	//private SubServer ss; // no, need one that can serve multiple listeners with thread pool
 	//private ArrayList topics = new ArrayList<>();
 	private Map<Topic,TopicItem> items = new HashMap<>();
-	
-	public Provider(IPacketMultiSource ms) 
-	{
-		ms.addPacketSink(this);	
+
+	static Provider withPacketsFrom(IPacketMultiSource source) {
+		Provider provider = new Provider();
+		source.addPacketSink(provider);
+		return provider;
 	}
 
 	public void addTopic(Topic topicName, String topicValue) {
 		// TODO need class PublishTopicItem?
 		items.put(topicName, new TopicItem(mqtt_udp_defs.PTYPE_PUBLISH, topicName, topicValue));
-		
 	}
 
 	@Override
 	public void accept(IPacket t) {
-		//System.out.println("Got packet "+t);
+		debug("Got packet "+t);
+		if (t instanceof SubscribePacket) {
+			acceptSubcription((SubscribePacket) t);
+		}
+	}
 
-		if( !(t instanceof SubscribePacket) ) 
-			return;
+	void acceptSubcription(SubscribePacket sp) {
+		if (items.containsKey(sp.getTopic())) {
+			debug("PROVIDER: Got request for "+sp.getTopic());
+			publish(items.get(sp.getTopic()));
+		}
+	}
 
-		SubscribePacket sp = (SubscribePacket) t;
-
-		if( !items.containsKey(sp.getTopic()) )
-			return;
-
-		//System.out.println("PROVIDER: Got request for "+sp.getTopic());
-		
-		TopicItem it = items.get(sp.getTopic());
-		
-		PublishPacket pp = new PublishPacket(it.getTopic(),new Flags(), it.getValue());
+	private void publish(TopicItem it) {
 		try {
-			pp.send();
+			PublishPacket packet = PublishPacket.from(it.getValue(), new Flags(), it.getTopic(), null);
+			packet.send();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
+	private static void debug(String message) {
+		System.out.println("Provider:" + message);
+	}
 }
