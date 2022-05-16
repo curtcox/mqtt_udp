@@ -1,6 +1,7 @@
 package ru.dz.mqtt_udp.config;
 
 import org.junit.Test;
+import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.Flags;
@@ -42,8 +43,9 @@ public class RequesterTest {
         Requester requester = new Requester();
         Topic topic = new Topic("Stuff");
         requester.addTopic(topic);
-        requester.accept(PublishPacket.from("", new Flags(),topic,null));
-        assertFalse(requester.waitForAll(1));
+        requester.accept(PublishPacket.from("", new Flags(),topic, IPacketAddress.LOCAL));
+
+        assertTrue(requester.waitForAll(1));
     }
 
 }

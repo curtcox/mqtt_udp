@@ -8,6 +8,8 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
+import static ru.dz.mqtt_udp.util.Check.notNull;
+
 /**
  * PUBLISH packet. Carries actual topic data update.
  * @author dz
@@ -19,7 +21,7 @@ public final class PublishPacket extends TopicPacket {
 
 	public PublishPacket(Flags flags, Topic topic, IPacketAddress from,byte[] value) {
 		super(flags,topic,from);
-		this.value = value;
+		this.value = notNull(value);
 	}
 
 	public static PublishPacket from(byte[] raw, Flags flags, Topic topic, IPacketAddress from) {
@@ -27,6 +29,7 @@ public final class PublishPacket extends TopicPacket {
 	}
 
 	public static PublishPacket from(String value, Flags flags, Topic topic, IPacketAddress from)  {
+		notNull(value,flags,topic,from);
 		try {
 			return new PublishPacket(flags,topic,from,value.getBytes(IPacket.MQTT_CHARSET));
 		} catch (UnsupportedEncodingException e) {

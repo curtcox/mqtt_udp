@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
 import ru.dz.mqtt_udp.items.AbstractItem;
+import ru.dz.mqtt_udp.items.Items;
 
 /**
  * 
@@ -83,9 +84,8 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 
 		synchronized (ilist) {
 			if( ilist.size() > 0 ) {
-				AbstractItem ai = AbstractItem.fromPacket(p);
-				for( Consumer<AbstractItem> isink : ilist )
-				{
+				AbstractItem ai = Items.fromPacket(p);
+				for( Consumer<AbstractItem> isink : ilist ) {
 					isink.accept(ai);
 				}
 			}

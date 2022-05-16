@@ -5,6 +5,8 @@ import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
+import static ru.dz.mqtt_udp.util.Check.notNull;
+
 public final class SubscribePacket extends TopicPacket {
 
 	public SubscribePacket(Topic topic, Flags flags, IPacketAddress from) {
@@ -16,7 +18,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 */
 	public SubscribePacket(Topic topic) {
-		super(new Flags(),topic, null);
+		super(new Flags(),notNull(topic), IPacketAddress.LOCAL);
 	}
 
 	/*

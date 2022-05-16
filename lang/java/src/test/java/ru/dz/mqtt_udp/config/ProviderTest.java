@@ -7,6 +7,8 @@ import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.Flags;
 
+import java.net.SocketAddress;
+
 import static org.junit.Assert.*;
 
 public class ProviderTest {
@@ -29,7 +31,7 @@ public class ProviderTest {
         Provider provider = new Provider();
         Topic topic = new Topic("schmopic");
         Flags flags = new Flags();
-        IPacketAddress from = new IpAddress(null);
+        IPacketAddress from = new IpAddress(new SocketAddress() {});
         SubscribePacket packet = new SubscribePacket(topic,flags,from);
 
         provider.accept(packet);

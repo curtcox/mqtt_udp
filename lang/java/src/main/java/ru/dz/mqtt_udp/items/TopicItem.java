@@ -17,7 +17,6 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  */
 public final class TopicItem extends AbstractItem {
 
-	
 	private Topic topic;
 	private String value;
 

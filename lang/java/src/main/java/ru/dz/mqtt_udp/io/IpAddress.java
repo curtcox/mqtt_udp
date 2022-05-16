@@ -5,12 +5,14 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import static ru.dz.mqtt_udp.util.Check.notNull;
+
 public final class IpAddress extends GeneralAddress implements Comparable<IPacketAddress> {
 
 	private SocketAddress socketAddress;
 
 	public IpAddress(SocketAddress socketAddress) {
-		this.socketAddress = socketAddress;
+		this.socketAddress = notNull(socketAddress);
 	}
 
 	public static IpAddress from(DatagramPacket packet) {

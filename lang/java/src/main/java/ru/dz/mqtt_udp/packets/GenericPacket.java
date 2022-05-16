@@ -24,6 +24,8 @@ import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.GlobalErrorHandler;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
+import static ru.dz.mqtt_udp.util.Check.notNull;
+
 /**
  * Network IO work horse for MQTT/UDP packets.
  * @author dz
@@ -39,7 +41,7 @@ public abstract class GenericPacket implements IPacket {
 
 	/**
 	 * Packet source address, if packet is received from net.
-	 * Locally created ones have null here.
+	 * Locally created ones have LOCAL here.
 	 */
 	private IPacketAddress from;
 
@@ -57,8 +59,8 @@ public abstract class GenericPacket implements IPacket {
 	 * @param from Sender's address.
 	 */
 	protected GenericPacket(Flags flags,IPacketAddress from) {
-		this.flags = flags;
-		this.from = from;
+		this.flags = notNull(flags);
+		this.from = notNull(from);
 	}
 
 	/**

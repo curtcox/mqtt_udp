@@ -17,5 +17,6 @@ public interface IPacketAddress {
 	String toString();
 
 	InetAddress getInetAddress();
-	
+
+	IPacketAddress LOCAL = () -> null;
 }

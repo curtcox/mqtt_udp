@@ -3,6 +3,8 @@ package ru.dz.mqtt_udp.packets;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
 
+import static ru.dz.mqtt_udp.util.Check.notNull;
+
 /**
  * Packets with topic field.
  * Support ifTopicIs filtering.
@@ -19,7 +21,7 @@ public abstract class TopicPacket extends GenericPacket {
 	 */
 	public TopicPacket(Flags flags, Topic topic, IPacketAddress from) {
 		super(flags,from);
-		this.topic = topic;
+		this.topic = notNull(topic);
 	}
 
 	/**

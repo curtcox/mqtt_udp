@@ -3,7 +3,6 @@ package ru.dz.mqtt_udp.items;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.packets.*;
 import ru.dz.mqtt_udp.util.MqttUdpRuntimeException;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
@@ -53,9 +52,9 @@ public abstract class AbstractItem {
 	}
 
 	public boolean isPingOrResponce() {
-		return 
-				(packetType == mqtt_udp_defs.PTYPE_PINGREQ) || 
-				(packetType == mqtt_udp_defs.PTYPE_PINGRESP) 
+		return
+				(packetType == mqtt_udp_defs.PTYPE_PINGREQ) ||
+				(packetType == mqtt_udp_defs.PTYPE_PINGRESP)
 				;
 	}
 
@@ -63,23 +62,9 @@ public abstract class AbstractItem {
 		return (packetType == mqtt_udp_defs.PTYPE_PUBLISH);
 	}
 
-
-
-
-
-
-
-
-	//static private final SimpleDateFormat ft3 = new SimpleDateFormat("hh:mm:ss");
-	private static String getCurrentTime()
-	{
-		//Date dNow = new Date( );
-		//return ft3.format(dNow);
+	private static String getCurrentTime() {
 		return java.time.LocalTime.now().toString();
 	}
-
-
-
 
 	public void setFrom(String from) { this.from = from; }
 	public String getFrom() {		return from;	}
@@ -102,58 +87,15 @@ public abstract class AbstractItem {
 		this.signed     = src.signed; 
 	}
 
-
-
-
 	public GenericPacket toPacket() {
-		switch(packetType)
-		{
-		case mqtt_udp_defs.PTYPE_PINGREQ: return new PingReqPacket();
-		case mqtt_udp_defs.PTYPE_PINGRESP: return new PingRespPacket();
-		default: break;
+		switch(packetType) {
+		    case mqtt_udp_defs.PTYPE_PINGREQ:  return new PingReqPacket();
+		    case mqtt_udp_defs.PTYPE_PINGRESP: return new PingRespPacket();
 		}
 
 		// TODO not runtime exception?
 		throw new MqttUdpRuntimeException("Unknown pkt type 0x"+Integer.toHexString(packetType));
 	}
-
-
-
-	public static AbstractItem fromPacket( IPacket p )
-	{
-		if (p instanceof PublishPacket) {
-			PublishPacket pp = (PublishPacket) p;			
-			TopicItem ti = new TopicItem( p.getType(), pp.getTopic(), pp.getValueString() );
-			ti.setFrom(pp.getFrom().toString());
-			ti.setSigned( p.isSigned() );
-			return ti;
-		} else if( p instanceof SubscribePacket) {
-			SubscribePacket sp = (SubscribePacket) p;			
-			TopicItem ti = new TopicItem( mqtt_udp_defs.PTYPE_SUBSCRIBE, sp.getTopic() );
-			ti.setFrom(p.getFrom().toString());
-			ti.setSigned( p.isSigned() );
-			return ti;
-		} else if( p instanceof PingReqPacket) {
-			TopicItem ti = new TopicItem(mqtt_udp_defs.PTYPE_PINGREQ);
-			ti.setFrom(p.getFrom().toString());
-			ti.setSigned( p.isSigned() );
-			return ti;
-		} else if( p instanceof PingRespPacket) {
-			TopicItem ti = new TopicItem(mqtt_udp_defs.PTYPE_PINGRESP);
-			ti.setFrom(p.getFrom().toString());
-			ti.setSigned( p.isSigned() );
-			return ti;
-		} else {
-			System.out.println(p);
-			// TODO hack
-			TopicItem ti = new TopicItem( 0, Topic.UnknownPacket, p.toString());
-			ti.setFrom(p.getFrom().toString());
-			ti.setSigned( p.isSigned() );
-			return ti;
-		}
-
-	}
-
 
 	public void sendToAll() throws IOException {
 		GenericPacket pkt = toPacket();
@@ -164,8 +106,5 @@ public abstract class AbstractItem {
 		GenericPacket pkt = toPacket();
 		pkt.send( addr );
 	}
-
-	
-
 
 }
