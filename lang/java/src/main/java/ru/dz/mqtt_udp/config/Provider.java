@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
+import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.items.TopicItem;
@@ -56,15 +57,18 @@ public final class Provider implements Consumer<IPacket> {
 	}
 
 	void acceptSubcription(SubscribePacket sp) {
-		if (items.containsKey(sp.getTopic())) {
-			debug("PROVIDER: Got request for "+sp.getTopic());
-			publish(items.get(sp.getTopic()));
+		Topic topic = sp.getTopic();
+		if (items.containsKey(topic)) {
+			debug("PROVIDER: Got request for " + topic);
+			publish(items.get(topic));
+		} else {
+			debug(topic + " not in " + items.keySet());
 		}
 	}
 
 	private void publish(TopicItem it) {
 		try {
-			PublishPacket packet = PublishPacket.from(it.getValue(), new Flags(), it.getTopic(), null);
+			PublishPacket packet = PublishPacket.from(it.getValue(), new Flags(), it.getTopic(), IPacketAddress.LOCAL);
 			packet.send();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

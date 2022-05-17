@@ -136,7 +136,7 @@ public final class Requester implements Consumer<IPacket> {
 			Topic topic = pp.getTopic();
 			if (items.containsKey(topic)) {
 				debug("REQUESTER: Got reply for " + topic);
-				put(topic, (TopicItem) Items.fromPacket(pp));
+				put(topic, Items.fromPacket(pp));
 			}
 		}
 	}

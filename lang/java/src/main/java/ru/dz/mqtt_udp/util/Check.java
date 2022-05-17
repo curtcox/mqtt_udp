@@ -10,9 +10,10 @@ public class Check {
     }
 
     public static void notNull(Object... args) {
-        for (Object arg: args) {
+        for (int i=0; i< args.length; i++) {
+            Object arg = args[i];
             if (arg==null) {
-                throw new NullPointerException();
+                throw new NullPointerException(i + " of " + (args.length - 1));
             }
         }
     }

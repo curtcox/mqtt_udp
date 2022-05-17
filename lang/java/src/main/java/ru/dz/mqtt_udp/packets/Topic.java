@@ -28,7 +28,7 @@ public final class Topic {
     @Override
     public boolean equals(Object other) {
         Topic that = (Topic) other;
-        return topic == that.topic;
+        return topic.equals(that.topic);
     }
 
     @Override
