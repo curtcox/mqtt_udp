@@ -40,18 +40,14 @@ public class PacketSourceMultiServerTest {
     public void processPacket_notifies_added_item_sink() {
         PacketSourceMultiServer server = new PacketSourceMultiServer();
 
-        IPacket[] packets = new IPacket[1];
-        server.addItemSink(new Consumer<AbstractItem>() {
-            @Override
-            public void accept(AbstractItem abstractItem) {
+        AbstractItem[] items = new AbstractItem[1];
+        server.addItemSink(item -> items[0] = item);
 
-            }
-        });
+        IPacket packet = new PingReqPacket();
+        server.processPacket(packet);
 
-        IPacket expected = new PingReqPacket();
-        server.processPacket(expected);
-
-        assertSame(expected,packets[0]);
+        AbstractItem item = items[0];
+        assertSame(packet.getType(),item.toPacket().getType());
     }
 
 }
