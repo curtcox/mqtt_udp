@@ -2,7 +2,8 @@ package ru.dz.mqtt_udp.items;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.packets.*;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
+
+import static ru.dz.mqtt_udp.packets.PacketType.*;
 
 public final class Items {
 
@@ -25,21 +26,21 @@ public final class Items {
     }
 
     static TopicItem subscribe( SubscribePacket p ) {
-        return from(new TopicItem( mqtt_udp_defs.PTYPE_SUBSCRIBE, p.getTopic() ),p);
+        return from(new TopicItem(Subscribe, p.getTopic() ),p);
     }
 
     static TopicItem pingRequest(PingReqPacket p) {
-        return from(new TopicItem(mqtt_udp_defs.PTYPE_PINGREQ),p);
+        return from(new TopicItem(PingRequest),p);
     }
 
     static TopicItem pingResponse(PingRespPacket p ) {
-        return from(new TopicItem(mqtt_udp_defs.PTYPE_PINGRESP),p);
+        return from(new TopicItem(PingResponse),p);
     }
 
     static TopicItem unknown( IPacket p ) {
         System.out.println(p);
         // TODO hack
-        return from(new TopicItem( 0, Topic.UnknownPacket, p.toString()),p);
+        return from(new TopicItem( Unknown, Topic.UnknownPacket, p.toString()),p);
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.dz.mqtt_udp;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.packets.PacketType;
 
 /**
  * Interface of general MQTT/UDP packet.
@@ -28,7 +29,7 @@ public interface IPacket {
 	 * Get packet type byte, as sent over the net (&amp; 0xF0).
 	 * @return Packet type byte.
 	 */
-	int getType();
+	PacketType getType();
 
 	String[] pTYpeNames = {
 			"? NULL",

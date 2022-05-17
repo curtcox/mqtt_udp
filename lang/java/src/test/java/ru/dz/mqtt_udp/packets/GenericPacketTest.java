@@ -24,8 +24,8 @@ public class GenericPacketTest {
         }
 
         @Override
-        public int getType() {
-            return 0;
+        public PacketType getType() {
+            return PacketType.Unknown;
         }
     }
 

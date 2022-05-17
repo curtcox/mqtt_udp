@@ -8,6 +8,7 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
+import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 import static ru.dz.mqtt_udp.util.Check.notNull;
 
 /**
@@ -83,8 +84,8 @@ public final class PublishPacket extends TopicPacket {
 	}
 
 	@Override
-	public int getType() {
-		return mqtt_udp_defs.PTYPE_PUBLISH;
+	public PacketType getType() {
+		return Publish;
 	}
 
 }

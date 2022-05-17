@@ -2,7 +2,8 @@ package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
+
+import static ru.dz.mqtt_udp.packets.PacketType.PingRequest;
 
 public final class PingReqPacket extends GenericPacket {
 
@@ -19,11 +20,11 @@ public final class PingReqPacket extends GenericPacket {
 	@Override
 	public byte[] toBytes() {
 		byte[] pkt = new byte[0];
-		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PINGREQ, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, PingRequest.value, getFlags(), null, this );
 	}
 
 	@Override
-	public int getType() {		return mqtt_udp_defs.PTYPE_PINGREQ;	}
+	public PacketType getType() {		return PingRequest;	}
 	
 	@Override
 	public String toString() {		

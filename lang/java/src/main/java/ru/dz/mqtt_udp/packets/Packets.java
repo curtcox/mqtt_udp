@@ -139,18 +139,18 @@ public final class Packets {
         return ret;
     }
 
-    /**
-     * Get packet type name.
-     * @param packetType as in incoming byte (&amp; 0xF0).
-     * @return Type string.
-     */
-    public static String getPacketTypeName(int packetType) {
-        int pos = packetType >> 4;
-
-        if( (pos < 0) || (pos > 15) )
-            return "?";
-        return IPacket.pTYpeNames[pos];
-    }
+//    /**
+//     * Get packet type name.
+//     * @param packetType as in incoming byte (&amp; 0xF0).
+//     * @return Type string.
+//     */
+//    public static String getPacketTypeName(int packetType) {
+//        int pos = packetType >> 4;
+//
+//        if( (pos < 0) || (pos > 15) )
+//            return "?";
+//        return IPacket.pTYpeNames[pos];
+//    }
 
     /**
      * Rename to encodePacketHeader?

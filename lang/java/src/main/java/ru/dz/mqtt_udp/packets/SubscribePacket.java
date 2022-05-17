@@ -5,6 +5,7 @@ import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
+import static ru.dz.mqtt_udp.packets.PacketType.Subscribe;
 import static ru.dz.mqtt_udp.util.Check.notNull;
 
 public final class SubscribePacket extends TopicPacket {
@@ -45,8 +46,8 @@ public final class SubscribePacket extends TopicPacket {
 	}
 
 	@Override
-	public int getType() {
-		return mqtt_udp_defs.PTYPE_SUBSCRIBE;
+	public PacketType getType() {
+		return Subscribe;
 	}
 
 }

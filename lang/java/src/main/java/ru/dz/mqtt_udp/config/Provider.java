@@ -14,6 +14,8 @@ import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
+import static ru.dz.mqtt_udp.packets.PacketType.Publish;
+
 /**
  * <p>Remote configuration data provider</p>
  * 
@@ -42,7 +44,7 @@ public final class Provider implements Consumer<IPacket> {
 
 	public void addTopic(Topic topicName, String topicValue) {
 		// TODO need class PublishTopicItem?
-		items.put(topicName, new TopicItem(mqtt_udp_defs.PTYPE_PUBLISH, topicName, topicValue));
+		items.put(topicName, new TopicItem(Publish, topicName, topicValue));
 	}
 
 	@Override

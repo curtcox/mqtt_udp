@@ -1,11 +1,9 @@
 package ru.dz.mqtt_udp.items;
 
-import ru.dz.mqtt_udp.packets.GenericPacket;
-import ru.dz.mqtt_udp.packets.Packets;
-import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.packets.Topic;
+import ru.dz.mqtt_udp.packets.*;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
+
+import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 
 // TODO rename to PacketItem, make subclasses per type
 
@@ -17,29 +15,25 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
  */
 public final class TopicItem extends AbstractItem {
 
-	private Topic topic;
-	private String value;
+	private final Topic topic;
+	private final String value;
 
-	public TopicItem(int packetType) {
+	public TopicItem(PacketType packetType) {
 		super(packetType);
-		assertHasNoTopic();
+		this.topic = null;
+		this.value = "";
 	}
 	
-	public TopicItem(int packetType, Topic topic) {
+	public TopicItem(PacketType packetType, Topic topic) {
 		super(packetType);
 		this.topic = topic;
 		this.value = "";
-		
-		assertHasTopic();
 	}
 
-
-	public TopicItem(int packetType, Topic topic, String value) {
+	public TopicItem(PacketType packetType, Topic topic, String value) {
 		super(packetType);
 		this.topic = topic;
 		this.value = value;
-
-		assertHasTopic();
 	}
 
 	/**
@@ -47,17 +41,11 @@ public final class TopicItem extends AbstractItem {
 	 * @param src TopicItem to copy.
 	 */
 	public TopicItem(TopicItem src) {
-		super(src);
-		this.packetType = src.packetType;
+		super(src, src.packetType);
 		this.topic = src.topic;
 		this.value = src.value;
 	}
 
-	
-	
-	
-	
-	
 	
 	// ---------------------------------------------------
 	// Get/set
@@ -67,36 +55,17 @@ public final class TopicItem extends AbstractItem {
 	public String toString() {
 		String com = (isSigned() ? "Sig! " : "       ")+getTime()+":  ";
 		
-		if( packetType == mqtt_udp_defs.PTYPE_PUBLISH)
+		if( packetType == Publish)
 			return com+topic+"="+value;
-		else if(typeWithTopic())
-			return com + Packets.getPacketTypeName(packetType)+" \ttopic="+topic;
+		else if (packetType.typeWithTopic())
+			return com + packetType +" \ttopic="+topic;
 		else
-			return com + Packets.getPacketTypeName(packetType);
+			return com + packetType;
 	}
 
 	public Topic getTopic() {		return topic;	}
 
-	public void setValue(String value) { this.value = value; }
 	public String getValue() {		return value;	}
-
-
-	
-	// ---------------------------------------------------
-	
-	
-	
-	// TODO assign value and time only? check for host/topic be same?
-	/** 
-	 * Assign all data from src
-	 * 
-	 * @param src object to copy. 
-	 **/
-	public void assignFrom(TopicItem src) {
-		this.topic	= src.topic;
-		this.value	= src.value;
-		super.assignFrom(src);
-	}
 
 	public boolean sameTopic( TopicItem t )
 	{
@@ -107,17 +76,10 @@ public final class TopicItem extends AbstractItem {
 		return getTopic().equals(t.getTopic()) && getFrom().equals(t.getFrom());
 	}
 
-	//public boolean hasTopic() {		return typeWithTopic();	}
-
-	// ---------------------------------------------------
-	
-	
 	public GenericPacket toPacket() {
 		switch(packetType) {
-		case mqtt_udp_defs.PTYPE_PUBLISH: return PublishPacket.from(value, new Flags(), topic, null);
-		//case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(topic);
-		
-		default: return super.toPacket(); 
+			case Publish: return PublishPacket.from(value, new Flags(), topic, null);
+		    default: return super.toPacket();
 		}		
 	}
 

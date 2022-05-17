@@ -171,18 +171,9 @@ public abstract class GenericPacket implements IPacket {
 	}
 
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#getFrom()
-	 */
 	@Override
 	final public IPacketAddress getFrom() { return from; }
 	
-	/**
-	 * Get packet flags. QoS, etc.
-	 * 
-	 * @return Flags bit field.
-	 */
 	final public Flags getFlags() {		return flags;	}
 
 	
@@ -257,10 +248,6 @@ public abstract class GenericPacket implements IPacket {
 
 	private boolean signed = false;
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#isSigned()
-	 */
 	@Override
 	final public boolean isSigned() {		return signed;	}
 
