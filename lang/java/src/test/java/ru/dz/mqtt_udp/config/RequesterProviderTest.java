@@ -57,7 +57,22 @@ public class RequesterProviderTest {
 		assertTrue( requester.waitForAll(1000) );
 	}
 
-	
+
+	@Test
+	public void timeout_with_1_topic() throws IOException {
+		requester.setCheckLoopTime(1000);
+		requester.startBackgroundRequests();
+
+		// Let requester ask it for the first time before
+		// provider is ready to answer. It will work if
+		// requester is repeating it's requests
+		requester.addTopic(new Topic(TO+T1));
+
+		provider.addTopic(new Topic(TO+T1), T1V);
+
+		assertTrue( requester.waitForAll(4000) );
+	}
+
 	@Test
 	public void timeout_with_3_topics() throws IOException {
 		requester.setCheckLoopTime(1000);

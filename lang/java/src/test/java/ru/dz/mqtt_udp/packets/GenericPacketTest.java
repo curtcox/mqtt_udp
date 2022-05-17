@@ -1,6 +1,8 @@
 package ru.dz.mqtt_udp.packets;
 
 import org.junit.Test;
+import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.util.Flags;
 
 import java.io.IOException;
 
@@ -11,6 +13,10 @@ public class GenericPacketTest {
     TestGenericPacket packet = new TestGenericPacket();
 
     class TestGenericPacket extends GenericPacket {
+
+        TestGenericPacket() {
+            super(new Flags(), IPacketAddress.LOCAL);
+        }
 
         @Override
         public byte[] toBytes() {

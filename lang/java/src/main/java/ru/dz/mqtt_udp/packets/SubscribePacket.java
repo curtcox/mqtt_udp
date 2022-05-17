@@ -21,10 +21,6 @@ public final class SubscribePacket extends TopicPacket {
 		super(new Flags(),notNull(topic), IPacketAddress.LOCAL);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#toBytes()
-	 */
 	@Override
 	public byte[] toBytes() {
 		byte[] tbytes = getTopic().getBytes();
@@ -48,10 +44,6 @@ public final class SubscribePacket extends TopicPacket {
 		return String.format("MQTT/UDP SUBSCRIBE '%s'", getTopic() );
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#getType()
-	 */
 	@Override
 	public int getType() {
 		return mqtt_udp_defs.PTYPE_SUBSCRIBE;

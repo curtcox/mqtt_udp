@@ -196,6 +196,7 @@ public final class Requester implements Consumer<IPacket> {
 		synchronized (items) {
 			for( TopicItem item : items.values() ) {
 				if (item == null) {
+					debug("items : " + items);
 					return false;
 				}
 			}

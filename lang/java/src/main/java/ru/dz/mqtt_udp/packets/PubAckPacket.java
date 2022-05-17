@@ -11,14 +11,6 @@ import ru.dz.mqtt_udp.util.*;
 public final class PubAckPacket extends GenericPacket {
 
 	private PublishPacket replyToPkt;
-	//private int qos;
-
-	/**
-	 * Construct from incoming UDP data. 
-	 * @param raw Data from UDP packet, starting after packet type and length.
-	 * @param flags Flags from packet header.
-	 * @param from Source IP address.
-	 */
 
 	public PubAckPacket(byte[] raw, Flags flags, IPacketAddress from) {
 		super(flags,from);
@@ -26,19 +18,11 @@ public final class PubAckPacket extends GenericPacket {
 			System.err.println("non-empty PubAck Packet");
 	}
 
-	/**
-	 * Create packet to be sent.
-	 */
-	public PubAckPacket(PublishPacket replyTo, int qos) {
-		this.replyToPkt = replyTo;
-		getFlags().setQoS(qos);
-	}
+//	public PubAckPacket(PublishPacket replyTo, int qos) {
+//		this.replyToPkt = replyTo;
+//		getFlags().setQoS(qos);
+//	}
 
-
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#toBytes()
-	 */
 	@Override
 	public byte[] toBytes() {
 		byte[] pkt = new byte[0];
@@ -58,17 +42,9 @@ public final class PubAckPacket extends GenericPacket {
 		return Packets.encodeTotalLength(pkt, mqtt_udp_defs.PTYPE_PUBACK, getFlags(), ttrs, this );
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#getType()
-	 */
 	@Override
 	public int getType() {		return mqtt_udp_defs.PTYPE_PUBACK;	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.packets.GenericPacket#toString()
-	 */
 	@Override
 	public String toString() {		
 		return String.format("MQTT/UDP PubAck" );

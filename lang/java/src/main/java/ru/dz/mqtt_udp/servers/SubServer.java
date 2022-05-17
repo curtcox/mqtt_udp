@@ -6,12 +6,14 @@ import java.net.DatagramSocket;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
+import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.io.SingleSendSocket;
 import ru.dz.mqtt_udp.packets.PingReqPacket;
 import ru.dz.mqtt_udp.packets.PingRespPacket;
 import ru.dz.mqtt_udp.packets.PubAckPacket;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.GenericPacket;
+import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.LoopRunner;
 
 
@@ -155,7 +157,7 @@ public abstract class SubServer extends LoopRunner {
 
 		if( p instanceof PingReqPacket) {
 			// Reply to ping
-			PingRespPacket presp = new PingRespPacket();
+			PingRespPacket presp = new PingRespPacket(new byte[0],new Flags(), IPacketAddress.LOCAL);
 			//presp.send(ss, ((PingReqPacket) p).getFrom().getInetAddress());
 			// decided to broadcast ping replies
 			presp.send(ss);
@@ -167,8 +169,9 @@ public abstract class SubServer extends LoopRunner {
 			if( qos != 0 ) {
 				System.out.println("QoS, Publish id="+pp.getPacketNumber().orElse(0));
 				int maxQos = Engine.getMaxReplyQoS();
-				qos = Integer.min(qos, maxQos);
-				new PubAckPacket(pp, qos).send();
+				Flags flags = new Flags();
+				flags.setQoS(Integer.min(qos, maxQos));
+				new PubAckPacket(new byte[0], flags, IPacketAddress.LOCAL).send();
 			}
 		}
 

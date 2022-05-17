@@ -1,6 +1,5 @@
 package ru.dz.mqtt_udp.servers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,8 +29,8 @@ import ru.dz.mqtt_udp.items.Items;
  */
 public final class PacketSourceMultiServer extends SubServer implements IPacketMultiSource {
 
-	private List< Consumer<IPacket> > plist = new ArrayList<>();
-	private List< Consumer<AbstractItem> > ilist = new ArrayList<>(); 
+	private final List< Consumer<IPacket> > packetSinks = new ArrayList<>();
+	private final List< Consumer<AbstractItem> > itemSinks = new ArrayList<>();
 
 	/*
 	 * (non-Javadoc)
@@ -39,18 +38,15 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 	 */
 	@Override
 	public void addPacketSink(Consumer<IPacket> sink) {
-		synchronized (plist) {
-			plist.add(sink);			
+		synchronized (packetSinks) {
+			packetSinks.add(sink);
 		}
 	}
 
-	/*
-	 * 
-	 */
 	@Override
 	public void removePacketSink(Consumer<IPacket> sink) {
-		synchronized (plist) {
-			plist.remove(sink);
+		synchronized (packetSinks) {
+			packetSinks.remove(sink);
 		}
 	}
 
@@ -60,8 +56,8 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 	 */
 	@Override
 	public void addItemSink(Consumer<AbstractItem> sink) {
-		synchronized (ilist) {
-			ilist.add(sink);
+		synchronized (itemSinks) {
+			itemSinks.add(sink);
 		}
 	}
 
@@ -71,29 +67,27 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 	 */
 	@Override
 	public void removeItemSink(Consumer<AbstractItem> sink) {
-		synchronized (ilist) {
-			ilist.remove(sink);
+		synchronized (itemSinks) {
+			itemSinks.remove(sink);
 		}
 	}
 
 
-
-
 	@Override
-	protected void processPacket(IPacket p) throws IOException {
+	protected void processPacket(IPacket p) {
 
-		synchronized (ilist) {
-			if( ilist.size() > 0 ) {
-				AbstractItem ai = Items.fromPacket(p);
-				for( Consumer<AbstractItem> isink : ilist ) {
-					isink.accept(ai);
+		synchronized (itemSinks) {
+			if ( itemSinks.size() > 0 ) {
+				AbstractItem item = Items.fromPacket(p);
+				for( Consumer<AbstractItem> itemSink : itemSinks) {
+					itemSink.accept(item);
 				}
 			}
 		}
 
-		synchronized (plist) {
-			for( Consumer<IPacket> psink : plist ) {
-				psink.accept(p);
+		synchronized (packetSinks) {
+			for ( Consumer<IPacket> packetSink : packetSinks) {
+				packetSink.accept(p);
 			}
 		}
 

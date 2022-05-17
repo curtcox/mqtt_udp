@@ -64,13 +64,6 @@ public abstract class GenericPacket implements IPacket {
 	}
 
 	/**
-	 * Construct packet to be sent.
-	 */
-	protected GenericPacket() {
-		this.from = null;
-	}
-
-	/**
 	 * Create new socket to listen to MQTT/UDP packets.
 	 * @return Created socket.
 	 * @throws SocketException If unable.

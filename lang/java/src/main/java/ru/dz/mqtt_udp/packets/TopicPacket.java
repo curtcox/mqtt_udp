@@ -24,10 +24,6 @@ public abstract class TopicPacket extends GenericPacket {
 		this.topic = notNull(topic);
 	}
 
-	/**
-	 * Get topic value.
-	 * @return Topic string.
-	 */
 	final public Topic getTopic() {			return topic;	}
 
 }
