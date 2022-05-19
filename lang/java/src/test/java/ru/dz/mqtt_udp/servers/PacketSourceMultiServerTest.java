@@ -6,8 +6,6 @@ import ru.dz.mqtt_udp.items.AbstractItem;
 import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.PingReqPacket;
 
-import java.util.function.Consumer;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 

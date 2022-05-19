@@ -9,18 +9,22 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 import java.io.IOException;
 import java.net.*;
 
+import static ru.dz.mqtt_udp.util.Check.notNull;
+
 public final class DatagramSocketIO implements IPacket.IO {
 
     final DatagramSocket socket;
 
     private int sentCounter = 0;
 
+    private static final int PORT = mqtt_udp_defs.MQTT_PORT;
+
 //    private InetAddress resendAddress;
 
     //    final public int getSentCounter() {		return sentCounter;	}
 //
     DatagramSocketIO(DatagramSocket socket) {
-        this.socket = socket;
+        this.socket = notNull(socket);
     }
 
     /**
@@ -136,7 +140,12 @@ public final class DatagramSocketIO implements IPacket.IO {
 
     @Override
     public void write(IPacket packet) throws IOException {
+        socket.send(datagram(packet));
+    }
 
+    private DatagramPacket datagram(IPacket packet) {
+        byte[] bytes = packet.toBytes();
+        return new DatagramPacket(bytes, bytes.length, packet.getFrom().getInetAddress(), PORT);
     }
 
     @Override
