@@ -59,6 +59,8 @@ public final class Requester implements Consumer<IPacket> {
 
 	private final Map<Topic,TopicItem> items = new HashMap<>();
 
+	private final IPacket.Writer writer;
+
 	private static final int CHECK_LOOP_TIME = 1000*60;
 	private static final int REQUEST_STEP_TIME = 1000;
 
@@ -77,13 +79,17 @@ public final class Requester implements Consumer<IPacket> {
 		protected void onStop() { /** empty */ }
 		
 	};
-	
+
+	public Requester(IPacket.Writer writer) {
+		this.writer = writer;
+	}
+
 	/**
 	 * Construct.
 	 * @param source MQTT/UDP network listener which is able to serve multiple consumers.
 	 */
-	static Requester withPacketsFrom(IPacketMultiSource source) {
-		Requester requester = new Requester();
+	static Requester withPacketsFrom(IPacketMultiSource source,IPacket.Writer writer) {
+		Requester requester = new Requester(writer);
 		source.addPacketSink(requester);
 		return requester;
 	}
@@ -100,7 +106,7 @@ public final class Requester implements Consumer<IPacket> {
 			put(topic, null);
 
 			SubscribePacket subscribePacket = new SubscribePacket(topic);
-			subscribePacket.send();
+			writer.write(subscribePacket);
 		}
 	}
 
@@ -166,7 +172,7 @@ public final class Requester implements Consumer<IPacket> {
 
 		// request them one per second		
 		for( Topic topic : empty ) {
-			new SubscribePacket(topic).send();
+			writer.write(new SubscribePacket(topic));
 			LoopRunner.sleep(REQUEST_STEP_TIME);
 		}
 

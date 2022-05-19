@@ -14,9 +14,9 @@ public final class LocalReadOnlyParameter extends LocalConfigurableParameter {
 		GlobalErrorHandler.handleError(ErrorType.Invalid, "sentValue is forbidden for LocalReadOnlyParameter");
 	}
 	
-	@Override
-	public void sendNewValue(String v) {
-		GlobalErrorHandler.handleError(ErrorType.Invalid, "sendNewValue is forbidden for LocalReadOnlyParameter");
-	}
+//	@Override
+//	public void sendNewValue(String v) {
+//		GlobalErrorHandler.handleError(ErrorType.Invalid, "sendNewValue is forbidden for LocalReadOnlyParameter");
+//	}
 	
 }

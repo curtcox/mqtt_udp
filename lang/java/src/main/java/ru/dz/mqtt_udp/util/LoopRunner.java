@@ -111,8 +111,6 @@ public abstract class LoopRunner {
 				loop();
 			} catch (IOException e) {
 				GlobalErrorHandler.handleError(ErrorType.IO, e);
-			} catch (MqttProtocolException e) {
-				GlobalErrorHandler.handleError(ErrorType.Protocol, e);
 			}
 		};
 	}

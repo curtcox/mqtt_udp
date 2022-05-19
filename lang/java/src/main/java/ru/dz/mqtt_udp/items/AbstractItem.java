@@ -58,14 +58,14 @@ public abstract class AbstractItem {
 		throw new MqttUdpRuntimeException("Unknown pkt type 0x"+Integer.toHexString(packetType.value));
 	}
 
-	public void sendToAll() throws IOException {
-		GenericPacket pkt = toPacket();
-		pkt.send();
-	}
-
-	public void sendTo(InetAddress addr) throws IOException {
-		GenericPacket pkt = toPacket();
-		pkt.send( addr );
-	}
+//	public void sendToAll() throws IOException {
+//		GenericPacket pkt = toPacket();
+//		pkt.send();
+//	}
+//
+//	public void sendTo(InetAddress addr) throws IOException {
+//		GenericPacket pkt = toPacket();
+//		pkt.send( addr );
+//	}
 
 }

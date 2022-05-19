@@ -32,7 +32,11 @@ public final class PacketSourceMultiServer extends SubServer implements IPacketM
 	private final List< Consumer<IPacket> > packetSinks = new ArrayList<>();
 	private final List< Consumer<AbstractItem> > itemSinks = new ArrayList<>();
 
-	/*
+    public PacketSourceMultiServer(IPacket.IO io) {
+        super(io);
+    }
+
+    /*
 	 * (non-Javadoc)
 	 * @see ru.dz.mqtt_udp.IPacketMultiSource#addPacketSink(java.util.function.Consumer)
 	 */

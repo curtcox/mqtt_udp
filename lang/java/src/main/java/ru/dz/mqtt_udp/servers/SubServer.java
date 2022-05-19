@@ -1,18 +1,14 @@
 package ru.dz.mqtt_udp.servers;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
-import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.io.SingleSendSocket;
 import ru.dz.mqtt_udp.packets.PingReqPacket;
 import ru.dz.mqtt_udp.packets.PingRespPacket;
 import ru.dz.mqtt_udp.packets.PubAckPacket;
 import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.packets.GenericPacket;
 import ru.dz.mqtt_udp.util.Flags;
 import ru.dz.mqtt_udp.util.LoopRunner;
 
@@ -25,29 +21,30 @@ import ru.dz.mqtt_udp.util.LoopRunner;
 @Deprecated
 public abstract class SubServer extends LoopRunner {
 
-	private final DatagramSocket ss = SingleSendSocket.get();
-	private DatagramSocket s;
+//	private final DatagramSocket ss = SingleSendSocket.get();
+//	private DatagramSocket s;
+	private final IPacket.IO io;
 
-	public SubServer() {
+	public SubServer(IPacket.IO io) {
 		super("MQTT UDP Recv");
-	}	
-
-	@Override
-	protected void onStart() throws IOException {
-		s = GenericPacket.recvSocket();
+		this.io = io;
 	}
 
 	@Override
-	protected void step() throws IOException, MqttProtocolException
-	{
-		IPacket p = GenericPacket.recv(s);
+	protected void onStart() throws IOException {
+//		s = GenericPacket.recvSocket();
+	}
+
+	@Override
+	protected void step() throws IOException {
+		IPacket p = io.read();
 		if(!muted) preprocessPacket(p);			
 		processPacket(p);			
 	}
 
 	@Override
 	protected void onStop() {
-		s.close();
+		//s.close();
 	}
 
 	// ------------------------------------------------------------
@@ -160,7 +157,7 @@ public abstract class SubServer extends LoopRunner {
 			PingRespPacket presp = new PingRespPacket(new byte[0],new Flags(), IPacketAddress.LOCAL);
 			//presp.send(ss, ((PingReqPacket) p).getFrom().getInetAddress());
 			// decided to broadcast ping replies
-			presp.send(ss);
+			io.write(presp);
 		}
 		else if( p instanceof PublishPacket) {
 			PublishPacket pp = (PublishPacket) p;
@@ -171,7 +168,7 @@ public abstract class SubServer extends LoopRunner {
 				int maxQos = Engine.getMaxReplyQoS();
 				Flags flags = new Flags();
 				flags.setQoS(Integer.min(qos, maxQos));
-				new PubAckPacket(new byte[0], flags, IPacketAddress.LOCAL).send();
+				io.write(new PubAckPacket(new byte[0], flags, IPacketAddress.LOCAL));
 			}
 		}
 

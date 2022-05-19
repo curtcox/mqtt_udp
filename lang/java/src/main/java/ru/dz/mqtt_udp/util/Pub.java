@@ -3,6 +3,7 @@ package ru.dz.mqtt_udp.util;
 import java.io.IOException;
 
 import ru.dz.mqtt_udp.*;
+import ru.dz.mqtt_udp.io.PacketOutputStreamWriter;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
 
@@ -26,14 +27,14 @@ public final class Pub {
 		if (params.signatureKey!=null) {
 			Engine.setSignatureKey(params.signatureKey);
 		}
-		sendMessageToTopic(params.msg,params.topic);
+		sendMessageToTopic(params.msg,params.topic,new PacketOutputStreamWriter(System.out));
 	}
 
-	static void sendMessageToTopic(String msg, Topic topic) throws IOException {
+	static void sendMessageToTopic(String msg, Topic topic, IPacket.Writer writer) throws IOException {
 		System.out.println("Will send "+msg+" to "+topic);
 
-		PublishPacket pp = PublishPacket.from(msg,new Flags(),topic,null);
-		pp.send();
+		writer.write(PublishPacket.from(msg,new Flags(),topic,null));
+
 		System.out.println("Sent ok");
 	}
 

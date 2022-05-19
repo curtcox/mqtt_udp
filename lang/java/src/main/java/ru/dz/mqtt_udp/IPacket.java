@@ -3,12 +3,24 @@ package ru.dz.mqtt_udp;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.packets.PacketType;
 
+import java.io.IOException;
+
 /**
  * Interface of general MQTT/UDP packet.
  * @author dz
  *
  */
 public interface IPacket {
+
+	interface Writer {
+		void write(IPacket packet) throws IOException;
+	}
+
+	interface Reader {
+		IPacket read() throws IOException;
+	}
+
+	interface IO extends Reader, Writer {}
 
 	/** MQTT/UDP character set */
 	String MQTT_CHARSET = "UTF-8";

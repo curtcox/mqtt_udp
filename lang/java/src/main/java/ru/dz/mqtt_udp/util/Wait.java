@@ -5,6 +5,7 @@ import java.io.IOException;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
+import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.SubServer;
@@ -31,10 +32,10 @@ public final class Wait extends SubServer {
 		if (params.signatureKey!=null) {
 			Engine.setSignatureKey(params.signatureKey);
 		}
-		startWait(params.msg,params.topic);
+		startWait(Packets.io,params.msg,params.topic);
 	}
 
-	static void startWait(String value, Topic topic) {
+	static void startWait(IPacket.IO io, String value, Topic topic) {
 		Thread timer = new Thread(() -> {
 			sleep(4000);
 			System.out.println("Timed out");
@@ -42,7 +43,7 @@ public final class Wait extends SubServer {
 		});
 		timer.start();
 
-		Wait srv = new Wait( topic, value );
+		Wait srv = new Wait(io, topic, value );
 		srv.start();
 	}
 
@@ -52,8 +53,9 @@ public final class Wait extends SubServer {
 		System.exit(2);
 	}
 	
-	public Wait(Topic topic, String value) {
-		this.topic = topic;
+	public Wait(IPacket.IO io, Topic topic, String value) {
+        super(io);
+        this.topic = topic;
 		this.value = value;
 		System.out.println("Will wait for "+topic+" = "+value);
 	}

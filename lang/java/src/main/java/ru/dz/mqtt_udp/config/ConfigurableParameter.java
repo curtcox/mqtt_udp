@@ -90,24 +90,24 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 	public String getValue() { return value; }
 
 	// Update value here and send to host
-	public void sendNewValue(String v) {
-		value = v;
-		sendCurrentValue();
-	}
+//	public void sendNewValue(String v) {
+//		value = v;
+//		sendCurrentValue();
+//	}
 
 
 
-	public void requestAgain() {
-		Topic topic = getTopicName();
-		
-		System.out.println("request "+topic);
-		
-		try {
-			new SubscribePacket(topic).send();
-		} catch (IOException e) {
-			GlobalErrorHandler.handleError(ErrorType.IO, e);
-		}
-	}
+//	public void requestAgain() {
+//		Topic topic = getTopicName();
+//
+//		System.out.println("request "+topic);
+//
+//		try {
+//			new SubscribePacket(topic).send();
+//		} catch (IOException e) {
+//			GlobalErrorHandler.handleError(ErrorType.IO, e);
+//		}
+//	}
 
 	private Topic makeTopicName() {
 		return new Topic(String.format(
@@ -130,16 +130,16 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 	}
 
 
-	public void sendCurrentValue() {
+	public PublishPacket sendCurrentValue() {
 		Topic topic = getTopicName();
-		
+
 		//System.out.println("send "+topic+"="+value);
-		
-		try {
-			PublishPacket.from(value, new Flags(), topic, null).send();
-		} catch (IOException e) {
-			GlobalErrorHandler.handleError(ErrorType.IO, e);
-		}
+
+//		try {
+			return PublishPacket.from(value, new Flags(), topic, null);
+//		} catch (IOException e) {
+//			GlobalErrorHandler.handleError(ErrorType.IO, e);
+//		}
 	}
 
 

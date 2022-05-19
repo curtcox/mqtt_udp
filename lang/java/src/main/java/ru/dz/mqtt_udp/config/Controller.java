@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
+import ru.dz.mqtt_udp.packets.*;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 import ru.dz.mqtt_udp.packets.PublishPacket;
@@ -14,7 +15,8 @@ import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.TopicFilter;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.LoopRunner;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
+
+import static ru.dz.mqtt_udp.util.Check.notNull;
 
 /**
  * 
@@ -44,10 +46,12 @@ import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 public final class Controller implements Consumer<IPacket> {
 
+	private final IPacket.Writer writer;
+
 	private LoopRunner lr = new RemoteConfigLoopRunner() {
 		@Override
 		protected void step() throws IOException {
-			new SubscribePacket(Topic.SYS_CONF_WILD).send();
+			writer.write(new SubscribePacket(Topic.SYS_CONF_WILD));
 			sleep(30L*1000L);
 			//sleep(2L*1000L);
 		}
@@ -56,16 +60,19 @@ public final class Controller implements Consumer<IPacket> {
 	
 	private TopicFilter rf = new TopicFilter(Topic.SYS_CONF_WILD.toString());
 
+	public Controller(IPacket.Writer writer) {
+		this.writer = notNull(writer);
+	}
+
 	//private IPacketMultiSource ms;
 	
 	/**
 	 * Construct.
 	 * @param ms MQTT/UDP network listener which is able to serve multiple consumers.
 	 */
-	public Controller(IPacketMultiSource ms) 
-	{
+	static void addController(IPacketMultiSource ms,IPacket.Writer writer) {
 		//this.ms = ms;
-		ms.addPacketSink(this);	
+		ms.addPacketSink(new Controller(writer));
 		//lr.requestStart();
 	}
 
@@ -175,16 +182,17 @@ public final class Controller implements Consumer<IPacket> {
 		this.newParameterListener = sink;		
 	}
 
-	static void start() {
-		PacketSourceMultiServer ms = new PacketSourceMultiServer();
-		Controller rc = new Controller(ms);
+	static void start(IPacket.IO io) {
+		PacketSourceMultiServer ms = new PacketSourceMultiServer(io);
+		Controller rc = new Controller(io);
+		ms.addPacketSink(rc);
 
 		ms.requestStart();
 		rc.requestStart();
 	}
 
 	public static void main(String[] args) {
-		start();
+		start(Packets.io);
 	}
 
 }

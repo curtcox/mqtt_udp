@@ -24,7 +24,10 @@ public final class PacketSourceServer extends SubServer implements IPacketSource
 	/**
 	 * Starts reception thread.
 	 */
-	public PacketSourceServer() {		start();	}
+	public PacketSourceServer(IPacket.IO io) {
+        super(io);
+        start();
+	}
 		
 	/*
 	 * (non-Javadoc)

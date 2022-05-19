@@ -7,6 +7,8 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ru.dz.mqtt_udp.IPacket;
+import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 
@@ -30,9 +32,10 @@ public class RequesterProviderTest {
 	
 	@BeforeClass
     public static void setUpClass() {
-		multiServer = new PacketSourceMultiServer();
-		provider = Provider.withPacketsFrom(multiServer);
-		requester = Requester.withPacketsFrom(multiServer);
+		IPacket.IO io = Packets.net;
+		multiServer = new PacketSourceMultiServer(io);
+		provider = Provider.withPacketsFrom(multiServer,io);
+		requester = Requester.withPacketsFrom(multiServer,io);
 		multiServer.requestStart();
     }
 

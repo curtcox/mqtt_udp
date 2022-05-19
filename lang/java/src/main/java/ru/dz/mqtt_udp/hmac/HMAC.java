@@ -36,8 +36,7 @@ public final class HMAC {
 	
 	
 	
-	public static String hmacDigest(String msg, String keyString, String algo) 
-	{
+	public static String hmacDigest(String msg, String keyString, String algo) {
 		
 		try {
 			return makeHexString( hmacDigest(msg.getBytes("ASCII"), keyString, algo) );

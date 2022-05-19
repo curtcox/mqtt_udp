@@ -2,18 +2,34 @@ package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.*;
 import ru.dz.mqtt_udp.hmac.HMAC;
+import ru.dz.mqtt_udp.io.DatagramSocketIO;
 import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.io.PacketInputStreamReader;
+import ru.dz.mqtt_udp.io.PacketOutputStreamWriter;
 import ru.dz.mqtt_udp.proto.TTR_PacketNumber;
 import ru.dz.mqtt_udp.proto.TTR_Signature;
 import ru.dz.mqtt_udp.proto.TaggedTailRecord;
 import ru.dz.mqtt_udp.util.*;
 
+import java.io.IOException;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Static methods useful for dealing with packets.
+ */
 public final class Packets {
+
+    public static final IPacket.Reader in = new PacketInputStreamReader(System.in);
+    public static final IPacket.Writer out = new PacketOutputStreamWriter(System.out);
+    public static final IPacket.IO io = new IPacket.IO() {
+        @Override public IPacket read() throws IOException { return in.read(); }
+        @Override public void write(IPacket packet) throws IOException { out.write(packet); }
+    };
+    public static final IPacket.IO net = DatagramSocketIO.newInstance();
+
     /**
      * Construct packet object from binary data (recvd from net).
      *
@@ -138,19 +154,6 @@ public final class Packets {
         ret &= 0xFFFF;
         return ret;
     }
-
-//    /**
-//     * Get packet type name.
-//     * @param packetType as in incoming byte (&amp; 0xF0).
-//     * @return Type string.
-//     */
-//    public static String getPacketTypeName(int packetType) {
-//        int pos = packetType >> 4;
-//
-//        if( (pos < 0) || (pos > 15) )
-//            return "?";
-//        return IPacket.pTYpeNames[pos];
-//    }
 
     /**
      * Rename to encodePacketHeader?

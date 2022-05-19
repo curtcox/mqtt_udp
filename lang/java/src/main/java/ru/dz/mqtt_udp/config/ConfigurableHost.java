@@ -25,13 +25,9 @@ public class ConfigurableHost implements Comparable<ConfigurableHost> {
 	
 	
 	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof ConfigurableHost))
-			return false;
-		
-		ConfigurableHost b = (ConfigurableHost) obj;
-			
-		return b.ident.equals(ident);
+	public boolean equals(Object o) {
+		ConfigurableHost that = (ConfigurableHost) o;
+		return that.ident.equals(ident);
 	}
 
 	@Override
@@ -45,18 +41,10 @@ public class ConfigurableHost implements Comparable<ConfigurableHost> {
 	 * @return true if all the same
 	 */
 	public boolean isSameAs(ConfigurableHost ch) {
-		
 		if( ch == null ) return false;
-		
 		if( !ident.equals(ch.ident) ) return false;
-		
-		// Now compare just hosts, not ports
-		
-		//return src.equals(ch.src);
-		
 		String ipa =    src.getInetAddress().getHostAddress();
 		String ipb = ch.src.getInetAddress().getHostAddress();
-		
 		return ipa.equals(ipb);
 	}
 	
@@ -67,10 +55,4 @@ public class ConfigurableHost implements Comparable<ConfigurableHost> {
 
 	public String getMacAddressString() { return ident; }
 
-	public String getIpAddressString() {
-		//return src.getInetAddress().getHostAddress().toString();
-		return src.getInetAddress().toString();
-	}
-
-	
 }

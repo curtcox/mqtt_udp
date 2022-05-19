@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
+import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.servers.PacketSourceMultiServer;
 import ru.dz.mqtt_udp.packets.PublishPacket;
@@ -123,8 +124,7 @@ public final class RemoteConfig implements Consumer<IPacket> {
 	}
 
 
-	public void loadFromProperties()
-	{
+	public void loadFromProperties() {
 		FileInputStream inStream;
 		try {
 			inStream = new FileInputStream(new File(fName));
@@ -160,8 +160,7 @@ public final class RemoteConfig implements Consumer<IPacket> {
 	}
 
 
-	public void saveToProperties()
-	{
+	public void saveToProperties() {
 		items.forEach( item -> {
 			if(!(item instanceof LocalReadOnlyParameter)) 
 			{				
@@ -213,7 +212,7 @@ public final class RemoteConfig implements Consumer<IPacket> {
 	}
 
 	static void start() {
-		PacketSourceMultiServer server = new PacketSourceMultiServer();
+		PacketSourceMultiServer server = new PacketSourceMultiServer(Packets.net);
 		RemoteConfig config = new RemoteConfig(server, itemList());
 
 		server.requestStart();

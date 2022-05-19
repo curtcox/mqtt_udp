@@ -13,9 +13,9 @@ import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.items.TopicItem;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
+import static ru.dz.mqtt_udp.util.Check.notNull;
 
 /**
  * <p>Remote configuration data provider</p>
@@ -33,12 +33,18 @@ import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 
 public final class Provider implements Consumer<IPacket> {
 
+
 	//private SubServer ss; // no, need one that can serve multiple listeners with thread pool
 	//private ArrayList topics = new ArrayList<>();
-	private Map<Topic,TopicItem> items = new HashMap<>();
+	private final Map<Topic,TopicItem> items = new HashMap<>();
+    private final IPacket.Writer writer;
 
-	static Provider withPacketsFrom(IPacketMultiSource source) {
-		Provider provider = new Provider();
+	Provider(IPacket.Writer writer) {
+        this.writer = notNull(writer);
+	}
+
+	static Provider withPacketsFrom(IPacketMultiSource source, IPacket.Writer writer) {
+		Provider provider = new Provider(writer);
 		source.addPacketSink(provider);
 		return provider;
 	}
@@ -69,7 +75,7 @@ public final class Provider implements Consumer<IPacket> {
 	private void publish(TopicItem it) {
 		try {
 			PublishPacket packet = PublishPacket.from(it.getValue(), new Flags(), it.getTopic(), IPacketAddress.LOCAL);
-			packet.send();
+			writer.write(packet);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
