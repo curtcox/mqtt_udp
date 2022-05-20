@@ -17,6 +17,7 @@ public class TTR_SignatureTest {
     @Test
     public void toBytes_values_are_consistent() {
         assertConsistent(new byte[0]);
+        assertConsistent(new byte[] {0,1,2,3,4,5,6,7,8,9});
         assertConsistent(new byte[10]);
         assertConsistent(new byte[100]);
         assertConsistent(new byte[1000]);

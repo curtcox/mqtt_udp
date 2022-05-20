@@ -65,7 +65,7 @@ public final class Packets {
             throw new MqttProtocolException("packet decoded size ("+total_len+") > packet length ("+recvLen+")");
 
         // We have bytes after classic MQTT packet, must be TTRs, decode 'em
-        if(recvLen > total_len) {
+        if (recvLen > total_len) {
             ttrs = decodeTTRs(raw, total_len, headerEnd, recvLen);
         }
 
@@ -75,11 +75,10 @@ public final class Packets {
         int ptype = 0xF0 & (int)(raw[0]);
         Flags flags = new Flags(0x0F & (int)(raw[0]));
 
-        GenericPacket p = packet(ptype,sub,flags,from);
-        return p.applyTTRs(ttrs);
+        return packet(ptype,sub,flags,from,ttrs);
     }
 
-    private static GenericPacket packet(int ptype,byte[] sub,Flags flags,IPacketAddress from) throws MqttProtocolException {
+    private static GenericPacket packet(int ptype,byte[] sub,Flags flags,IPacketAddress from,Collection<TaggedTailRecord> ttrs) throws MqttProtocolException {
         Topic topic = Topic.from(sub);
         switch (ptype) {
             case mqtt_udp_defs.PTYPE_PUBLISH:   return new PublishPacket(flags, topic, from, sub);
@@ -210,25 +209,23 @@ public final class Packets {
 
         boolean haveNumber = false;
 
-        if( ttrs != null )
-            for( TaggedTailRecord r : ttrs ) {
-                if( r instanceof TTR_Signature ) {
+        if( ttrs != null ) {
+            for (TaggedTailRecord r : ttrs) {
+                if (r instanceof TTR_Signature) {
                     GlobalErrorHandler.handleError(ErrorType.Protocol, "Signature must be generated here");
                     continue;
                 }
 
-                if( r instanceof TTR_PacketNumber)
+                if (r instanceof TTR_PacketNumber)
                     haveNumber = true;
 
                 outs.add(r.toBytes());
             }
+        }
 
         // Add packet number to list, if none
         if( !haveNumber ) {
-            if( p.getPacketNumber().isPresent() )
-                outs.add(new TTR_PacketNumber( p.getPacketNumber().get() ).toBytes());
-            else
-                outs.add(new TTR_PacketNumber().toBytes());
+            outs.add(new TTR_PacketNumber( p.getPacketNumber() ).toBytes());
         }
 
         int totalLen = packetBeginning.length;

@@ -26,14 +26,9 @@ public final class PubAckPacket extends GenericPacket {
 		byte[] pkt = new byte[0];
 		AbstractCollection<TaggedTailRecord> ttrs = new ArrayList<TaggedTailRecord>();
 
-		if(!replyToPkt.getPacketNumber().isPresent()) {
-			GlobalErrorHandler.handleError(ErrorType.Protocol, "attempt to PubAck for pkt with no id");
-			//throw new MqttProtocolException("attempt to PubAck for pkt with no id");
-		} else {
-			TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.getPacketNumber().get());
-			ttrs.add(id);
-		}
-		
+		TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.getPacketNumber());
+		ttrs.add(id);
+
 		return Packets.encodeTotalLength(pkt, PublishAck, getFlags(), ttrs, this );
 	}
 

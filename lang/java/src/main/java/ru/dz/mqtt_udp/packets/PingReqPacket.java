@@ -24,7 +24,7 @@ public final class PingReqPacket extends GenericPacket {
 	}
 
 	@Override
-	public PacketType getType() {		return PingRequest;	}
+	public PacketType getType() { return PingRequest; }
 	
 	@Override
 	public String toString() {		

@@ -3,9 +3,6 @@ package ru.dz.mqtt_udp.packets;
 import org.junit.Test;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
-
-import java.io.IOException;
-
 import static org.junit.Assert.*;
 
 public class GenericPacketTest {
@@ -54,11 +51,6 @@ public class GenericPacketTest {
         packet.getType();
     }
 
-//    @Test
-//    public void send() throws IOException {
-//        packet.send();
-//    }
-
     @Test
     public void toBytes() {
         packet.toBytes();
@@ -67,16 +59,6 @@ public class GenericPacketTest {
     @Test
     public void getQoS() {
         packet.getFlags().getQoS();
-    }
-
-    @Test
-    public void getAckCount() {
-        packet.getAckCount();
-    }
-
-    @Test
-    public void incrementAckCount() {
-        packet.incrementAckCount();
     }
 
     @Test
