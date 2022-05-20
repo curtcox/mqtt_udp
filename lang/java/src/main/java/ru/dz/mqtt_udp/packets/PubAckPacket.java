@@ -34,7 +34,7 @@ public final class PubAckPacket extends GenericPacket {
 			ttrs.add(id);
 		}
 		
-		return Packets.encodeTotalLength(pkt, PublishAck.value, getFlags(), ttrs, this );
+		return Packets.encodeTotalLength(pkt, PublishAck, getFlags(), ttrs, this );
 	}
 
 	@Override

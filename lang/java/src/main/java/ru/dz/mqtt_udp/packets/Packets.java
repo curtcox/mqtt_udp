@@ -166,13 +166,13 @@ public final class Packets {
      * @param ttr TTRs to encode to packet
      * @return encoded packet to send to UDP
      */
-    static byte[] encodeTotalLength(byte[] pkt, int packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
+    static byte[] encodeTotalLength(byte[] pkt, PacketType packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
         int data_len = pkt.length;
 
         byte[] buf = new byte[4]; // can't sent very long packets over UDP, 16 bytes are surely ok
         int bp = 1;
 
-        buf[0] = (byte) ((packetType & 0xF0) | (flags.toByte() & 0x0F));
+        buf[0] = (byte) ((packetType.value & 0xF0) | (flags.toByte() & 0x0F));
 
         do {
             byte b = (byte) (data_len % 128);

@@ -22,8 +22,7 @@ public final class HMAC {
 	}
 
 	
-	public static byte[] hmacDigestMD5(byte[] msg, String keyString) 
-	{
+	public static byte[] hmacDigestMD5(byte[] msg, String keyString) {
 		//ByteArray.dumpBytes("To Sign", msg);
 		byte[] d = hmacDigest(msg, keyString, "HmacMD5");
 		//ByteArray.dumpBytes("Signed", d);

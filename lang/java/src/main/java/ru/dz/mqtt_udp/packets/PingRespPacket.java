@@ -22,7 +22,7 @@ public final class PingRespPacket extends GenericPacket {
 	@Override
 	public byte[] toBytes() {
 		byte[] pkt = new byte[0];
-		return Packets.encodeTotalLength(pkt, PingResponse.value, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, PingResponse, getFlags(), null, this );
 	}
 
 	@Override
