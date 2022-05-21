@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ru.dz.mqtt_udp.*;
 import ru.dz.mqtt_udp.io.PacketOutputStreamWriter;
+import ru.dz.mqtt_udp.packets.Flags;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
 

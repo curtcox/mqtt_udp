@@ -12,7 +12,7 @@ import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.items.TopicItem;
 import ru.dz.mqtt_udp.packets.Topic;
-import ru.dz.mqtt_udp.util.Flags;
+import ru.dz.mqtt_udp.packets.Flags;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 import static ru.dz.mqtt_udp.util.Check.notNull;

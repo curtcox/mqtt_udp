@@ -5,7 +5,6 @@ import java.nio.charset.Charset;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.util.Flags;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 import static ru.dz.mqtt_udp.util.Check.notNull;

@@ -1,13 +1,8 @@
 package ru.dz.mqtt_udp.config;
 
-import java.io.IOException;
-
 import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.packets.SubscribePacket;
 import ru.dz.mqtt_udp.packets.Topic;
-import ru.dz.mqtt_udp.util.ErrorType;
-import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.GlobalErrorHandler;
+import ru.dz.mqtt_udp.packets.Flags;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 /**

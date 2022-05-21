@@ -1,7 +1,5 @@
 package ru.dz.mqtt_udp.packets;
 
-import ru.dz.mqtt_udp.util.Flags;
-
 import ru.dz.mqtt_udp.io.IPacketAddress;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Subscribe;

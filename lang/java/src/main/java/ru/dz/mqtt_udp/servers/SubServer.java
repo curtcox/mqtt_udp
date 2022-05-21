@@ -9,7 +9,7 @@ import ru.dz.mqtt_udp.packets.PingReqPacket;
 import ru.dz.mqtt_udp.packets.PingRespPacket;
 import ru.dz.mqtt_udp.packets.PubAckPacket;
 import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.util.Flags;
+import ru.dz.mqtt_udp.packets.Flags;
 import ru.dz.mqtt_udp.util.LoopRunner;
 
 

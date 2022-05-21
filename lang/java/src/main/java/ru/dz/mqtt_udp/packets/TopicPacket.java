@@ -1,7 +1,6 @@
 package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.util.Flags;
 
 import static ru.dz.mqtt_udp.util.Check.notNull;
 

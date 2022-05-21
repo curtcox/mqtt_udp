@@ -5,7 +5,7 @@ import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IpAddress;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
-import ru.dz.mqtt_udp.util.Flags;
+import ru.dz.mqtt_udp.packets.Flags;
 
 import java.net.SocketAddress;
 

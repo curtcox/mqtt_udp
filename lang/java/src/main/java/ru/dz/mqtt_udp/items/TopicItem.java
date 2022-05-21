@@ -1,7 +1,7 @@
 package ru.dz.mqtt_udp.items;
 
 import ru.dz.mqtt_udp.packets.*;
-import ru.dz.mqtt_udp.util.Flags;
+import ru.dz.mqtt_udp.packets.Flags;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 

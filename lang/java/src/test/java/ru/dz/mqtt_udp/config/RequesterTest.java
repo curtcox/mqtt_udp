@@ -6,7 +6,7 @@ import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
-import ru.dz.mqtt_udp.util.Flags;
+import ru.dz.mqtt_udp.packets.Flags;
 
 import java.io.IOException;
 

@@ -2,7 +2,7 @@ package ru.dz.mqtt_udp.packets;
 
 import org.junit.Test;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.util.Flags;
+
 import static org.junit.Assert.*;
 
 public class GenericPacketTest {

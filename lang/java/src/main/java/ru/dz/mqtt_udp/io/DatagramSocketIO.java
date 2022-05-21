@@ -17,6 +17,11 @@ public final class DatagramSocketIO implements IPacket.IO {
 
     private int sentCounter = 0;
 
+    /**
+     * Broadcast IP address.
+     */
+    private static final byte[] broadcast =  { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF } ;
+
     private static final int PORT = mqtt_udp_defs.MQTT_PORT;
 
 //    private InetAddress resendAddress;

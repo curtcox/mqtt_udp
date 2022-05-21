@@ -4,7 +4,6 @@ import org.junit.Test;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.util.Flags;
 
 import java.io.IOException;
 

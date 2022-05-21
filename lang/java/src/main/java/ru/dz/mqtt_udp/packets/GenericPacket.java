@@ -2,7 +2,6 @@ package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.util.Flags;
 
 import static ru.dz.mqtt_udp.util.Check.notNull;
 
@@ -28,11 +27,6 @@ public abstract class GenericPacket implements IPacket {
 	public final boolean signed = false;
 	@Override
 	final public boolean isSigned() {		return signed;	}
-
-	/** 
-	 * Broadcast IP address.
-	 */
-	private static final byte[] broadcast =  { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF } ;
 
 	/**
 	 * Construct packet from network.
