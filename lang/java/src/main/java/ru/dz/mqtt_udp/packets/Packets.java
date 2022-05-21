@@ -79,13 +79,12 @@ public final class Packets {
     }
 
     private static GenericPacket packet(int ptype,byte[] sub,Flags flags,IPacketAddress from,Collection<TaggedTailRecord> ttrs) throws MqttProtocolException {
-        Topic topic = Topic.from(sub);
         switch (ptype) {
-            case mqtt_udp_defs.PTYPE_PUBLISH:   return new PublishPacket(flags, topic, from, sub);
+            case mqtt_udp_defs.PTYPE_PUBLISH:   return new PublishPacket(flags, Topic.from(sub), from, sub);
             case mqtt_udp_defs.PTYPE_PUBACK:    return new PubAckPacket(sub, flags, from);
             case mqtt_udp_defs.PTYPE_PINGREQ:   return new PingReqPacket(sub, flags, from);
             case mqtt_udp_defs.PTYPE_PINGRESP:  return new PingRespPacket(sub, flags, from);
-            case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(topic, flags, from);
+            case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(Topic.from(sub), flags, from);
         }
         throw new MqttProtocolException("Unknown pkt type " + ptype);
     }
