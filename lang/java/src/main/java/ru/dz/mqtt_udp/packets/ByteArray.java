@@ -1,4 +1,4 @@
-package ru.dz.mqtt_udp.util;
+package ru.dz.mqtt_udp.packets;
 
 public final class ByteArray {
 
