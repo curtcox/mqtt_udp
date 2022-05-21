@@ -1,6 +1,5 @@
 package ru.dz.mqtt_udp.io;
 
-import ru.dz.mqtt_udp.Engine;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
 import ru.dz.mqtt_udp.packets.Packets;
@@ -13,7 +12,8 @@ import static ru.dz.mqtt_udp.util.Check.notNull;
 
 public final class DatagramSocketIO implements IPacket.IO {
 
-    final DatagramSocket socket;
+    final DatagramSocket inputSocket;
+    final DatagramSocket outputSocket;
 
     private int sentCounter = 0;
 
@@ -23,8 +23,9 @@ public final class DatagramSocketIO implements IPacket.IO {
 
     //    final public int getSentCounter() {		return sentCounter;	}
 //
-    DatagramSocketIO(DatagramSocket socket) {
-        this.socket = notNull(socket);
+    DatagramSocketIO(DatagramSocket inputSocket, DatagramSocket outputSocket) {
+        this.inputSocket = notNull(inputSocket);
+        this.outputSocket = notNull(outputSocket);
     }
 
     /**
@@ -34,7 +35,7 @@ public final class DatagramSocketIO implements IPacket.IO {
      */
     public static DatagramSocketIO newInstance() {
         try {
-            DatagramSocketIO io = new DatagramSocketIO(new DatagramSocket(null));
+            DatagramSocketIO io = new DatagramSocketIO(new DatagramSocket(null),new DatagramSocket(null));
             io.recvSocket();
             return io;
         } catch (SocketException e) {
@@ -45,12 +46,12 @@ public final class DatagramSocketIO implements IPacket.IO {
     void recvSocket() throws SocketException {
         //s.setBroadcast(true);
 
-        socket.setReuseAddress(true);
+        inputSocket.setReuseAddress(true);
         // TODO reuseport
 
         InetSocketAddress address = new InetSocketAddress(mqtt_udp_defs.MQTT_PORT);
 
-        socket.bind(address);
+        inputSocket.bind(address);
     }
 
 //    /**
@@ -119,7 +120,7 @@ public final class DatagramSocketIO implements IPacket.IO {
      * @throws IOException As is.
      * @throws MqttProtocolException What we got is not a valid MQTT/UDP packet.
      */
-    public static IPacket recv(DatagramSocket s) throws IOException, MqttProtocolException {
+    private static IPacket recv(DatagramSocket s) throws IOException {
         // some embedded systems can't fragment UDP and
         // fragmented UDP is highly unreliable anyway, so it is
         // better to stick to MAC layer max packet size
@@ -140,7 +141,7 @@ public final class DatagramSocketIO implements IPacket.IO {
 
     @Override
     public void write(IPacket packet) throws IOException {
-        socket.send(datagram(packet));
+        outputSocket.send(datagram(packet));
     }
 
     private DatagramPacket datagram(IPacket packet) {
@@ -150,6 +151,21 @@ public final class DatagramSocketIO implements IPacket.IO {
 
     @Override
     public IPacket read() throws IOException {
-        return null;
+        // some embedded systems can't fragment UDP and
+        // fragmented UDP is highly unreliable anyway, so it is
+        // better to stick to MAC layer max packet size
+
+        byte[] buf = new byte[2*1024];
+        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+
+        inputSocket.receive(packet);
+
+        int l = packet.getLength();
+
+        byte[] got = new byte[l];
+
+        System.arraycopy(packet.getData(), packet.getOffset(), got, 0, l);
+
+        return Packets.fromBytes(got, IpAddress.from(packet));
     }
 }

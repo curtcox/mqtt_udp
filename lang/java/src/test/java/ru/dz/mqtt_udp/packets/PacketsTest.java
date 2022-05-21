@@ -2,11 +2,11 @@ package ru.dz.mqtt_udp.packets;
 
 import org.junit.Test;
 import ru.dz.mqtt_udp.IPacket;
-import ru.dz.mqtt_udp.proto.TaggedTailRecord;
+import ru.dz.mqtt_udp.MqttProtocolException;
+import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
 
 import java.io.IOException;
-import java.util.AbstractCollection;
 
 import static org.junit.Assert.*;
 import static ru.dz.mqtt_udp.TestUtil.assertEqualBytes;
@@ -14,6 +14,29 @@ import static ru.dz.mqtt_udp.packets.Packets.encodeTTR;
 import static ru.dz.mqtt_udp.packets.Packets.encodeTotalLength;
 
 public class PacketsTest {
+
+    @Test(expected = MqttProtocolException.class)
+    public void fromBytes_throws_MQTT_exception_for_empty_array() throws MqttProtocolException {
+        Packets.fromBytes(new byte[0],null);
+    }
+
+    @Test
+    public void fromBytes() throws MqttProtocolException {
+        IPacket[] packets = new IPacket[]{
+                new PingReqPacket(),
+                new PingRespPacket(),
+                new PublishPacket(),
+                new SubscribePacket(),
+        };
+        for (IPacket packet: packets) {
+            fromBytes(packet);
+        }
+    }
+
+    private void fromBytes(IPacket original) throws MqttProtocolException {
+        IPacket packet = Packets.fromBytes(original.toBytes(), IPacketAddress.LOCAL);
+        assertEqualBytes(packet.toBytes(),original.toBytes());
+    }
 
     @Test
     public void packets_written_to_net_can_be_read_from_net() throws IOException {

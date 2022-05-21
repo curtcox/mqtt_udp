@@ -3,7 +3,6 @@ package ru.dz.mqtt_udp.packets;
 import ru.dz.mqtt_udp.util.Flags;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Subscribe;
 import static ru.dz.mqtt_udp.util.Check.notNull;
@@ -20,6 +19,10 @@ public final class SubscribePacket extends TopicPacket {
 	 */
 	public SubscribePacket(Topic topic) {
 		super(new Flags(),notNull(topic), IPacketAddress.LOCAL);
+	}
+
+	public SubscribePacket() {
+		this(Topic.UnknownPacket,new Flags(),IPacketAddress.LOCAL);
 	}
 
 	@Override

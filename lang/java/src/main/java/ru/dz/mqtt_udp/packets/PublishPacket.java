@@ -25,6 +25,10 @@ public final class PublishPacket extends TopicPacket {
 		this.value = notNull(value);
 	}
 
+	public PublishPacket() {
+		this(new Flags(),Topic.UnknownPacket,IPacketAddress.LOCAL,new byte[0]);
+	}
+
 	public static PublishPacket from(byte[] raw, Flags flags, Topic topic, IPacketAddress from) {
 		return new PublishPacket(flags,topic,from,value(raw));
 	}
