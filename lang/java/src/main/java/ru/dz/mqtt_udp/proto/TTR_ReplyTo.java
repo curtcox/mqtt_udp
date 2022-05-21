@@ -17,8 +17,7 @@ public final class TTR_ReplyTo extends TTR_AbstractInteger32 {
 		super(tag, rec, rawLength);
 	}
 
-	public TTR_ReplyTo( int number )
-	{
+	public TTR_ReplyTo( int number ) {
 		super( myTag, number);
 	}
 

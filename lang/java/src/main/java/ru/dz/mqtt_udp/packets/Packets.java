@@ -81,8 +81,8 @@ public final class Packets {
     private static GenericPacket packet(int ptype,byte[] sub,Flags flags,IPacketAddress from,Collection<TaggedTailRecord> ttrs) throws MqttProtocolException {
         switch (ptype) {
             case mqtt_udp_defs.PTYPE_PUBLISH:   return new PublishPacket(flags, Topic.from(sub), from, sub);
-            case mqtt_udp_defs.PTYPE_PUBACK:    return new PubAckPacket(sub, flags, from);
-            case mqtt_udp_defs.PTYPE_PINGREQ:   return new PingReqPacket(sub, flags, from);
+            case mqtt_udp_defs.PTYPE_PUBACK:    return PubAckPacket.from(sub, flags, from);
+            case mqtt_udp_defs.PTYPE_PINGREQ:   return new PingReqPacket(flags, from);
             case mqtt_udp_defs.PTYPE_PINGRESP:  return new PingRespPacket(sub, flags, from);
             case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(Topic.from(sub), flags, from);
         }
@@ -224,7 +224,7 @@ public final class Packets {
 
         // Add packet number to list, if none
         if( !haveNumber ) {
-            outs.add(new TTR_PacketNumber( p.packetNumber ).toBytes());
+            outs.add(new TTR_PacketNumber( p.packetNumber.value ).toBytes());
         }
 
         int totalLen = packetBeginning.length;

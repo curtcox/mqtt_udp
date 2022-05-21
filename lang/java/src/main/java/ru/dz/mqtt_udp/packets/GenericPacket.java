@@ -23,7 +23,7 @@ public abstract class GenericPacket implements IPacket {
 	 */
 	public final IPacketAddress from;
 
-	public final int packetNumber = 0;
+	public final PacketNumber packetNumber = new PacketNumber(0);
 	public final boolean signed = false;
 	@Override
 	final public boolean isSigned() {		return signed;	}

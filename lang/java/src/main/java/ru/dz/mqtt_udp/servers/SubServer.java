@@ -168,7 +168,7 @@ public abstract class SubServer extends LoopRunner {
 				int maxQos = Engine.getMaxReplyQoS();
 				Flags flags = new Flags();
 				flags.setQoS(Integer.min(qos, maxQos));
-				io.write(new PubAckPacket(new byte[0], flags, IPacketAddress.LOCAL));
+				io.write(new PubAckPacket(pp.packetNumber, flags, IPacketAddress.LOCAL));
 			}
 		}
 
