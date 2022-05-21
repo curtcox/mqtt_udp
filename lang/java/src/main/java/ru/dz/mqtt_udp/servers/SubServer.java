@@ -164,7 +164,7 @@ public abstract class SubServer extends LoopRunner {
 			
 			int qos = pp.flags.getQoS();
 			if( qos != 0 ) {
-				System.out.println("QoS, Publish id="+pp.getPacketNumber());
+				System.out.println("QoS, Publish id="+pp.packetNumber);
 				int maxQos = Engine.getMaxReplyQoS();
 				Flags flags = new Flags();
 				flags.setQoS(Integer.min(qos, maxQos));

@@ -224,7 +224,7 @@ public final class Packets {
 
         // Add packet number to list, if none
         if( !haveNumber ) {
-            outs.add(new TTR_PacketNumber( p.getPacketNumber() ).toBytes());
+            outs.add(new TTR_PacketNumber( p.packetNumber ).toBytes());
         }
 
         int totalLen = packetBeginning.length;

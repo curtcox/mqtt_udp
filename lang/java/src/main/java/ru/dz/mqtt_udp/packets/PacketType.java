@@ -1,7 +1,5 @@
 package ru.dz.mqtt_udp.packets;
 
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
-
 import static ru.dz.mqtt_udp.util.mqtt_udp_defs.*;
 
 public enum PacketType {
@@ -28,5 +26,24 @@ public enum PacketType {
     public boolean isPingOrResponce() {
         return this == PingRequest || this == PingResponse;
     }
+
+//    String[] pTYpeNames = {
+//            "? NULL",
+//            "Connect",
+//            "ConnAck",
+//            "Publish",
+//            "PubAck",
+//            "PubRec",
+//            "PubRel",
+//            "PubComp",
+//            "Subscribe",
+//            "SubAck",
+//            "UnSubscribe",
+//            "UnSubAck",
+//            "PingReq",
+//            "PingResp",
+//            "Disconnect",
+//            "? 0xFF",
+//    };
 
 }

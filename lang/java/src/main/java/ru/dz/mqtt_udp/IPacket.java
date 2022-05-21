@@ -43,25 +43,6 @@ public interface IPacket {
 	 */
 	PacketType getType();
 
-	String[] pTYpeNames = {
-			"? NULL",
-			"Connect",
-			"ConnAck",
-			"Publish",
-			"PubAck",
-			"PubRec",
-			"PubRel",
-			"PubComp",
-			"Subscribe",
-			"SubAck",
-			"UnSubscribe",
-			"UnSubAck",
-			"PingReq",
-			"PingResp",
-			"Disconnect",
-			"? 0xFF",
-	};
-
 	/**
 	 * Packet with valid signature?
 	 * @return true if it has valid digital signature.

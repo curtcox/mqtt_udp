@@ -26,7 +26,7 @@ public final class PubAckPacket extends GenericPacket {
 		byte[] pkt = new byte[0];
 		AbstractCollection<TaggedTailRecord> ttrs = new ArrayList<TaggedTailRecord>();
 
-		TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.getPacketNumber());
+		TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.packetNumber);
 		ttrs.add(id);
 
 		return Packets.encodeTotalLength(pkt, PublishAck, flags, ttrs, this );

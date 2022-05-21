@@ -24,7 +24,10 @@ public abstract class GenericPacket implements IPacket {
 	 */
 	public final IPacketAddress from;
 
-	private final int packetNumber = 0;
+	public final int packetNumber = 0;
+	public final boolean signed = false;
+	@Override
+	final public boolean isSigned() {		return signed;	}
 
 	/** 
 	 * Broadcast IP address.
@@ -47,14 +50,5 @@ public abstract class GenericPacket implements IPacket {
 	public String toString() {
 		return String.format("MQTT/UDP packet of unknown type from '%s', please redefine toString in %s", from, getClass().getName());
 	}
-
-	final public int getPacketNumber() {
-		return packetNumber;
-	}
-
-	private final boolean signed = false;
-
-	@Override
-	final public boolean isSigned() {		return signed;	}
 
 }

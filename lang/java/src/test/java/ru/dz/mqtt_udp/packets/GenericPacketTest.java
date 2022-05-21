@@ -32,11 +32,6 @@ public class GenericPacketTest {
     }
 
     @Test
-    public void getPacketNumber() {
-        packet.getPacketNumber();
-    }
-
-    @Test
     public void flags() {
         assertNotNull(packet.flags);
     }
