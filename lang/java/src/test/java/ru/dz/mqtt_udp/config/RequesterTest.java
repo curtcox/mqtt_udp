@@ -3,10 +3,7 @@ package ru.dz.mqtt_udp.config;
 import org.junit.Test;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.packets.Packets;
-import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.packets.Topic;
-import ru.dz.mqtt_udp.packets.Flags;
+import ru.dz.mqtt_udp.packets.*;
 
 import java.io.IOException;
 
@@ -60,7 +57,7 @@ public class RequesterTest {
         Requester requester = new Requester(writer);
         Topic topic = new Topic("Stuff");
         requester.addTopic(topic);
-        requester.accept(PublishPacket.from("", new Flags(),topic, IPacketAddress.LOCAL));
+        requester.accept(new PublishPacket(new Flags(),topic, IPacketAddress.LOCAL,new Bytes()));
 
         assertTrue(requester.waitForAll(1));
         assertTrue(requester.isDone());

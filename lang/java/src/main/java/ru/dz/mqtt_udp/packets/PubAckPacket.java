@@ -19,19 +19,18 @@ public final class PubAckPacket extends GenericPacket {
 		this.replyToPkt = notNull(replyToPkt);
 	}
 
-	public static GenericPacket from(byte[] sub, Flags flags, IPacketAddress from) {
+	public static GenericPacket from(Bytes sub, Flags flags, IPacketAddress from) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public byte[] toBytes() {
-		byte[] pkt = new byte[0];
+	public Bytes toBytes() {
 		AbstractCollection<TaggedTailRecord> ttrs = new ArrayList<TaggedTailRecord>();
 
 		TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.value);
 		ttrs.add(id);
 
-		return Packets.encodeTotalLength(pkt, PublishAck, flags, ttrs, this );
+		return Packets.encodeTotalLength(new Bytes(), PublishAck, flags, ttrs, this );
 	}
 
 	@Override

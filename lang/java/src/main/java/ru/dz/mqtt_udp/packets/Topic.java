@@ -19,9 +19,9 @@ public final class Topic {
         this.topic = topic;
     }
 
-    static Topic from(byte[] raw) {
+    static Topic from(Bytes raw) {
         int tlen = Packets.decodeTopicLen( raw );
-        return new Topic(new String(raw, 2, tlen, Charset.forName(MQTT_CHARSET)));
+        return new Topic(new String(raw.bytes, 2, tlen, Charset.forName(MQTT_CHARSET)));
     }
 
 
@@ -45,12 +45,8 @@ public final class Topic {
         return topic.substring(mqtt_udp_defs.SYS_CONF_PREFIX.length());
     }
 
-    byte[] getBytes() {
-        try {
-            return topic.getBytes(MQTT_CHARSET);
-        } catch (UnsupportedEncodingException e) {
-            throw new NoEncodingRuntimeException(e);
-        }
+    Bytes getBytes() {
+        return Bytes.from(topic);
     }
 
 }

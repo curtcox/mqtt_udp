@@ -16,8 +16,8 @@ public class GenericPacketTest {
         }
 
         @Override
-        public byte[] toBytes() {
-            return new byte[0];
+        public Bytes toBytes() {
+            return new Bytes();
         }
 
         @Override

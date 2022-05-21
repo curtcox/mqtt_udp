@@ -38,12 +38,12 @@ public final class Packets {
      * @return Packet object
      * @throws MqttProtocolException on incorrect binary packet data
      */
-    public static IPacket fromBytes(byte[] raw, IPacketAddress from ) throws MqttProtocolException {
+    public static IPacket fromBytes(Bytes raw, IPacketAddress from ) throws MqttProtocolException {
         int total_len = 0;
         int headerEnd = 1;
 
         while(true) {
-            byte b = raw[headerEnd++];
+            byte b = raw.at(headerEnd++);
             total_len |= b & ~0x80;
 
             if( (b & 0x80) == 0 )
@@ -72,24 +72,24 @@ public final class Packets {
         byte[] sub = new byte[total_len];
         System.arraycopy(raw, headerEnd, sub, 0, total_len);
 
-        int ptype = 0xF0 & (int)(raw[0]);
-        Flags flags = new Flags(0x0F & (int)(raw[0]));
+        int ptype = 0xF0 & (int)(raw.at(0));
+        Flags flags = new Flags(0x0F & (int)(raw.at(0)));
 
-        return packet(ptype,sub,flags,from,ttrs);
+        return packet(ptype,new Bytes(sub),flags,from,ttrs);
     }
 
-    private static GenericPacket packet(int ptype,byte[] sub,Flags flags,IPacketAddress from,Collection<TaggedTailRecord> ttrs) throws MqttProtocolException {
+    private static GenericPacket packet(int ptype,Bytes sub,Flags flags,IPacketAddress from,Collection<TaggedTailRecord> ttrs) throws MqttProtocolException {
         switch (ptype) {
             case mqtt_udp_defs.PTYPE_PUBLISH:   return new PublishPacket(flags, Topic.from(sub), from, sub);
             case mqtt_udp_defs.PTYPE_PUBACK:    return PubAckPacket.from(sub, flags, from);
             case mqtt_udp_defs.PTYPE_PINGREQ:   return new PingReqPacket(flags, from);
-            case mqtt_udp_defs.PTYPE_PINGRESP:  return new PingRespPacket(sub, flags, from);
+            case mqtt_udp_defs.PTYPE_PINGRESP:  return new PingRespPacket(flags, from);
             case mqtt_udp_defs.PTYPE_SUBSCRIBE: return new SubscribePacket(Topic.from(sub), flags, from);
         }
         throw new MqttProtocolException("Unknown pkt type " + ptype);
     }
 
-    static Collection<TaggedTailRecord> decodeTTRs(byte[] raw, int total_len, int headerEnd, int recvLen)
+    static Collection<TaggedTailRecord> decodeTTRs(Bytes raw, int total_len, int headerEnd, int recvLen)
             throws MqttProtocolException
     {
         Collection<TaggedTailRecord> ttrs;
@@ -147,8 +147,8 @@ public final class Packets {
      * @param pkt Binary packet data.
      * @return Decoded length.
      */
-    static int decodeTopicLen( byte [] pkt ) {
-        int ret = (pkt[0] << 8) | pkt[1];
+    static int decodeTopicLen(Bytes pkt ) {
+        int ret = (pkt.at(0) << 8) | pkt.at(1);
         ret &= 0xFFFF;
         return ret;
     }
@@ -164,7 +164,7 @@ public final class Packets {
      * @param ttr TTRs to encode to packet
      * @return encoded packet to send to UDP
      */
-    static byte[] encodeTotalLength(byte[] pkt, PacketType packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
+    static Bytes encodeTotalLength(Bytes pkt, PacketType packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
         int data_len = pkt.length;
 
         byte[] buf = new byte[4]; // can't sent very long packets over UDP, 16 bytes are surely ok
@@ -190,7 +190,7 @@ public final class Packets {
         System.arraycopy(pkt, 0, out, bp, pkt.length );
 
         // Encode in Tagged Tail Records - packet extensions
-        byte[] ttrbin = encodeTTR( ttr, out, p );
+        Bytes ttrbin = encodeTTR( ttr, out, p );
         return ttrbin;
     }
 
@@ -203,7 +203,7 @@ public final class Packets {
      * @param packetBeginning Classic packet.
      * @return Extended packet.
      */
-    static byte[] encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p ) {
+    static Bytes encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p ) {
         ArrayList<byte[]> outs = new ArrayList<>();
 
         boolean haveNumber = false;
@@ -252,7 +252,7 @@ public final class Packets {
         byte[] sigBytes = sig.toBytes();
         System.arraycopy( sigBytes, 0, presig, pos, TTR_Signature.SIGLEN);
 
-        return presig;
+        return new Bytes(presig);
     }
 
 }

@@ -16,7 +16,7 @@ public class PacketsTest {
 
     @Test(expected = MqttProtocolException.class)
     public void fromBytes_throws_MQTT_exception_for_empty_array() throws MqttProtocolException {
-        Packets.fromBytes(new byte[0],null);
+        Packets.fromBytes(new Bytes(),null);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class PacketsTest {
     @Test
     public void encodeTotalLength_returns_the_same_contents_when_invoked_twice() {
         PingReqPacket packet = new PingReqPacket();
-        byte[] bytes = new byte[0];
+        Bytes bytes = new Bytes();
         PacketType packetType = packet.getType();
         Flags flags = packet.flags;
         assertEqualBytes(

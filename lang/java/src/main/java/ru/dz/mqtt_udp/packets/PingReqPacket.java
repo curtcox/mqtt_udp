@@ -15,9 +15,8 @@ public final class PingReqPacket extends GenericPacket {
 	}
 
 	@Override
-	public byte[] toBytes() {
-		byte[] pkt = new byte[0];
-		return Packets.encodeTotalLength(pkt, PingRequest, flags, null, this );
+	public Bytes toBytes() {
+		return Packets.encodeTotalLength(new Bytes(), PingRequest, flags, null, this );
 	}
 
 	@Override

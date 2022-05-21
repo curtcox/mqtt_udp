@@ -17,6 +17,6 @@ public final class PacketOutputStreamWriter implements IPacket.Writer {
 
     @Override
     public void write(IPacket packet) throws IOException {
-        out.write(packet.toBytes());
+        out.write(packet.toBytes().bytes);
     }
 }

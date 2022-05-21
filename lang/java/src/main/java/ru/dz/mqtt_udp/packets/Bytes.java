@@ -1,19 +1,42 @@
 package ru.dz.mqtt_udp.packets;
 
+import ru.dz.mqtt_udp.IPacket;
+
+import java.io.UnsupportedEncodingException;
+
 import static ru.dz.mqtt_udp.util.Check.notNull;
 
+/**
+ * An immutable byte array.
+ */
 public final class Bytes {
 
-	final byte[] bytes;
-	final String name;
+	public final byte[] bytes;
+
+	public final String name;
+
+	public final int length;
 
 	public Bytes(byte[] bytes, String name) {
 		this.bytes = notNull(bytes);
 		this.name = notNull(name);
+		this.length = bytes.length;
+	}
+
+	public Bytes() {
+		this(new byte[0],Thread.currentThread().getStackTrace()[0].toString());
 	}
 
 	public Bytes(byte[] bytes) {
 		this(bytes,Thread.currentThread().getStackTrace()[0].toString());
+	}
+
+	public static Bytes from(String value) {
+		try {
+			return new Bytes(value.getBytes(IPacket.MQTT_CHARSET));
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void dump() {
@@ -43,4 +66,7 @@ public final class Bytes {
 		return out.toString();
 	}
 
+	public byte at(int i) {
+		return bytes[i];
+	}
 }

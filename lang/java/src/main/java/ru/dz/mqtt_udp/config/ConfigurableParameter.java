@@ -1,5 +1,7 @@
 package ru.dz.mqtt_udp.config;
 
+import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.packets.Bytes;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
 import ru.dz.mqtt_udp.packets.Flags;
@@ -84,26 +86,6 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 	public String getName() { return name; }
 	public String getValue() { return value; }
 
-	// Update value here and send to host
-//	public void sendNewValue(String v) {
-//		value = v;
-//		sendCurrentValue();
-//	}
-
-
-
-//	public void requestAgain() {
-//		Topic topic = getTopicName();
-//
-//		System.out.println("request "+topic);
-//
-//		try {
-//			new SubscribePacket(topic).send();
-//		} catch (IOException e) {
-//			GlobalErrorHandler.handleError(ErrorType.IO, e);
-//		}
-//	}
-
 	private Topic makeTopicName() {
 		return new Topic(String.format(
 				"%s/%s/%s/%s", 
@@ -128,13 +110,7 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 	public PublishPacket sendCurrentValue() {
 		Topic topic = getTopicName();
 
-		//System.out.println("send "+topic+"="+value);
-
-//		try {
-			return PublishPacket.from(value, new Flags(), topic, null);
-//		} catch (IOException e) {
-//			GlobalErrorHandler.handleError(ErrorType.IO, e);
-//		}
+		return new PublishPacket(new Flags(), topic, IPacketAddress.LOCAL, Bytes.from(value));
 	}
 
 
@@ -145,7 +121,5 @@ public class ConfigurableParameter implements Comparable<ConfigurableParameter> 
 
 	public void setValue(String v) {
 		value = v;
-		// TODO value change listener
-		//System.out.println("got "+getTopicName()+"="+value);
 	}
 }

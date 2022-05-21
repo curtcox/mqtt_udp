@@ -78,7 +78,7 @@ public final class TopicItem extends AbstractItem {
 
 	public GenericPacket toPacket() {
 		switch(packetType) {
-			case Publish: return PublishPacket.from(value, new Flags(), topic, null);
+			case Publish: return new PublishPacket(new Flags(), topic, null, Bytes.from(value));
 		    default: return super.toPacket();
 		}		
 	}

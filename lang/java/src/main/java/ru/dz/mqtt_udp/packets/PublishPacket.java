@@ -1,9 +1,7 @@
 package ru.dz.mqtt_udp.packets;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
@@ -16,44 +14,22 @@ import static ru.dz.mqtt_udp.util.Check.notNull;
  */
 public final class PublishPacket extends TopicPacket {
 
-	private final byte[]  value;
+	private final Bytes value;
 
-	public PublishPacket(Flags flags, Topic topic, IPacketAddress from,byte[] value) {
+	public PublishPacket(Flags flags, Topic topic, IPacketAddress from,Bytes value) {
 		super(flags,topic,from);
 		this.value = notNull(value);
 	}
 
 	public PublishPacket() {
-		this(new Flags(),Topic.UnknownPacket,IPacketAddress.LOCAL,new byte[0]);
+		this(new Flags(),Topic.UnknownPacket,IPacketAddress.LOCAL,new Bytes());
 	}
 
-	public static PublishPacket from(byte[] raw, Flags flags, Topic topic, IPacketAddress from) {
-		return new PublishPacket(flags,topic,from,value(raw));
-	}
-
-	public static PublishPacket from(String value, Flags flags, Topic topic, IPacketAddress from)  {
-		notNull(value,flags,topic,from);
-		try {
-			return new PublishPacket(flags,topic,from,value.getBytes(IPacket.MQTT_CHARSET));
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static byte[] value(byte[] raw) {
-		int tlen = Packets.decodeTopicLen( raw );
-		int vlen = raw.length - tlen - 2;
-		byte[] value = new byte[vlen];
-		System.arraycopy( raw, tlen+2, value, 0, vlen );
-		return value;
-	}
-
-	public byte[] getValueRaw() {		return value;	}
-	public String getValueString() {	return new String(value, Charset.forName(MQTT_CHARSET));	}
+	public String getValueString() {	return new String(value.bytes, Charset.forName(MQTT_CHARSET));	}
 
 	@Override
-	public byte[] toBytes() {
-		byte[] tbytes = getTopic().getBytes();
+	public Bytes toBytes() {
+		Bytes tbytes = getTopic().getBytes();
 		int plen = tbytes.length + value.length + 2;
 					
 		byte [] pkt = new byte[plen]; 
@@ -65,7 +41,7 @@ public final class PublishPacket extends TopicPacket {
 		System.arraycopy(value, 0, pkt, tbytes.length + 2, value.length );
 		
 		//return IPacket.encodeTotalLength(pkt, IPacket.PT_PUBLISH);
-		return Packets.encodeTotalLength(pkt, Publish, flags, null, this );
+		return Packets.encodeTotalLength(new Bytes(pkt), Publish, flags, null, this );
 	}
 
 	@Override

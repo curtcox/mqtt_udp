@@ -2,6 +2,7 @@ package ru.dz.mqtt_udp.io;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.MqttProtocolException;
+import ru.dz.mqtt_udp.packets.Bytes;
 import ru.dz.mqtt_udp.packets.Packets;
 import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
@@ -141,7 +142,7 @@ public final class DatagramSocketIO implements IPacket.IO {
 
         System.arraycopy(packet.getData(), packet.getOffset(), got, 0, l);
 
-        return Packets.fromBytes(got, IpAddress.from(packet));
+        return Packets.fromBytes(new Bytes(got), IpAddress.from(packet));
     }
 
     @Override
@@ -150,8 +151,8 @@ public final class DatagramSocketIO implements IPacket.IO {
     }
 
     private DatagramPacket datagram(IPacket packet) {
-        byte[] bytes = packet.toBytes();
-        return new DatagramPacket(bytes, bytes.length, packet.getFrom().getInetAddress(), PORT);
+        Bytes bytes = packet.toBytes();
+        return new DatagramPacket(bytes.bytes, bytes.length, packet.getFrom().getInetAddress(), PORT);
     }
 
     @Override
@@ -171,6 +172,6 @@ public final class DatagramSocketIO implements IPacket.IO {
 
         System.arraycopy(packet.getData(), packet.getOffset(), got, 0, l);
 
-        return Packets.fromBytes(got, IpAddress.from(packet));
+        return Packets.fromBytes(new Bytes(got), IpAddress.from(packet));
     }
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ru.dz.mqtt_udp.*;
 import ru.dz.mqtt_udp.io.PacketOutputStreamWriter;
+import ru.dz.mqtt_udp.packets.Bytes;
 import ru.dz.mqtt_udp.packets.Flags;
 import ru.dz.mqtt_udp.packets.PublishPacket;
 import ru.dz.mqtt_udp.packets.Topic;
@@ -34,7 +35,7 @@ public final class Pub {
 	static void sendMessageToTopic(String msg, Topic topic, IPacket.Writer writer) throws IOException {
 		System.out.println("Will send "+msg+" to "+topic);
 
-		writer.write(PublishPacket.from(msg,new Flags(),topic,null));
+		writer.write(new PublishPacket(new Flags(),topic,null, Bytes.from(msg)));
 
 		System.out.println("Sent ok");
 	}

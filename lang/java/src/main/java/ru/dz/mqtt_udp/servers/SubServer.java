@@ -154,7 +154,7 @@ public abstract class SubServer extends LoopRunner {
 
 		if( p instanceof PingReqPacket) {
 			// Reply to ping
-			PingRespPacket presp = new PingRespPacket(new byte[0],new Flags(), IPacketAddress.LOCAL);
+			PingRespPacket presp = new PingRespPacket(new Flags(), IPacketAddress.LOCAL);
 			//presp.send(ss, ((PingReqPacket) p).getFrom().getInetAddress());
 			// decided to broadcast ping replies
 			io.write(presp);

@@ -24,8 +24,8 @@ public final class SubscribePacket extends TopicPacket {
 	}
 
 	@Override
-	public byte[] toBytes() {
-		byte[] tbytes = getTopic().getBytes();
+	public Bytes toBytes() {
+		Bytes tbytes = getTopic().getBytes();
 		int plen = tbytes.length + 2 + 1; // + QoS byte
 
 		byte [] pkt = new byte[plen]; 
@@ -38,7 +38,7 @@ public final class SubscribePacket extends TopicPacket {
 
 		pkt[tbytes.length + 2] = 0; // Requested QoS is allways zero now - TODO add property
 		
-		return Packets.encodeTotalLength(pkt, Subscribe, flags, null, this );
+		return Packets.encodeTotalLength(new Bytes(pkt), Subscribe, flags, null, this );
 	}
 
 	@Override

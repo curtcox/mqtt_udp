@@ -1,6 +1,7 @@
 package ru.dz.mqtt_udp;
 
 import ru.dz.mqtt_udp.io.IPacketAddress;
+import ru.dz.mqtt_udp.packets.Bytes;
 import ru.dz.mqtt_udp.packets.PacketType;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ public interface IPacket {
 	 * Generate network representation of packet to be sent.
 	 * @return UDP packet contents.
 	 */
-	byte[] toBytes();
+	Bytes toBytes();
 
 	/**
 	 * Get packet sender address.

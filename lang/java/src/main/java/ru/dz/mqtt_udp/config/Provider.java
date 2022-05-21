@@ -8,11 +8,8 @@ import java.util.function.Consumer;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.IPacketMultiSource;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-import ru.dz.mqtt_udp.packets.PublishPacket;
-import ru.dz.mqtt_udp.packets.SubscribePacket;
+import ru.dz.mqtt_udp.packets.*;
 import ru.dz.mqtt_udp.items.TopicItem;
-import ru.dz.mqtt_udp.packets.Topic;
-import ru.dz.mqtt_udp.packets.Flags;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 import static ru.dz.mqtt_udp.util.Check.notNull;
@@ -74,7 +71,7 @@ public final class Provider implements Consumer<IPacket> {
 
 	private void publish(TopicItem it) {
 		try {
-			PublishPacket packet = PublishPacket.from(it.getValue(), new Flags(), it.getTopic(), IPacketAddress.LOCAL);
+			PublishPacket packet = new PublishPacket(new Flags(), it.getTopic(), IPacketAddress.LOCAL, Bytes.from(it.getValue()));
 			writer.write(packet);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

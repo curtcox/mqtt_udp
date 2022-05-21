@@ -1,7 +1,7 @@
 package ru.dz.mqtt_udp.io;
 
 import ru.dz.mqtt_udp.IPacket;
-import ru.dz.mqtt_udp.MqttProtocolException;
+import ru.dz.mqtt_udp.packets.Bytes;
 import ru.dz.mqtt_udp.packets.Packets;
 
 import java.io.IOException;
@@ -19,6 +19,6 @@ public final class PacketInputStreamReader implements IPacket.Reader {
     public IPacket read() throws IOException {
         byte[] bytes = new byte[0];
         in.read(bytes);
-        return Packets.fromBytes(bytes,IPacketAddress.LOCAL);
+        return Packets.fromBytes(new Bytes(bytes),IPacketAddress.LOCAL);
     }
 }
