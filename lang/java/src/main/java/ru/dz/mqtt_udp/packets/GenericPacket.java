@@ -16,13 +16,13 @@ public abstract class GenericPacket implements IPacket {
 	/**
 	 * Packet header flags.
 	 */
-	private final Flags flags;
+	public final Flags flags;
 
 	/**
 	 * Packet source address, if packet is received from net.
 	 * Locally created ones have LOCAL here.
 	 */
-	private final IPacketAddress from;
+	public final IPacketAddress from;
 
 	private final int packetNumber = 0;
 
@@ -42,10 +42,7 @@ public abstract class GenericPacket implements IPacket {
 
 	@Override
 	final public IPacketAddress getFrom() { return from; }
-	
-	final public Flags getFlags() {		return flags;	}
 
-	
 	@Override
 	public String toString() {
 		return String.format("MQTT/UDP packet of unknown type from '%s', please redefine toString in %s", from, getClass().getName());

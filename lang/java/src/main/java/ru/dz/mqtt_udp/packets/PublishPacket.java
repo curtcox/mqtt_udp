@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 import ru.dz.mqtt_udp.util.Flags;
-import ru.dz.mqtt_udp.util.mqtt_udp_defs;
 
 import static ru.dz.mqtt_udp.packets.PacketType.Publish;
 import static ru.dz.mqtt_udp.util.Check.notNull;
@@ -50,21 +49,9 @@ public final class PublishPacket extends TopicPacket {
 		return value;
 	}
 
-	/**
-	 * Get value as byte array.
-	 * @return Packet value.
-	 */
 	public byte[] getValueRaw() {		return value;	}
-	/**
-	 * Get value as string.
-	 * @return Packet value.
-	 */
 	public String getValueString() {	return new String(value, Charset.forName(MQTT_CHARSET));	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see ru.dz.mqtt_udp.IPacket#toBytes()
-	 */
 	@Override
 	public byte[] toBytes() {
 		byte[] tbytes = getTopic().getBytes();
@@ -72,14 +59,14 @@ public final class PublishPacket extends TopicPacket {
 					
 		byte [] pkt = new byte[plen]; 
 
-		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags().toByte() & 0x0F)); // TODO encodeTotalLength does it?
+		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (flags.toByte() & 0x0F)); // TODO encodeTotalLength does it?
 		pkt[1] = (byte) (tbytes.length & 0xFF);
 		
 		System.arraycopy(tbytes, 0, pkt, 2, tbytes.length);
 		System.arraycopy(value, 0, pkt, tbytes.length + 2, value.length );
 		
 		//return IPacket.encodeTotalLength(pkt, IPacket.PT_PUBLISH);
-		return Packets.encodeTotalLength(pkt, Publish, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, Publish, flags, null, this );
 	}
 
 	@Override

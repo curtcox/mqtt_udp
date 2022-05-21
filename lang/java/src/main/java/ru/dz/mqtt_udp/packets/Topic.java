@@ -48,8 +48,7 @@ public final class Topic {
     byte[] getBytes() {
         try {
             return topic.getBytes(MQTT_CHARSET);
-        } catch (
-        UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new NoEncodingRuntimeException(e);
         }
     }

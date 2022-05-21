@@ -32,7 +32,7 @@ public final class SubscribePacket extends TopicPacket {
 
 		byte [] pkt = new byte[plen]; 
 
-		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (getFlags().toByte() & 0x0F)); // TODO encodeTotalLength does it?
+		pkt[0] = (byte) (((tbytes.length >>8) & 0xFF) | (flags.toByte() & 0x0F)); // TODO encodeTotalLength does it?
 		pkt[1] = (byte) (tbytes.length & 0xFF);
 
 		System.arraycopy(tbytes, 0, pkt, 2, tbytes.length);
@@ -40,7 +40,7 @@ public final class SubscribePacket extends TopicPacket {
 
 		pkt[tbytes.length + 2] = 0; // Requested QoS is allways zero now - TODO add property
 		
-		return Packets.encodeTotalLength(pkt, Subscribe, getFlags(), null, this );
+		return Packets.encodeTotalLength(pkt, Subscribe, flags, null, this );
 	}
 
 	@Override

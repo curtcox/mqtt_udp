@@ -21,6 +21,26 @@ public class PacketsTest {
     }
 
     @Test
+    public void empty_ping() throws MqttProtocolException {
+        fromBytes(new PingReqPacket());
+    }
+
+    @Test
+    public void empty_ping_response() throws MqttProtocolException {
+        fromBytes(new PingRespPacket());
+    }
+
+    @Test
+    public void empty_publish() throws MqttProtocolException {
+        fromBytes(new PublishPacket());
+    }
+
+    @Test
+    public void empty_subscribe() throws MqttProtocolException {
+        fromBytes(new SubscribePacket());
+    }
+
+    @Test
     public void fromBytes() throws MqttProtocolException {
         IPacket[] packets = new IPacket[]{
                 new PingReqPacket(),
@@ -53,7 +73,7 @@ public class PacketsTest {
         PingReqPacket packet = new PingReqPacket();
         byte[] bytes = new byte[0];
         PacketType packetType = packet.getType();
-        Flags flags = packet.getFlags();
+        Flags flags = packet.flags;
         assertEqualBytes(
                 encodeTotalLength(bytes, packetType, flags, null, packet),
                 encodeTotalLength(bytes, packetType, flags, null, packet)

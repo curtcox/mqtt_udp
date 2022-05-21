@@ -38,7 +38,7 @@ public class GenericPacketTest {
 
     @Test
     public void flags() {
-        packet.getFlags();
+        assertNotNull(packet.flags);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class GenericPacketTest {
 
     @Test
     public void getQoS() {
-        packet.getFlags().getQoS();
+        packet.flags.getQoS();
     }
 
     @Test

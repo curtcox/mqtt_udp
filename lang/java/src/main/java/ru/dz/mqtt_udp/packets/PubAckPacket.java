@@ -29,7 +29,7 @@ public final class PubAckPacket extends GenericPacket {
 		TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.getPacketNumber());
 		ttrs.add(id);
 
-		return Packets.encodeTotalLength(pkt, PublishAck, getFlags(), ttrs, this );
+		return Packets.encodeTotalLength(pkt, PublishAck, flags, ttrs, this );
 	}
 
 	@Override
