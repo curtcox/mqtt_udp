@@ -8,7 +8,7 @@ import static ru.dz.mqtt_udp.util.Check.notNull;
 public final class SubscribePacket extends TopicPacket {
 
 	public SubscribePacket(Topic topic, Flags flags, IPacketAddress from) {
-		super(flags,topic,from);
+		super(Subscribe,flags,topic,from);
 	}
 
 	/**
@@ -16,7 +16,7 @@ public final class SubscribePacket extends TopicPacket {
 	 * @param topic Topic string.
 	 */
 	public SubscribePacket(Topic topic) {
-		super(new Flags(),notNull(topic), IPacketAddress.LOCAL);
+		super(Subscribe,new Flags(),notNull(topic), IPacketAddress.LOCAL);
 	}
 
 	public SubscribePacket() {
@@ -24,7 +24,7 @@ public final class SubscribePacket extends TopicPacket {
 	}
 
 	@Override
-	public Bytes toBytes() {
+	public Bytes typeSpecificBytes() {
 		Bytes tbytes = getTopic().getBytes();
 		int plen = tbytes.length + 2 + 1; // + QoS byte
 
@@ -38,17 +38,6 @@ public final class SubscribePacket extends TopicPacket {
 
 		pkt[tbytes.length + 2] = 0; // Requested QoS is allways zero now - TODO add property
 		
-		return Packets.encodeTotalLength(new Bytes(pkt), Subscribe, flags, null, this );
+		return new Bytes(pkt);
 	}
-
-	@Override
-	public String toString() {		
-		return String.format("MQTT/UDP SUBSCRIBE '%s'", getTopic() );
-	}
-
-	@Override
-	public PacketType getType() {
-		return Subscribe;
-	}
-
 }

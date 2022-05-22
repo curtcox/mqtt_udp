@@ -74,8 +74,8 @@ public class PacketsTest {
         PacketType packetType = packet.getType();
         Flags flags = packet.flags;
         assertEqualBytes(
-                encodeTotalLength(bytes, packetType, flags, null, packet),
-                encodeTotalLength(bytes, packetType, flags, null, packet)
+                encodeTotalLength(bytes, packetType, flags, null, packet.packetNumber),
+                encodeTotalLength(bytes, packetType, flags, null, packet.packetNumber)
         );
     }
 
@@ -84,8 +84,8 @@ public class PacketsTest {
         PingReqPacket packet = new PingReqPacket();
         byte[] packetBeginning = new byte[0];
         assertEqualBytes(
-                encodeTTR(null, packetBeginning, packet),
-                encodeTTR(null, packetBeginning, packet)
+                encodeTTR(null, packetBeginning, packet.packetNumber),
+                encodeTTR(null, packetBeginning, packet.packetNumber)
         );
     }
 }

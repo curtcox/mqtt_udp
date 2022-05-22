@@ -2,7 +2,6 @@ package ru.dz.mqtt_udp.packets;
 
 import ru.dz.mqtt_udp.IPacket;
 import ru.dz.mqtt_udp.io.IPacketAddress;
-
 import static ru.dz.mqtt_udp.util.Check.notNull;
 
 /**
@@ -16,6 +15,8 @@ public abstract class GenericPacket implements IPacket {
 	 * Packet header flags.
 	 */
 	public final Flags flags;
+
+	private final PacketType packetType;
 
 	/**
 	 * Packet source address, if packet is received from net.
@@ -32,7 +33,8 @@ public abstract class GenericPacket implements IPacket {
 	 * Construct packet from network.
 	 * @param from Sender's address.
 	 */
-	protected GenericPacket(Flags flags,IPacketAddress from) {
+	protected GenericPacket(PacketType packetType, Flags flags,IPacketAddress from) {
+		this.packetType = notNull(packetType);
 		this.flags = notNull(flags);
 		this.from = notNull(from);
 	}
@@ -41,8 +43,20 @@ public abstract class GenericPacket implements IPacket {
 	final public IPacketAddress getFrom() { return from; }
 
 	@Override
-	public String toString() {
-		return String.format("MQTT/UDP packet of unknown type from '%s', please redefine toString in %s", from, getClass().getName());
+	final public Bytes toBytes() {
+		return Packets.encodeTotalLength(typeSpecificBytes(), getType(), flags, null, packetNumber );
+	}
+
+	@Override
+	final public PacketType getType() { return packetType;	}
+
+	public Bytes typeSpecificBytes() {
+		return new Bytes();
+	}
+
+	@Override
+	final public String toString() {
+		return String.format("MQTT/UDP " + packetType );
 	}
 
 }

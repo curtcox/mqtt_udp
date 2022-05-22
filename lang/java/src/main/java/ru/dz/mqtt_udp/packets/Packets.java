@@ -164,7 +164,7 @@ public final class Packets {
      * @param ttr TTRs to encode to packet
      * @return encoded packet to send to UDP
      */
-    static Bytes encodeTotalLength(Bytes pkt, PacketType packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, GenericPacket p ) {
+    static Bytes encodeTotalLength(Bytes pkt, PacketType packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, PacketNumber p) {
         int data_len = pkt.length;
 
         byte[] buf = new byte[4]; // can't sent very long packets over UDP, 16 bytes are surely ok
@@ -203,7 +203,7 @@ public final class Packets {
      * @param packetBeginning Classic packet.
      * @return Extended packet.
      */
-    static Bytes encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, GenericPacket p ) {
+    static Bytes encodeTTR( AbstractCollection<TaggedTailRecord> ttrs, byte[] packetBeginning, PacketNumber packetNumber) {
         ArrayList<byte[]> outs = new ArrayList<>();
 
         boolean haveNumber = false;
@@ -224,7 +224,7 @@ public final class Packets {
 
         // Add packet number to list, if none
         if( !haveNumber ) {
-            outs.add(new TTR_PacketNumber( p.packetNumber.value ).toBytes());
+            outs.add(new TTR_PacketNumber(packetNumber.value ).toBytes());
         }
 
         int totalLen = packetBeginning.length;

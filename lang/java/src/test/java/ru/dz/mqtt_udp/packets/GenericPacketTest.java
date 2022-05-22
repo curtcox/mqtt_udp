@@ -4,6 +4,7 @@ import org.junit.Test;
 import ru.dz.mqtt_udp.io.IPacketAddress;
 
 import static org.junit.Assert.*;
+import static ru.dz.mqtt_udp.packets.PacketType.Unknown;
 
 public class GenericPacketTest {
 
@@ -12,18 +13,9 @@ public class GenericPacketTest {
     class TestGenericPacket extends GenericPacket {
 
         TestGenericPacket() {
-            super(new Flags(), IPacketAddress.LOCAL);
+            super(Unknown, new Flags(), IPacketAddress.LOCAL);
         }
 
-        @Override
-        public Bytes toBytes() {
-            return new Bytes();
-        }
-
-        @Override
-        public PacketType getType() {
-            return PacketType.Unknown;
-        }
     }
 
     @Test

@@ -15,7 +15,7 @@ public final class PubAckPacket extends GenericPacket {
     public final PacketNumber replyToPkt;
 
 	public PubAckPacket(PacketNumber replyToPkt, Flags flags, IPacketAddress from) {
-		super(flags,from);
+		super(PublishAck,flags,from);
 		this.replyToPkt = notNull(replyToPkt);
 	}
 
@@ -23,22 +23,12 @@ public final class PubAckPacket extends GenericPacket {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public Bytes toBytes() {
-		AbstractCollection<TaggedTailRecord> ttrs = new ArrayList<TaggedTailRecord>();
+	public Bytes typeSpecificBytes() {
+		AbstractCollection<TaggedTailRecord> ttrs = new ArrayList<>();
 
 		TTR_ReplyTo id = new TTR_ReplyTo(replyToPkt.value);
 		ttrs.add(id);
-
-		return Packets.encodeTotalLength(new Bytes(), PublishAck, flags, ttrs, this );
-	}
-
-	@Override
-	public PacketType getType() {		return PublishAck;	}
-
-	@Override
-	public String toString() {		
-		return String.format("MQTT/UDP PubAck" );
+		return new Bytes();
 	}
 
 }

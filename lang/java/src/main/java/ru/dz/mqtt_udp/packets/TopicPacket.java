@@ -18,8 +18,8 @@ public abstract class TopicPacket extends GenericPacket {
 	 * Packet from net.
 	 * @param from Source address.
 	 */
-	public TopicPacket(Flags flags, Topic topic, IPacketAddress from) {
-		super(flags,from);
+	public TopicPacket(PacketType packetType, Flags flags, Topic topic, IPacketAddress from) {
+		super(packetType,flags,from);
 		this.topic = notNull(topic);
 	}
 

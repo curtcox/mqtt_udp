@@ -17,7 +17,7 @@ public final class PublishPacket extends TopicPacket {
 	private final Bytes value;
 
 	public PublishPacket(Flags flags, Topic topic, IPacketAddress from,Bytes value) {
-		super(flags,topic,from);
+		super(Publish,flags,topic,from);
 		this.value = notNull(value);
 	}
 
@@ -28,7 +28,8 @@ public final class PublishPacket extends TopicPacket {
 	public String getValueString() {	return new String(value.bytes, Charset.forName(MQTT_CHARSET));	}
 
 	@Override
-	public Bytes toBytes() {
+	public Bytes typeSpecificBytes() {
+
 		Bytes tbytes = getTopic().getBytes();
 		int plen = tbytes.length + value.length + 2;
 					
@@ -41,17 +42,7 @@ public final class PublishPacket extends TopicPacket {
 		System.arraycopy(value, 0, pkt, tbytes.length + 2, value.length );
 		
 		//return IPacket.encodeTotalLength(pkt, IPacket.PT_PUBLISH);
-		return Packets.encodeTotalLength(new Bytes(pkt), Publish, flags, null, this );
-	}
-
-	@Override
-	public String toString() {		
-		return String.format("MQTT/UDP PUBLISH '%s'='%s'", getTopic(), getValueString() );
-	}
-
-	@Override
-	public PacketType getType() {
-		return Publish;
+		return new Bytes(pkt);
 	}
 
 }
