@@ -165,6 +165,12 @@ public final class Packets {
      * @return encoded packet to send to UDP
      */
     static Bytes encodeTotalLength(Bytes pkt, PacketType packetType, Flags flags, AbstractCollection<TaggedTailRecord> ttr, PacketNumber p) {
+        byte[] buf = headerBytes(pkt,packetType,flags);
+        // Encode in Tagged Tail Records - packet extensions
+        return encodeTTR( ttr, Bytes.from(buf,pkt.bytes), p );
+    }
+
+    private static byte[] headerBytes(Bytes pkt, PacketType packetType, Flags flags) {
 
         int data_len = pkt.length;
 
@@ -183,11 +189,7 @@ public final class Packets {
             buf[bp++] = b;
         } while( data_len > 0 );
 
-        int tlen = pkt.length + bp;
-
-        // Encode in Tagged Tail Records - packet extensions
-        Bytes ttrbin = encodeTTR( ttr, Bytes.from(buf,pkt.bytes), p );
-        return ttrbin;
+        return buf;
     }
 
     /**
