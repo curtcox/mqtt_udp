@@ -82,7 +82,7 @@ public class PacketsTest {
     @Test
     public void encodeTTR_returns_the_same_contents_when_invoked_twice() {
         PingReqPacket packet = new PingReqPacket();
-        byte[] packetBeginning = new byte[0];
+        Bytes packetBeginning = new Bytes();
         assertEqualBytes(
                 encodeTTR(null, packetBeginning, packet.packetNumber),
                 encodeTTR(null, packetBeginning, packet.packetNumber)

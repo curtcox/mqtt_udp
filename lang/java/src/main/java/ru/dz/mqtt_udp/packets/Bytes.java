@@ -39,6 +39,22 @@ public final class Bytes {
 		}
 	}
 
+	public static Bytes from(byte[]... arrays) {
+		int size = 0;
+		for (byte[] a : arrays) {
+			size = size + a.length;
+		}
+		byte[] out = new byte[size];
+		int start = 0;
+		for (byte[] a : arrays) {
+			for (int i=0; i<a.length; i++) {
+                out[start + i] = a[i];
+			}
+			start = start + a.length;
+		}
+		return new Bytes(out);
+	}
+
 	public void dump() {
 		System.err.println(this);
 	}
